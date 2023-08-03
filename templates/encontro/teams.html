@@ -2,9 +2,14 @@
 'components/toasts.html' %} {% endif %} {% endwith %} {% block screen_body %}
 <h2 class="fs-4">Equipes</h2>
 <hr />
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a href="/pages{{ url_for('encontro.index') }}" class="btn btn-primary" data-link>Voltar</a>
+    <a href="/pages{{ url_for('encontro.index') }}" class="btn btn-primary" data-link>+ Nova</a>
+  </div>
+</nav>
 <div class="d-flex flex-wrap justify-content-evenly">
 <div class="card m-3" style="width: 18rem">
-  <img src="..." class="card-img-top" alt="..." />
   <div class="card-body">
     <h5 class="card-title">Coorndenação Geral</h5>
     <p class="card-text">
@@ -14,7 +19,6 @@
   </div>
 </div>
 <div class="card m-3" style="width: 18rem">
-    <img src="..." class="card-img-top" alt="..." />
     <div class="card-body">
       <h5 class="card-title">Lanchinho</h5>
       <p class="card-text">
@@ -24,7 +28,6 @@
     </div>
   </div>
   <div class="card m-3" style="width: 18rem">
-    <img src="..." class="card-img-top" alt="..." />
     <div class="card-body">
       <h5 class="card-title">Apresentadores</h5>
       <p class="card-text">
@@ -34,7 +37,6 @@
     </div>
   </div>
   <div class="card m-3" style="width: 18rem">
-    <img src="..." class="card-img-top" alt="..." />
     <div class="card-body">
       <h5 class="card-title">Apresentadores</h5>
       <p class="card-text">
@@ -44,9 +46,13 @@
     </div>
   </div>
   <div class="card m-3" style="width: 18rem">
-    <img src="..." class="card-img-top" alt="..." />
     <div class="card-body">
-      <h5 class="card-title">Apresentadores</h5>
+      <div class="d-flex justify-content-between">
+        <h5 class="card-title">Apresentadores</h5>
+        <a class="btn btn-sm" href="">
+          <i class="fas fa-pen"></i>
+        </a>
+      </div>
       <p class="card-text">
         Some quick example text to build on the card title and make up the bulk of
         the card's content.
@@ -54,7 +60,6 @@
     </div>
   </div>
   <div class="card m-3" style="width: 18rem">
-    <img src="..." class="card-img-top" alt="..." />
     <div class="card-body">
       <h5 class="card-title">Apresentadores</h5>
       <p class="card-text">

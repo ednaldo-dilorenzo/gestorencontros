@@ -1,6 +1,19 @@
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
+const getParams = (match) => {
+  const values = match.result.slice(1);
+  const keys = Array.from(match.path.matchAll(/:(\w+)/g)).map(
+    (result) => result[1]
+  );
+
+  return keys.length > 0 ? Object.fromEntries(
+    keys.map((key, i) => {
+      return [key, values[i]];
+    })
+  ) : null;
+};
+
 const navigateTo = (url) => {
   history.pushState(null, null, url);
   router();
@@ -11,22 +24,28 @@ const router = async (uri) => {
     { path: "/", view: "/" },
     { path: "/pages/encontros/", view: "/encontros" },
     { path: "/pages/encontros/register", view: "/encontros/register" },
+    { path: "/pages/encontros/edit/:id", view: "/encontros/edit/:id" },
+    { path: "/pages/encontros/:id/eventos", view: "/encontros/:id/eventos" },
+    { path: "/pages/encontros/:id/eventos/register", view: "/encontros/:id/eventos/register" },
     { path: "/pages/encontros/teams", view: "/encontros/teams" },
-    { path: "/alunos", view: "/alunos" },
-    { path: "/alunos/add", view: "/alunos/add" },
-    { path: "/alunos/:id", view: "/alunos/add-ajax" },
   ];
-
-  const resolvedLocation = uri ? uri : location.pathname;
 
   const potentialMatches = routes.map((route) => {
     return {
       ...route,
-      result: resolvedLocation.match(pathToRegex(route.path)),
+      result: location.pathname.match(pathToRegex(route.path)),
     };
   });
 
   const match = potentialMatches.find((value) => value.result !== null);
+  if (match) {
+    const params = getParams(match);
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        match.view = match.view.replace(`:${key}`, value);
+      }      
+    }
+  }
 
   const request = new XMLHttpRequest();
   request.open("GET", match.view);
@@ -35,10 +54,8 @@ const router = async (uri) => {
     const loadedContent = document.getElementById("app");
     loadedContent.innerHTML = response;
     const scripts = loadedContent.getElementsByTagName("script");
-    const body = document.querySelector("body");
     for (var i = 0; i < scripts.length; ++i) {
       var script = scripts[i];
-      body.appendChild(script);
       eval(script.innerHTML);
     }
   };
@@ -135,7 +152,7 @@ const validateForm = (validationList) => {
   return result;
 };
 
-const sendFormData = (form) => {
+const sendFormData = (form, toastMsg = "") => {
   let formData = new FormData(form);
 
   fetch(form.action, {
@@ -143,9 +160,15 @@ const sendFormData = (form) => {
     method: form.method,
   }).then((resp) => {
     if (resp.ok) {
+      const mainToast = document.getElementById("mainToast");
+      const mainToastMsg = mainToast.querySelector(".toast-body");
+      mainToastMsg.textContent = toastMsg;
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
+
+      toastBootstrap.show();
       navigateTo(form.target);
     } else {
-      const toastLiveExample = document.getElementById("liveToast");
+      const toastLiveExample = document.getElementById("myToast");
       const toastBootstrap =
         bootstrap.Toast.getOrCreateInstance(toastLiveExample);
 
