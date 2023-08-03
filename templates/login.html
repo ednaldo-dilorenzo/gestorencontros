@@ -1,0 +1,102 @@
+{% extends "base.html" %} {% block title %}Sistema XYZ -s{% endblock %} {% block
+main %}
+<div class="container">
+  <div
+    style="height: 100vh"
+    class="row justify-content-center align-items-center"
+  >
+    <div class="p-4 col-sm-4 shadow-lg">
+      <h2 class="mb-5 text-center fs-1">Sistema XYZ</h2>
+      <form
+        action="{{ url_for('authentication.login') }}"
+        method="post"
+        novalidate
+      >
+        {{ form.csrf_token }} 
+        {% with messages = get_flashed_messages() %} 
+        {% if messages %} 
+        {% for message in messages %}
+          <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endfor %} 
+        {% endif %} 
+        {% endwith %}
+        <div class="mb-3">
+          <label for="iptLogin" class="form-label">Usuário</label>
+          <input
+            type="text"
+            name="login"
+            id="iptLogin"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="iptPassword" class="form-label">Senha</label>
+          <input
+            type="password"
+            name="senha"
+            class="form-control"
+            id="iptPassword"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="sltParoquia" class="form-label">Paróquia</label>
+          <select name="paroquia" class="form-control" id="sltParoquia">
+            <option value="">Selecione...</option>
+            {% for paroquia in paroquias %}
+            <option value="{{paroquia.id}}">{{paroquia.nome}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+          <label class="form-check-label" for="exampleCheck1"
+            >Lembrar meu usuário</label
+          >
+        </div>
+        <button type="submit" class="btn btn-primary d-block w-100">
+          Entrar
+        </button>
+        <div class="text-end mt-3">
+          <a href="#" class="text-decoration-none">Esqueceu a senha?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %} 
+{% block script_action %}
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const form = document.querySelector("form");
+    const formValidations = [
+      {
+        selector: "#iptLogin",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o login" },
+        ],
+      },
+      {
+        selector: "#iptPassword",
+        validations: [
+          { handler: isRequired, message: "Por favor informe a senha" },
+        ],
+      },
+    ];
+
+    form.addEventListener("submit", (event) => {
+      if (!validateForm(formValidations)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      form.classList.add("was-validated");
+    });
+  })();
+</script>
+{% endblock %}

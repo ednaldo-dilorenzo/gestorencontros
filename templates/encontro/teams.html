@@ -1,0 +1,74 @@
+{% with messages = get_flashed_messages() %} {% if messages %} {% include
+'components/toasts.html' %} {% endif %} {% endwith %} {% block screen_body %}
+<h2 class="fs-4">Equipes</h2>
+<hr />
+<div class="d-flex flex-wrap justify-content-evenly">
+<div class="card m-3" style="width: 18rem">
+  <img src="..." class="card-img-top" alt="..." />
+  <div class="card-body">
+    <h5 class="card-title">Coorndenação Geral</h5>
+    <p class="card-text">
+      Some quick example text to build on the card title and make up the bulk of
+      the card's content.
+    </p>
+  </div>
+</div>
+<div class="card m-3" style="width: 18rem">
+    <img src="..." class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Lanchinho</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk of
+        the card's content.
+      </p>
+    </div>
+  </div>
+  <div class="card m-3" style="width: 18rem">
+    <img src="..." class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Apresentadores</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk of
+        the card's content.
+      </p>
+    </div>
+  </div>
+  <div class="card m-3" style="width: 18rem">
+    <img src="..." class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Apresentadores</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk of
+        the card's content.
+      </p>
+    </div>
+  </div>
+  <div class="card m-3" style="width: 18rem">
+    <img src="..." class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Apresentadores</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk of
+        the card's content.
+      </p>
+    </div>
+  </div>
+  <div class="card m-3" style="width: 18rem">
+    <img src="..." class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Apresentadores</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk of
+        the card's content.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script_action %}
+<script>
+  const toastLiveExample = document.getElementById("liveToast");
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+
+  toastBootstrap.show();
+</script>
+{% endblock %}

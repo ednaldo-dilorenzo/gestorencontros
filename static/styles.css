@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.sidebar { 
+    width: 250px; 
+    background: black; 
+    color: white;
+}
+
+.sidebar li a:hover {
+    background: #eee;
+    color: black;
+    border-radius: 8px;
+}
+
+.sidebar li a {
+    color: #eee;
+}

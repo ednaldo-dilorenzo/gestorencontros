@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+{% block header %}
+<script
+  src="https://kit.fontawesome.com/a04af11849.js"
+  crossorigin="anonymous"
+></script>
+{% endblock %} 
+{% block main %}
+<div class="d-flex vh-100">
+  {% include "components/sidebar.html" %}
+  <div class="w-100">
+    {% include "components/navbar.html" %}
+    <div id="app" class="dashboard-content px-3 pt-4"></div>
+  </div>
+</div>
+{% endblock %}

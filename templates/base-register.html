@@ -1,0 +1,10 @@
+{% extends "admin.html" %}
+{% block head %}
+{% endblock %}
+{% block content %}
+<div class="dashboard-content px-3 pt-4">
+  <h2 class="fs-4">{% block screen_title %}{% endblock%}</h2>
+  <hr>
+  {% block screen_body %}{% endblock %}
+</div>
+{% endblock %}

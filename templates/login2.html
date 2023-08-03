@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container">
+    <div class="row content d-flex justify-content-center align-items-center">
+        <div class="col-md-5">
+            <div class="box shadow bg-white p-4">
+                <h3 class="mb-4 text-center fs-1">Login Form</h3>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form class="mb-3 needs-validation" method="post" action="{{ url_for('authentication.login') }}" novalidate>
+                    <div class="form-floating mb-4">
+                        <input required type="email" name="username" class="form-control rounded-0" id="iUsername"
+                            placeholder="name@example.com">
+                        <label for="iUsername">Email</label>
+                        <div class="invalid-feedback">
+                            Por favor informe o login.
+                        </div>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input required type="password" name="password" class="form-control rounded-0" id="pPassword" placeholder="senha">
+                        <label for="pPassword">Senha</label>
+                        <div class="invalid-feedback">
+                            Por favor informe a senha.
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 mb-4">
+                        <button type="submit" class="btn btn-dark btn-lg border-0 rounded-0">Entrar</button>
+                    </div>
+                    <div class="forgot-password-link mb-4 text-right">
+                        <a href="#" title="Forgot Password" class="text-decoration-none">Forgot Password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (() => {
+                'use strict'
+    
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.needs-validation')            
+    
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+    
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+        </script>
+    </div>
+</section>
+{% endblock %}
