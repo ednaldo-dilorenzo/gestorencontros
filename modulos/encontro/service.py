@@ -23,3 +23,7 @@ def buscar_encontro_por_id(_id: int, paroquia: int):
 
 def buscar_eventos_por_encontro(id_encontro):
     return encontroDao.buscar_eventos_por_encontro(id_encontro)
+
+
+def buscar_evento_por_id(id_evento):
+    return encontroDao.buscar_evento_por_id(id_evento)

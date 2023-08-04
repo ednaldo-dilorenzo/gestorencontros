@@ -1,6 +1,17 @@
-{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
-%} {% include '../components/toasts.html' %} {% endif %} {% endwith %}
-<h2 class="fs-4">Cadastro de Encontro</h2>
+<div class="d-flex justify-content-between">
+  <h2 class="fs-4">Cadastro de Encontro</h2>
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="/pages{{ url_for('encontro.index')}}" data-link>Encontros</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Cadastro de Encontro
+      </li>      
+    </ol>
+  </nav>
+</div>
 <hr />
 <form
   action="{% if form.id.data %}{{ url_for('encontro.edit', id=form.id.data) }}{% else %}{{ url_for('encontro.register') }}{% endif %}"

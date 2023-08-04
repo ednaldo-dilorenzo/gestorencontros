@@ -98,3 +98,37 @@ def register_event(_id):
     encontroService.criar_evento(novo_evento)
 
     return "200", 201
+
+
+@encontro_bp.route("/<int:_id>/eventos/edit/<int:id_evento>", methods=["GET", "POST"])
+def edit_event(_id, id_evento):
+    encontro = encontroService.buscar_encontro_por_id(_id, 1)
+    evento = encontroService.buscar_evento_por_id(id_evento)
+
+    if not evento:
+        return "Evento não encontrado", 404
+
+    evento_form = EventoForm()
+
+    if request.method == "GET":
+        return render_template(
+            "encontro/regevent.html", form=evento_form, encontro=encontro
+        )
+
+    if not evento_form.validate_on_submit():
+        return "Falha na validação do formulário", 400
+
+    novo_evento = Evento(
+        1,
+        evento_form.nome.data,
+        evento_form.ano.data,
+        evento_form.tema.data,
+        "incio",
+        "fim",
+        _id,
+        1,
+    )
+
+    encontroService.criar_evento(novo_evento)
+
+    return "200", 201

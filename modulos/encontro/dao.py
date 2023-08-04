@@ -98,3 +98,15 @@ def buscar_eventos_por_encontro(id_encontro):
         )
     except StopIteration:
         return None
+
+
+def buscar_evento_por_id(_id: int) -> Encontro:
+    try:
+        return next(
+            filter(
+                lambda evento: evento.id == _id,
+                eventos,
+            )
+        )
+    except StopIteration:
+        return None
