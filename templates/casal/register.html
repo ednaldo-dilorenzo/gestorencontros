@@ -1,0 +1,296 @@
+<div class="d-flex justify-content-between">
+  <h2 class="fs-4">Cadastro de Casais</h2>
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="/pages{{ url_for('encontro.index')}}" data-link>Encontros</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Cadastro de Encontro
+      </li>
+    </ol>
+  </nav>
+</div>
+<hr />
+<form
+  action="{% if form.id.data %}{{ url_for('encontro.edit', id=form.id.data) }}{% else %}{{ url_for('casal.register') }}{% endif %}"
+  target="/pages{{ url_for('casal.index') }}"
+  method="post"
+  novalidate
+>
+  {{ form.csrf_token }} {% if form.id.data %}
+  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
+  {% endif %}
+  <h3 class="fs-5 my-4">Esposo</h3>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label for="iptNomeEsposo" class="form-label">Nome</label>
+      <input
+        type="text"
+        value="{% if form.nome_esposo.data %}{{ form.nome_esposo.data }}{% endif %}"
+        name="nome_esposo"
+        class="form-control"
+        id="iptNomeEsposo"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iptEmailEsposo" class="form-label">Email</label>
+      <input
+        type="text"
+        value="{% if form.email_esposo.data %}{{ form.email_esposo.data }}{% endif %}"
+        name="email_esposo"
+        class="form-control"
+        id="iptEmailEsposo"
+      />
+    </div>
+  </div>
+  <div class="row g-3 my-1">
+    <div class="col-md-6">
+      <label for="iptNascimentoEsposo" class="form-label">Nascimento</label>
+      <input
+        type="date"
+        value="{% if form.nascimento_esposo.data %}{{ form.nascimento_esposo.data }}{% endif %}"
+        name="nascimento_esposo"
+        class="form-control"
+        id="iptNascimentoEsposo"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iptTelefoneEsposo" class="form-label">Telefone</label>
+      <input
+        type="tel"
+        value="{% if form.telefone_esposo.data %}{{ form.telefone_esposo.data }}{% endif %}"
+        name="telefone_esposo"
+        class="form-control"
+        id="iptTelefoneEsposo"
+      />
+    </div>
+  </div>
+  <h3 class="fs-5 my-4">Esposa</h3>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label for="iptNomeEsposa" class="form-label">Nome</label>
+      <input
+        type="text"
+        value="{% if form.nome_esposa.data %}{{ form.nome_esposa.data }}{% endif %}"
+        name="nome_esposa"
+        class="form-control"
+        id="iptNomeEsposa"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iptEmailEsposa" class="form-label">Email</label>
+      <input
+        type="text"
+        value="{% if form.email_esposa.data %}{{ form.email_esposa.data }}{% endif %}"
+        name="email_esposa"
+        class="form-control"
+        id="iptEmailEsposa"
+      />
+    </div>
+  </div>
+  <div class="row g-3 my-1">
+    <div class="col-md-6">
+      <label for="iptNascimentoEsposa" class="form-label">Nascimento</label>
+      <input
+        type="date"
+        value="{% if form.nascimento_esposa.data %}{{ form.nascimento_esposa.data }}{% endif %}"
+        name="nascimento_esposa"
+        class="form-control"
+        id="iptNascimentoEsposa"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iptTelefoneEsposa" class="form-label">Telefone</label>
+      <input
+        type="tel"
+        value="{% if form.telefone_esposa.data %}{{ form.telefone_esposa.data }}{% endif %}"
+        name="telefone_esposa"
+        class="form-control"
+        id="iptTelefoneEsposa"
+      />
+    </div>
+  </div>
+  <h3 class="fs-5 my-4">Endereço</h3>
+  <div class="row g-3">
+    <div class="col-12">
+      <label for="iptEndereco" class="form-label">Endereço</label>
+      <input
+        type="text"
+        class="form-control"
+        value="{% if form.endereco.data %}{{ form.endereco.data }}{% endif %}"
+        name="endereco"
+        id="iptEndereco"
+        placeholder="Rua"
+      />
+    </div>
+    <div class="col-12">
+      <label for="iptComplemento" class="form-label">Complemento</label>
+      <input
+        type="text"
+        class="form-control"
+        name="complemento"
+        value="{% if form.complemento.data %}{{ form.complemento.data }}{% endif %}"
+        id="iptComplemento"
+        placeholder="Apartamento, loteamento..."
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iptCidade" class="form-label">Cidade</label>
+      <input
+        type="text"
+        value="{% if form.cidade.data %}{{ form.cidade.data }}{% endif %}"
+        name="cidade"
+        class="form-control"
+        id="iptCidade"
+      />
+    </div>
+    <div class="col-md-4">
+      <label for="iptEstado" class="form-label">Estado</label>
+      <select
+        id="iptEstado"
+        value="{% if form.estado.data %}{{ form.estado.data }}{% endif %}"
+        class="form-select"
+      >
+        <option selected>Escolha...</option>
+        <option>...</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label for="iptCEP" class="form-label">CEP</label>
+      <input
+        type="text"
+        value="{% if form.cep.data %}{{ form.cep.data }}{% endif %}"
+        class="form-control"
+        id="iptCEP"
+      />
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row g-3">
+    <div class="col-6">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a
+          href="/pages{{ url_for('encontro.index') }}"
+          style="width: 100px"
+          class="btn btn-secondary"
+          type="button"
+          data-link
+          >Cancelar</a
+        >
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button
+          type="submit"
+          style="width: 100px"
+          class="btn btn-dark"
+          type="button"
+        >
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const form = document.querySelector("form");
+    const formValidations = [
+      {
+        selector: "#iptNomeEsposo",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nome" },
+        ],
+      },
+      {
+        selector: "#iptEmailEsposo",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o email" },
+          { handler: isEmailValid, message: "Formato de email inválido" },
+        ],
+      },
+      {
+        selector: "#iptNascimentoEsposo",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nascimento" },
+        ],
+      },
+      {
+        selector: "#iptTelefoneEsposo",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o telefone" },
+        ],
+      },
+      {
+        selector: "#iptNomeEsposa",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nome" },
+        ],
+      },
+      {
+        selector: "#iptEmailEsposa",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o email" },
+          { handler: isEmailValid, message: "Formato de email inválido" },
+        ],
+      },
+      {
+        selector: "#iptNascimentoEsposa",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nascimento" },
+        ],
+      },
+      {
+        selector: "#iptTelefoneEsposa",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o telefone" },
+        ],
+      },
+      {
+        selector: "#iptEndereco",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o endereço" },
+        ],
+      },
+      {
+        selector: "#iptCidade",
+        validations: [
+          { handler: isRequired, message: "Por favor informe a cidade" },
+        ],
+      },
+      {
+        selector: "#iptEstado",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o estado" },
+        ],
+      },
+      {
+        selector: "#iptCEP",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o CEP" },
+        ],
+      },
+    ];
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.classList.add("was-validated");
+      const itemId = event.target.querySelector("#iptId");
+      const successMsg = itemId
+        ? "Casal atualizado com sucesso"
+        : "Casal criado com sucesso";
+
+      if (validateForm(formValidations)) {
+        sendFormData(event.target, successMsg);
+      }
+    });
+  })();
+</script>

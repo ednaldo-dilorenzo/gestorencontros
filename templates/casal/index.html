@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-between">
+  <h2 class="fs-4">Casais Cadastrados</h2>
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Casais</li>
+    </ol>
+  </nav>
+</div>
+<hr />
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a
+      href="/pages{{ url_for('casal.register') }}"
+      class="btn btn-primary"
+      data-link
+      >+ Novo</a
+    >
+  </div>
+</nav>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Esposo</th>
+      <th scope="col">Esposa</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for casal in casais %}
+    <tr>
+      <td>{{ casal.esposo.nome }}</td>
+      <td>{{ casal.esposa.nome }}</td>
+      <td>
+        <a
+          class="btn btn-sm icon-link icon-link-hover"
+          href="/pages{{ url_for('encontro.edit', id=1) }}"
+          data-link
+        >
+          <i class="fas fa-pen"></i>
+        </a>
+        <a
+          class="btn btn-sm icon-link icon-link-hover"
+          href="/pages{{ url_for('encontro.teams') }}"
+          data-link
+        >
+          <i class="fas fa-people-group"></i>
+        </a>
+        <a
+          class="btn btn-sm icon-link icon-link-hover"
+          href="/pages{{ url_for('encontro.events', _id=1) }}"
+          data-link
+        >
+          <i class="fa-solid fa-person-praying"></i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

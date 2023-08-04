@@ -10,9 +10,7 @@ from flask_login import (
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired, Optional
 from modulos.autenticacao import service as usuario_service
-from modulos.autenticacao.routes import auth_bp
-from modulos.encontro.routes import encontro_bp
-from modulos.autenticacao.usuario import Usuario
+from modulos import auth_bp, encontro_bp, casal_bp
 
 
 app = Flask(__name__)
@@ -22,6 +20,8 @@ login.login_view = "authentication.login"
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(encontro_bp)
+app.register_blueprint(casal_bp)
+
 
 class UsuarioForm(FlaskForm):
     matricula = StringField("Matrícula", validators=[DataRequired()])

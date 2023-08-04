@@ -1,20 +1,28 @@
-{% extends "base.html" %} 
-{% block header %}
+{% extends "base.html" %} {% block header %}
 <script
   src="https://kit.fontawesome.com/a04af11849.js"
   crossorigin="anonymous"
 ></script>
-{% endblock %} 
-{% block main %}
+{% endblock %} {% block main %}
 <div class="d-flex vh-100">
   {% include "components/sidebar.html" %}
   <div class="w-100">
-    <div id="mainToast" style="top: 3.6rem" class="toast align-items-center text-bg-success border-0  position-fixed top-30 start-50 translate-middle-x p-2" role="alert" aria-live="assertive" aria-atomic="true">
+    <div
+      id="mainToast"
+      style="top: 3.6rem"
+      class="toast align-items-center border-0 position-fixed top-30 start-50 translate-middle-x p-2"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
       <div class="d-flex">
-        <div class="toast-body">
-          Hello, world! This is a toast message.
-        </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <div class="toast-body"></div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
       </div>
     </div>
     {% include "components/navbar.html" %}

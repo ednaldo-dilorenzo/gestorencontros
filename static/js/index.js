@@ -7,11 +7,13 @@ const getParams = (match) => {
     (result) => result[1]
   );
 
-  return keys.length > 0 ? Object.fromEntries(
-    keys.map((key, i) => {
-      return [key, values[i]];
-    })
-  ) : null;
+  return keys.length > 0
+    ? Object.fromEntries(
+        keys.map((key, i) => {
+          return [key, values[i]];
+        })
+      )
+    : null;
 };
 
 const navigateTo = (url) => {
@@ -19,14 +21,19 @@ const navigateTo = (url) => {
   router();
 };
 
-const router = async (uri) => {
+const router = async () => {
   const routes = [
     { path: "/", view: "/" },
+    { path: "/pages/casais/", view: "/casais" },
+    { path: "/pages/casais/register", view: "/casais/register" },
     { path: "/pages/encontros/", view: "/encontros" },
     { path: "/pages/encontros/register", view: "/encontros/register" },
     { path: "/pages/encontros/edit/:id", view: "/encontros/edit/:id" },
     { path: "/pages/encontros/:id/eventos", view: "/encontros/:id/eventos" },
-    { path: "/pages/encontros/:id/eventos/register", view: "/encontros/:id/eventos/register" },
+    {
+      path: "/pages/encontros/:id/eventos/register",
+      view: "/encontros/:id/eventos/register",
+    },
     { path: "/pages/encontros/teams", view: "/encontros/teams" },
   ];
 
@@ -43,7 +50,7 @@ const router = async (uri) => {
     if (params) {
       for (const [key, value] of Object.entries(params)) {
         match.view = match.view.replace(`:${key}`, value);
-      }      
+      }
     }
   }
 
@@ -161,6 +168,8 @@ const sendFormData = (form, toastMsg = "") => {
   }).then((resp) => {
     if (resp.ok) {
       const mainToast = document.getElementById("mainToast");
+      mainToast.classList.remove("text-bg-warning");
+      mainToast.classList.add("text-bg-success");
       const mainToastMsg = mainToast.querySelector(".toast-body");
       mainToastMsg.textContent = toastMsg;
       const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
@@ -168,9 +177,11 @@ const sendFormData = (form, toastMsg = "") => {
       toastBootstrap.show();
       navigateTo(form.target);
     } else {
-      const toastLiveExample = document.getElementById("myToast");
-      const toastBootstrap =
-        bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+      const mainToast = document.getElementById("mainToast");
+      mainToast.classList.add("text-bg-warning");
+      const mainToastMsg = mainToast.querySelector(".toast-body");
+      mainToastMsg.textContent = "Falha na validação do formulário";
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
 
       toastBootstrap.show();
     }
