@@ -1,4 +1,4 @@
-import modulos.encontro.dao as encontroDao
+import app.modulos.encontro.dao as encontroDao
 
 
 def buscar_encontros(paroquia: int):

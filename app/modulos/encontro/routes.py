@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
-import modulos.encontro.service as encontroService
-from modulos.encontro.dao import Encontro, Evento
+import app.modulos.encontro.service as encontroService
+from app.modulos.encontro.dao import Encontro, Evento
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm

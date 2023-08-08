@@ -1,4 +1,4 @@
-import modulos.casal.dao as casal_dao
+import app.modulos.casal.dao as casal_dao
 
 
 def buscar_todos(paroquia: int):

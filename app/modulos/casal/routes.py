@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField
-import modulos.casal.service as casal_service
-from modulos.casal.dao import Casal, Pessoa
+import app.modulos.casal.service as casal_service
+from app.modulos.casal.dao import Casal, Pessoa
 
 
 casal_bp = Blueprint("casal", __name__, url_prefix="/casais")
@@ -28,6 +28,7 @@ class CasalForm(FlaskForm):
 @casal_bp.route("/")
 def index():
     casais = casal_service.buscar_todos(1)
+    filtro = request.args.get('filtro', None)
     return render_template("casal/index.html", casais=casais)
 
 

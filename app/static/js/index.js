@@ -52,6 +52,7 @@ const router = async () => {
         match.view = match.view.replace(`:${key}`, value);
       }
     }
+    match.view = match.view + location.search;
   }
 
   const request = new XMLHttpRequest();
@@ -160,8 +161,12 @@ const validateForm = (validationList) => {
 };
 
 const sendFormData = (form, toastMsg = "") => {
-  let formData = new FormData(form);
+  const formData = new FormData(form);
+  const params = new URLSearchParams(formData);
 
+  if (form.method.toUpperCase() === 'GET') {
+    navigateTo(form.action + '?' + params);
+  } else 
   fetch(form.action, {
     body: formData,
     method: form.method,

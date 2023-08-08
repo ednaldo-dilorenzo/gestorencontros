@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
-from modulos.autenticacao import dao as auth_dao
-from .usuario import Usuario
+from app.modulos.autenticacao import dao as auth_dao
+from app.modulos.autenticacao.model import Usuario
 
 
 def valida_usuario(login: str, senha: str, paroquia: int = None) -> Usuario:
@@ -11,7 +11,7 @@ def valida_usuario(login: str, senha: str, paroquia: int = None) -> Usuario:
     else:
         usuario = auth_dao.buscar_admin_pelo_login(login)
 
-    return usuario if usuario and check_password_hash(usuario.password, senha) else None
+    return usuario if usuario and check_password_hash(usuario.senha, senha) else None
 
 
 def buscar_por_id(id: int) -> Usuario:

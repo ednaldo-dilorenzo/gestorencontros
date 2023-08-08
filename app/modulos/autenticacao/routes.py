@@ -1,8 +1,8 @@
 from flask import Blueprint, redirect, url_for, request, render_template, flash
 from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired
-from modulos.autenticacao import service as usuario_service
-from modulos.paroquia import service as paroquia_service
+from app.modulos.autenticacao import service as usuario_service
+from app.modulos.paroquia import service as paroquia_service
 from flask_wtf import FlaskForm
 from flask_login import (
     current_user,

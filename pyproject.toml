@@ -9,6 +9,9 @@ python = "^3.10"
 flask = "^2.2.2"
 flask-wtf = "^1.1.1"
 flask-login = "^0.6.2"
+flask-sqlalchemy = "^3.0.5"
+psycopg2 = "^2.9.7"
+load-dotenv = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 

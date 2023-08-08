@@ -1,4 +1,4 @@
-import modulos.paroquia.dao as paroquia_dao
+import app.modulos.paroquia.dao as paroquia_dao
 
 
 def buscar_paroquias():

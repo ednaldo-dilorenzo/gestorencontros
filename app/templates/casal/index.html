@@ -16,6 +16,22 @@
       data-link
       >+ Novo</a
     >
+    <form
+      id="frmPesquisa"
+      action="/pages{{ url_for('casal.index')}}"
+      class="d-flex"
+      role="search"
+      target="/pages{{ url_for('casal.index')}}"
+    >
+      <input
+        class="form-control me-2"
+        type="search"
+        name="filtro"
+        placeholder="Pesquisar"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+    </form>
   </div>
 </nav>
 <table class="table table-striped table-hover">
@@ -58,3 +74,28 @@
     {% endfor %}
   </tbody>
 </table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+<script>
+  const form = document.getElementById("frmPesquisa");
+
+  form.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+    sendFormData(evt.target);
+  });
+</script>
