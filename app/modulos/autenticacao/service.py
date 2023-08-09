@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 from app.modulos.autenticacao import dao as auth_dao
-from app.modulos.autenticacao.model import Usuario
+from app.model import Usuario
 
 
 def valida_usuario(login: str, senha: str, paroquia: int = None) -> Usuario:

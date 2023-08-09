@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField
 import app.modulos.casal.service as casal_service
-from app.modulos.casal.dao import Casal, Pessoa
 
 
 casal_bp = Blueprint("casal", __name__, url_prefix="/casais")
@@ -27,9 +26,14 @@ class CasalForm(FlaskForm):
 
 @casal_bp.route("/")
 def index():
-    casais = casal_service.buscar_todos(1)
-    filtro = request.args.get('filtro', None)
-    return render_template("casal/index.html", casais=casais)
+    filtro = request.args.get("filtro", None)
+    casais = (
+        casal_service.buscar_por_filtro(filtro, 1)
+        if filtro
+        else casal_service.buscar_todos(1)
+    )
+
+    return render_template("casal/index.html", page=casais)
 
 
 @casal_bp.route("/register", methods=["GET", "POST"])
@@ -41,24 +45,7 @@ def register():
     if not casal_form.validate_on_submit():
         return "Falha na validação", 404
 
-    novo_casal = Casal(
-        id=1,
-        esposo=Pessoa(
-            1,
-            casal_form.nome_esposo.data,
-            casal_form.nascimento_esposo.data,
-            casal_form.email_esposo.data,
-            1,
-        ),
-        esposa=Pessoa(
-            2,
-            casal_form.nome_esposa.data,
-            casal_form.nascimento_esposa.data,
-            casal_form.email_esposo.data,
-            1,
-        ),
-        paroquia=1,
-    )
+    novo_casal = None
 
     casal_service.salvar(novo_casal)
 

@@ -1,5 +1,5 @@
 from app.extensoes import db
-from app.model.paroquia import Paroquia
+from app.model import Paroquia
 
 
 def buscar_todas_paroquias():

@@ -1,5 +1,5 @@
 from app.extensoes import db
-from app.modulos.autenticacao.model import Usuario
+from app.model import Usuario
 
 # usuarios = [
 #     Usuario(

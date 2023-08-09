@@ -1,58 +1,30 @@
-class Pessoa:
-    def __init__(self, id, nome, data_nascimento, email, paroquia):
-        self.id = id
-        self.nome = nome
-        self.data_nascimento = data_nascimento
-        self.email = email
-        self.paroquia = paroquia
-
-
-class Casal:
-    def __init__(self, id, esposo, esposa, paroquia):
-        self.id = id
-        self.esposo = esposo
-        self.esposa = esposa
-        self.paroquia = paroquia
-
-
-pessoas = [
-    Pessoa(1, "Ednaldo Dilorenzo de Souza Filho", "21/04/1982", "ed@test.com", 1),
-    Pessoa(2, "Juliana de Castro Farias Dilorenzo", "26/09/1980", "ju@test.com", 1),
-    Pessoa(3, "Rafael Moraes", "21/04/1982", "ra@test.com", 1),
-    Pessoa(4, "Rafaela Moraes", "26/09/1980", "rafa@test.com", 1),
-]
-
-
-casais = [
-    Casal(
-        1,
-        pessoas[0],
-        pessoas[1],
-        1,
-    ),
-    Casal(
-        2,
-        pessoas[2],
-        pessoas[3],
-        1,
-    ),
-]
+from app.extensoes import db
+from app.model import Casal
 
 
 def criar_pessoa(pessoa):
-    pessoas.append(pessoa)
+    pass
 
 
 def criar_casal(casal):
-    casais.append(casal)
+    pass
 
 
 def buscar_casais(id_paroquia: int):
-    return list(filter(lambda casal: casal.paroquia == id_paroquia, casais))
+    return db.session.query(Casal).filter(Casal.id_paroquia == id_paroquia).all()
+
+
+def buscar_por_filtro(
+    filtro: str, id_paroquia: int, page: int = 1, per_page: int = 10
+):
+    busca = "%{}%".format(filtro)
+    result = (
+        db.session.query(Casal)
+        .filter(Casal.id_paroquia == id_paroquia, Casal.extenso.like(busca))
+        .paginate(page=page, per_page=per_page)
+    )
+    return result
 
 
 def buscar_casal_por_id(id_casal: int):
-    try:
-        return next(filter(lambda casal: casal.id == id_casal, casais))
-    except StopIteration:
-        return None
+    return None

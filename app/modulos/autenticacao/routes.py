@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, request, render_template, flash
-from wtforms import StringField, PasswordField, IntegerField
+from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 from app.modulos.autenticacao import service as usuario_service
 from app.modulos.paroquia import service as paroquia_service
