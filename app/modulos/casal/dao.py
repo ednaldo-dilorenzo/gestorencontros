@@ -10,13 +10,15 @@ def criar_casal(casal):
     pass
 
 
-def buscar_casais(id_paroquia: int):
-    return db.session.query(Casal).filter(Casal.id_paroquia == id_paroquia).all()
+def buscar_casais(id_paroquia: int, page: int = 1, per_page: int = 10):
+    return (
+        db.session.query(Casal)
+        .filter(Casal.id_paroquia == id_paroquia)
+        .paginate(page=page, per_page=per_page)
+    )
 
 
-def buscar_por_filtro(
-    filtro: str, id_paroquia: int, page: int = 1, per_page: int = 10
-):
+def buscar_por_filtro(filtro: str, id_paroquia: int, page: int = 1, per_page: int = 10):
     busca = "%{}%".format(filtro)
     result = (
         db.session.query(Casal)

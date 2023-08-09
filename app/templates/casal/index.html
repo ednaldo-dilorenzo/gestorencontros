@@ -81,9 +81,13 @@
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li class="page-item active"><span class="page-link">1</span></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    {% for i in range(page.pages) %}
+    {% if i + 1 == page.page %}
+    <li class="page-item active"><span class="page-link">{{ i + 1 }}</span></li>
+    {% else %}
+    <li class="page-item"><a href="#" class="page-link">{{ i + 1 }}</a></li>
+    {% endif %}
+    {% endfor %}
     <li class="page-item">
       <a class="page-link {% if not page.has_next %}disabled{% endif %}" href="#" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
