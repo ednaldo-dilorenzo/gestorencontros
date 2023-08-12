@@ -20,6 +20,7 @@ class Pessoa(db.Model):
     nome = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
     telefone = db.Column(db.String, nullable=False)
+    nascimento = db.Column(db.Date)
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"))
 
 
@@ -27,8 +28,18 @@ class Casal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_esposo = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
     id_esposa = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
-    esposa = db.relationship("Pessoa", backref="esposa", uselist=False, foreign_keys=[id_esposa])
+    esposa = db.relationship(
+        "Pessoa", backref="esposa", uselist=False, foreign_keys=[id_esposa]
+    )
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"))
-    esposo = db.relationship("Pessoa", backref="esposo", uselist=False, foreign_keys=[id_esposo])
+    esposo = db.relationship(
+        "Pessoa", backref="esposo", uselist=False, foreign_keys=[id_esposo]
+    )
     extenso = db.Column(db.String)
-    #away_ref = db.relationship("Pessoa", backref="fixture", uselist=False, foreign_keys=[away_id])
+    # away_ref = db.relationship("Pessoa", backref="fixture", uselist=False, foreign_keys=[away_id])
+
+
+class Movimento(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String, nullable=False)
+    id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"), nullable=False)

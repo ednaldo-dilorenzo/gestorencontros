@@ -1,3 +1,7 @@
+from app.extensoes import db
+from app.model import Movimento
+
+
 class Encontro:
     def __init__(self, id, nome, paroquia):
         self.id = id
@@ -42,32 +46,25 @@ eventos = [
 ]
 
 
-def buscar_por_paroquia(paroquia: int):
-    try:
-        return list(
-            filter(
-                lambda encontro: encontro.paroquia == paroquia,
-                encontros,
-            )
-        )
-    except StopIteration:
-        return None
+def buscar_por_paroquia(id_paroquia: int):
+    return (
+        db.session.query(Movimento)
+        .filter(Movimento.id_paroquia == id_paroquia)
+        .order_by(Movimento.id)
+        .all()
+    )
 
 
-def buscar_por_id(_id: int, paroquia: int) -> Encontro:
-    try:
-        return next(
-            filter(
-                lambda encontro: encontro.paroquia == paroquia and encontro.id == _id,
-                encontros,
-            )
-        )
-    except StopIteration:
-        return None
+def buscar_por_id(_id: int, id_paroquia: int) -> Encontro:
+    return (
+        db.session.query(Movimento)
+        .filter(Movimento.id_paroquia == id_paroquia, Movimento.id == _id)
+        .first()
+    )
 
 
-def salvar(encontro):
-    encontros.append(encontro)
+def salvar(movimento):
+    db.session.add(movimento)
 
 
 def salvar_evento(evento: Evento):

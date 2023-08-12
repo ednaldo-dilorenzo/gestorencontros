@@ -14,8 +14,8 @@
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('encontro.edit', id=form.id.data) }}{% else %}{{ url_for('casal.register') }}{% endif %}"
-  target="/pages{{ url_for('casal.index') }}"
+  action="{% if form.id.data %}{{ url_for('casal.editar', id=form.id.data) }}{% else %}{{ url_for('casal.register') }}{% endif %}"
+  target="/pages{{ url_for('casal.index', page=page.pate, per_page=page.per_page) }}"
   method="post"
   novalidate
 >
@@ -172,7 +172,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('casal.index') }}"
+          href="/pages{{ url_for('casal.index', page=page, per_page=per_page) }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"
@@ -217,12 +217,6 @@
         ],
       },
       {
-        selector: "#iptNascimentoEsposo",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o nascimento" },
-        ],
-      },
-      {
         selector: "#iptTelefoneEsposo",
         validations: [
           { handler: isRequired, message: "Por favor informe o telefone" },
@@ -242,39 +236,9 @@
         ],
       },
       {
-        selector: "#iptNascimentoEsposa",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o nascimento" },
-        ],
-      },
-      {
         selector: "#iptTelefoneEsposa",
         validations: [
           { handler: isRequired, message: "Por favor informe o telefone" },
-        ],
-      },
-      {
-        selector: "#iptEndereco",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o endereço" },
-        ],
-      },
-      {
-        selector: "#iptCidade",
-        validations: [
-          { handler: isRequired, message: "Por favor informe a cidade" },
-        ],
-      },
-      {
-        selector: "#iptEstado",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o estado" },
-        ],
-      },
-      {
-        selector: "#iptCEP",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o CEP" },
         ],
       },
     ];

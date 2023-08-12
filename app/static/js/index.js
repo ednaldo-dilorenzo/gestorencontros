@@ -26,9 +26,10 @@ const router = async () => {
     { path: "/", view: "/" },
     { path: "/pages/casais/", view: "/casais" },
     { path: "/pages/casais/register", view: "/casais/register" },
+    { path: "/pages/casais/:id/editar", view: "/casais/:id/editar" },
     { path: "/pages/encontros/", view: "/encontros" },
     { path: "/pages/encontros/register", view: "/encontros/register" },
-    { path: "/pages/encontros/edit/:id", view: "/encontros/edit/:id" },
+    { path: "/pages/encontros/:id/edit", view: "/encontros/:id/edit" },
     { path: "/pages/encontros/:id/eventos", view: "/encontros/:id/eventos" },
     {
       path: "/pages/encontros/:id/eventos/register",
