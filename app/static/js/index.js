@@ -27,15 +27,17 @@ const router = async () => {
     { path: "/pages/casais/", view: "/casais" },
     { path: "/pages/casais/register", view: "/casais/register" },
     { path: "/pages/casais/:id/editar", view: "/casais/:id/editar" },
-    { path: "/pages/encontros/", view: "/encontros" },
-    { path: "/pages/encontros/register", view: "/encontros/register" },
-    { path: "/pages/encontros/:id/edit", view: "/encontros/:id/edit" },
-    { path: "/pages/encontros/:id/eventos", view: "/encontros/:id/eventos" },
+    { path: "/pages/movimentos/", view: "/movimentos" },
+    { path: "/pages/movimentos/register", view: "/movimentos/register" },
+    { path: "/pages/movimentos/:id/edit", view: "/movimentos/:id/edit" },
+    { path: "/pages/movimentos/:id/eventos", view: "/movimentos/:id/eventos" },
     {
-      path: "/pages/encontros/:id/eventos/register",
-      view: "/encontros/:id/eventos/register",
+      path: "/pages/movimentos/:id/eventos/register",
+      view: "/movimentos/:id/eventos/register",
     },
-    { path: "/pages/encontros/teams", view: "/encontros/teams" },
+    { path: "/pages/movimentos/:id/equipes", view: "/movimentos/:id/equipes" },
+    { path: "/pages/movimentos/:id/equipes/nova", view: "/movimentos/:id/equipes/nova" },
+    { path: "/pages/movimentos/:id/equipes/:id_equipe", view: "/movimentos/:id/equipes/:id_equipe" },
   ];
 
   const potentialMatches = routes.map((route) => {
@@ -165,31 +167,31 @@ const sendFormData = (form, toastMsg = "") => {
   const formData = new FormData(form);
   const params = new URLSearchParams(formData);
 
-  if (form.method.toUpperCase() === 'GET') {
-    navigateTo(form.action + '?' + params);
-  } else 
-  fetch(form.action, {
-    body: formData,
-    method: form.method,
-  }).then((resp) => {
-    if (resp.ok) {
-      const mainToast = document.getElementById("mainToast");
-      mainToast.classList.remove("text-bg-warning");
-      mainToast.classList.add("text-bg-success");
-      const mainToastMsg = mainToast.querySelector(".toast-body");
-      mainToastMsg.textContent = toastMsg;
-      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
+  if (form.method.toUpperCase() === "GET") {
+    navigateTo(form.action + "?" + params);
+  } else
+    fetch(form.action, {
+      body: formData,
+      method: form.method,
+    }).then((resp) => {
+      if (resp.ok) {
+        const mainToast = document.getElementById("mainToast");
+        mainToast.classList.remove("text-bg-warning");
+        mainToast.classList.add("text-bg-success");
+        const mainToastMsg = mainToast.querySelector(".toast-body");
+        mainToastMsg.textContent = toastMsg;
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
 
-      toastBootstrap.show();
-      navigateTo(form.target);
-    } else {
-      const mainToast = document.getElementById("mainToast");
-      mainToast.classList.add("text-bg-warning");
-      const mainToastMsg = mainToast.querySelector(".toast-body");
-      mainToastMsg.textContent = "Falha na validação do formulário";
-      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
+        toastBootstrap.show();
+        navigateTo(form.target);
+      } else {
+        const mainToast = document.getElementById("mainToast");
+        mainToast.classList.add("text-bg-warning");
+        const mainToastMsg = mainToast.querySelector(".toast-body");
+        mainToastMsg.textContent = "Falha na validação do formulário";
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
 
-      toastBootstrap.show();
-    }
-  });
+        toastBootstrap.show();
+      }
+    });
 };

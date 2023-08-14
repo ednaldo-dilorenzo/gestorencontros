@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Encontros Cadastrados</h2>
+  <h2 class="fs-4">Movimentos Cadastrados</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item active" aria-current="page">
-        Encontros
+        Movimentos
       </li>
     </ol>
   </nav>
@@ -13,7 +13,7 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <a
-      href="/pages{{ url_for('encontro.register') }}"
+      href="/pages{{ url_for('movimento.register') }}"
       class="btn btn-primary"
       data-link
       >+ Novo</a
@@ -29,28 +29,28 @@
     </tr>
   </thead>
   <tbody>
-    {% for encontro in encontros %}
+    {% for movimento in movimentos %}
     <tr>
-      <th scope="row">{{ encontro.id }}</th>
-      <td>{{ encontro.nome }}</td>
+      <th scope="row">{{ movimento.id }}</th>
+      <td>{{ movimento.nome }}</td>
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('encontro.edit', id=encontro.id) }}"
+          href="/pages{{ url_for('movimento.edit', id=movimento.id) }}"
           data-link
         >
           <i class="fas fa-pen"></i>
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('encontro.teams') }}"
+          href="/pages{{ url_for('movimento.equipes', id_movimento=movimento.id) }}"
           data-link
         >
           <i class="fas fa-people-group"></i>
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
+          href="/pages{{ url_for('movimento.events', _id=movimento.id) }}"
           data-link
         >
           <i class="fa-solid fa-person-praying"></i>

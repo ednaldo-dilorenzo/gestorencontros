@@ -43,3 +43,20 @@ class Movimento(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String, nullable=False)
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"), nullable=False)
+
+
+class Equipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String, nullable=False)
+    descricao = db.Column(db.String, nullable=False)
+    id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)
+
+
+class Encontro(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String, nullable=False)    
+    ano = db.Column(db.Integer, nullable=False)
+    tema = db.Column(db.String, nullable=False)
+    data_inicio = db.Column(db.Date, nullable=False)
+    data_fim = db.Column(db.Date, nullable=False)
+    id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)

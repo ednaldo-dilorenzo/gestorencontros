@@ -1,43 +1,49 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Cadastro de Encontro</h2>
+  <h2 class="fs-4">Cadastro de Equipe</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a href="/pages{{ url_for('encontro.index')}}" data-link>Encontros</a>
+        <a href="/pages{{ url_for('movimento.index')}}" data-link>Movimentos</a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        Cadastro de Encontro
-      </li>      
+        Cadastro de Equipes
+      </li>
     </ol>
   </nav>
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('encontro.edit', id=form.id.data) }}{% else %}{{ url_for('encontro.register') }}{% endif %}"
-  target="/pages{{ url_for('encontro.index') }}"
+  action="{% if form.id.data %}{{ url_for('movimento.editar_equipe', id_movimento=id_movimento, id_equipe=form.id.data) }}{% else %}{{ url_for('movimento.nova_equipe', id_movimento=id_movimento) }}{% endif %}"
+  target="/pages{{ url_for('movimento.equipes', id_movimento=id_movimento) }}"
   method="post"
   novalidate
 >
-  {{ form.csrf_token }}
-  {% if form.id.data %}
-  <input
-    type="hidden"
-    name="id"
-    id="iptId"
-    value="{{ form.id.data }}"
-  />
+  {{ form.csrf_token }} {% if form.id.data %}
+  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
   {% endif %}
-  <div class="row g-3">
-    <div class="col-md-6">
+  <div class="row g-3 mb-3">
+    <div class="col-md-12">
       <label for="iptNome" class="form-label">Nome</label>
       <input
         type="text"
-        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"        
+        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"
         name="nome"
         class="form-control"
         id="iptNome"
+        autofocus
       />
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-12">
+      <label for="iptDescricao" class="form-label">Descrição</label>
+      <textarea
+        type="text"
+        class="form-control"
+        id="iptDescricao"
+        name="descricao"
+      >{% if form.descricao.data %}{{ form.descricao.data }}{% endif %}</textarea>
     </div>
   </div>
   <hr class="my-4" />
@@ -45,7 +51,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('encontro.index') }}"
+          href="/pages{{ url_for('movimento.equipes', id_movimento=id_movimento) }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"
@@ -81,7 +87,13 @@
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
         ],
-      },      
+      },
+      {
+        selector: "#iptDescricao",
+        validations: [
+          { handler: isRequired, message: "Por favor informe a descrição" },
+        ],
+      },
     ];
 
     form.addEventListener("submit", (event) => {
@@ -89,7 +101,9 @@
       event.stopPropagation();
       event.target.classList.add("was-validated");
       const itemId = event.target.querySelector("#iptId");
-      const successMsg = itemId ? "Encontro atualizado com sucesso" : "Encontro criado com sucesso";
+      const successMsg = itemId
+        ? "Equipe atualizada com sucesso"
+        : "Equipe criada com sucesso";
 
       if (validateForm(formValidations)) {
         sendFormData(event.target, successMsg);

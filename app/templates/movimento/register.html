@@ -1,63 +1,42 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Cadastro de Evento</h2>
+  <h2 class="fs-4">Cadastro de Movimento</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a href="/pages{{ url_for('encontro.index')}}" data-link>Encontros</a>
+        <a href="/pages{{ url_for('movimento.index')}}" data-link>Encontros</a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a
-          href="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
-          data-link
-          >Eventos</a
-        >
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">Novo Evento</li>
+        Cadastro de Encontro
+      </li>      
     </ol>
   </nav>
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('encontro.edit', id=form.id.data) }}{% else %}{{ url_for('encontro.register_event', _id=encontro.id) }}{% endif %}"
-  target="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
+  action="{% if form.id.data %}{{ url_for('movimento.edit', id=form.id.data) }}{% else %}{{ url_for('encontro.register') }}{% endif %}"
+  target="/pages{{ url_for('movimento.index') }}"
   method="post"
   novalidate
 >
-  {{ form.csrf_token }} {% if form.id.data %}
-  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
+  {{ form.csrf_token }}
+  {% if form.id.data %}
+  <input
+    type="hidden"
+    name="id"
+    id="iptId"
+    value="{{ form.id.data }}"
+  />
   {% endif %}
   <div class="row g-3">
     <div class="col-md-6">
       <label for="iptNome" class="form-label">Nome</label>
       <input
         type="text"
-        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"
+        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"        
         name="nome"
         class="form-control"
         id="iptNome"
-      />
-    </div>
-    <div class="col-md-6">
-      <label for="iptTema" class="form-label">Tema</label>
-      <input
-        type="text"
-        value="{% if form.tema.data %}{{ form.tema.data }}{% endif %}"
-        name="tema"
-        class="form-control"
-        id="iptTema"
-      />
-    </div>
-  </div>
-  <div class="row g-3">
-    <div class="col-md-6">
-      <label for="iptAno" class="form-label">Ano</label>
-      <input
-        type="number"
-        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"
-        name="ano"
-        class="form-control"
-        id="iptAno"
       />
     </div>
   </div>
@@ -66,7 +45,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
+          href="/pages{{ url_for('movimento.index') }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"
@@ -102,19 +81,7 @@
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
         ],
-      },
-      {
-        selector: "#iptTema",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o tema" },
-        ],
-      },
-      {
-        selector: "#iptAno",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o ano" },
-        ],
-      },
+      },      
     ];
 
     form.addEventListener("submit", (event) => {
@@ -122,9 +89,7 @@
       event.stopPropagation();
       event.target.classList.add("was-validated");
       const itemId = event.target.querySelector("#iptId");
-      const successMsg = itemId
-        ? "Evento atualizado com sucesso"
-        : "Evento criado com sucesso";
+      const successMsg = itemId ? "Encontro atualizado com sucesso" : "Encontro criado com sucesso";
 
       if (validateForm(formValidations)) {
         sendFormData(event.target, successMsg);

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
-from app.modulos import auth_bp, casal_bp, encontro_bp
+from app.modulos import auth_bp, casal_bp, movimento_bp
 from app.extensoes import db
 import logging
 
@@ -20,14 +20,14 @@ def create_app(config_filename: str = ""):
     app.config.from_pyfile(config_filename)
     db.init_app(app)
     login_manager.init_app(app)
-    
+
     @login_manager.user_loader
     def load_user(user_id):
         return None
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(casal_bp)
-    app.register_blueprint(encontro_bp)
+    app.register_blueprint(movimento_bp)
 
     return app
 

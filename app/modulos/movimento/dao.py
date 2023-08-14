@@ -1,5 +1,5 @@
 from app.extensoes import db
-from app.model import Movimento
+from app.model import Movimento, Equipe
 
 
 class Encontro:
@@ -83,6 +83,27 @@ def atualizar(valor):
     encontro_atual.nome = valor.nome
 
     return encontro_atual
+
+
+def buscar_equipes_por_movimento(id_movimento: int) -> list:
+    return (
+        db.session.query(Equipe)
+        .filter(Equipe.id_movimento == id_movimento)
+        .order_by(Equipe.nome)
+        .all()
+    )
+
+
+def buscar_equipe_por_id_e_movimento(_id: int, id_movimento: int) -> Equipe:
+    return (
+        db.session.query(Equipe)
+        .filter(Equipe.id == _id, Equipe.id_movimento == id_movimento)
+        .first()
+    )
+
+
+def salvar_equipe(equipe: Equipe):
+    db.session.add(equipe)
 
 
 def buscar_eventos_por_encontro(id_encontro):

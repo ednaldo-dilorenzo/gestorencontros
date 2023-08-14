@@ -4,7 +4,7 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item active" aria-current="page">
-          <a href="/pages{{ url_for('encontro.index')}}" data-link>Encontros</a>
+          <a href="/pages{{ url_for('movimento.index')}}" data-link>Encontros</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
           Eventos
@@ -16,7 +16,7 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <a
-      href="/pages{{ url_for('encontro.register_event', _id=encontro.id) }}"
+      href="/pages{{ url_for('movimento.register_event', _id=encontro.id) }}"
       class="btn btn-primary"
       data-link
       >+ Novo</a
@@ -41,14 +41,14 @@
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('encontro.edit', id=evento.id) }}"
+          href="/pages{{ url_for('movimento.edit', id=evento.id) }}"
           data-link
         >
           <i class="fas fa-pen"></i>
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('encontro.teams') }}"
+          href="/pages{{ url_for('movimento.equipes') }}"
           data-link
         >
           <i class="fas fa-people-group"></i>
