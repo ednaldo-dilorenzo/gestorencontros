@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, request
 import app.modulos.movimento.service as movimento_service
-from app.model import Movimento, Equipe
-from app.modulos.movimento.dao import Evento
-from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from app.model import Movimento, Equipe, Encontro
+from wtforms import StringField, IntegerField, DateField
+from wtforms.validators import DataRequired, Optional
 from flask_wtf import FlaskForm
 
 movimento_bp = Blueprint("movimento", __name__, url_prefix="/movimentos")
@@ -27,11 +26,23 @@ class EquipeForm(FlaskForm):
         return resultado
 
 
-class EventoForm(FlaskForm):
+class EncontroForm(FlaskForm):
     id = StringField("id")
     nome = StringField("Nome")
     tema = StringField("Tema")
     ano = IntegerField("Ano")
+    data_inicio = DateField("Data", validators=[Optional()])
+    data_termino = DateField("Data fim", validators=[Optional()])
+
+    def retorna_encontro(self):
+        resultado = Encontro()
+        resultado.id = self.id.data
+        resultado.nome = self.nome.data
+        resultado.tema = self.tema.data
+        resultado.ano = self.ano.data
+        resultado.data_inicio = self.data_inicio.data
+        resultado.data_termino = self.data_termino.data
+        return resultado
 
 
 @movimento_bp.route("/")
@@ -58,7 +69,7 @@ def register():
 
 @movimento_bp.route("/<int:id>/edit", methods=["GET", "POST"])
 def edit(id):
-    movimento = movimento_service.buscar_encontro_por_id(id, 1)
+    movimento = movimento_service.buscar_movimento_por_id(id, 1)
 
     if not movimento:
         return "Encontro não encontrado", 404
@@ -142,69 +153,57 @@ def editar_equipe(id_movimento, id_equipe):
 
 @movimento_bp.route("/<int:_id>/encontros")
 def encontros(_id):
-    encontro = movimento_service.buscar_encontro_por_id(_id, 1)
-    eventos = movimento_service.buscar_eventos_por_encontro(_id)
-    return render_template("movimento/events.html", eventos=eventos, encontro=encontro)
+    movimento = movimento_service.buscar_movimento_por_id(_id, 1)
+    encontros = movimento_service.buscar_encontros_por_movimento(_id)
+    return render_template(
+        "movimento/encontro.html", encontros=encontros, movimento=movimento
+    )
 
 
-@movimento_bp.route("/<int:_id>/eventos/register", methods=["GET", "POST"])
-def register_event(_id):
-    encontro = movimento_service.buscar_encontro_por_id(_id, 1)
-    evento_form = EventoForm()
+@movimento_bp.route("/<int:_id>/encontros/register", methods=["GET", "POST"])
+def novo_encontro(_id):
+    movimento = movimento_service.buscar_movimento_por_id(_id, 1)
+    encontro_form = EncontroForm()
 
     if request.method == "GET":
         return render_template(
-            "movimento/regevent.html", form=evento_form, encontro=encontro
+            "movimento/encontro_registro.html", form=encontro_form, movimento=movimento
         )
 
-    if not evento_form.validate_on_submit():
+    if not encontro_form.validate_on_submit():
         return "Falha na validação do formulário", 400
 
-    novo_evento = Evento(
-        1,
-        evento_form.nome.data,
-        evento_form.ano.data,
-        evento_form.tema.data,
-        "incio",
-        "fim",
-        _id,
-        1,
-    )
+    novo_encontro = encontro_form.retorna_encontro()
+    novo_encontro.id_movimento = _id
 
-    movimento_service.criar_evento(novo_evento)
+    movimento_service.criar_encontro(novo_encontro)
 
     return "200", 201
 
 
-@movimento_bp.route("/<int:_id>/eventos/edit/<int:id_evento>", methods=["GET", "POST"])
-def edit_event(_id, id_evento):
-    encontro = movimento_service.buscar_encontro_por_id(_id, 1)
-    evento = movimento_service.buscar_evento_por_id(id_evento)
+@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/edit", methods=["GET", "POST"])
+def editar_encontro(id_movimento, id_encontro):
+    movimento = movimento_service.buscar_movimento_por_id(id_movimento, 1)
+    encontro = movimento_service.buscar_encontro_por_id(id_movimento, id_encontro)
 
-    if not evento:
+    if not encontro:
         return "Evento não encontrado", 404
 
-    evento_form = EventoForm()
+    encontro_form = EncontroForm()
 
     if request.method == "GET":
+        encontro_form.id.data = encontro.id
+        encontro_form.nome.data = encontro.nome
+        encontro_form.ano.data = encontro.ano
+        encontro_form.data_inicio.data = encontro.data_inicio
+        encontro_form.data_termino.data = encontro.data_termino
         return render_template(
-            "movimento/regevent.html", form=evento_form, encontro=encontro
+            "movimento/encontro_registro.html", form=encontro_form, movimento=movimento
         )
 
-    if not evento_form.validate_on_submit():
+    if not encontro_form.validate_on_submit():
         return "Falha na validação do formulário", 400
 
-    novo_evento = Evento(
-        1,
-        evento_form.nome.data,
-        evento_form.ano.data,
-        evento_form.tema.data,
-        "incio",
-        "fim",
-        _id,
-        1,
-    )
-
-    movimento_service.criar_evento(novo_evento)
+    movimento_service.criar_evento(None)
 
     return "200", 201

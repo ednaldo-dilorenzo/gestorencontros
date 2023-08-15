@@ -30,14 +30,27 @@ const router = async () => {
     { path: "/pages/movimentos/", view: "/movimentos" },
     { path: "/pages/movimentos/register", view: "/movimentos/register" },
     { path: "/pages/movimentos/:id/edit", view: "/movimentos/:id/edit" },
-    { path: "/pages/movimentos/:id/eventos", view: "/movimentos/:id/eventos" },
     {
-      path: "/pages/movimentos/:id/eventos/register",
-      view: "/movimentos/:id/eventos/register",
+      path: "/pages/movimentos/:id/encontros",
+      view: "/movimentos/:id/encontros",
+    },
+    {
+      path: "/pages/movimentos/:id/encontros/register",
+      view: "/movimentos/:id/encontros/register",
+    },
+    {
+      path: "/pages/movimentos/:id_movimento/encontros/:id_encontro/edit",
+      view: "/movimentos/:id_movimento/encontros/:id_encontro/edit",
     },
     { path: "/pages/movimentos/:id/equipes", view: "/movimentos/:id/equipes" },
-    { path: "/pages/movimentos/:id/equipes/nova", view: "/movimentos/:id/equipes/nova" },
-    { path: "/pages/movimentos/:id/equipes/:id_equipe", view: "/movimentos/:id/equipes/:id_equipe" },
+    {
+      path: "/pages/movimentos/:id/equipes/nova",
+      view: "/movimentos/:id/equipes/nova",
+    },
+    {
+      path: "/pages/movimentos/:id/equipes/:id_equipe",
+      view: "/movimentos/:id/equipes/:id_equipe",
+    },
   ];
 
   const potentialMatches = routes.map((route) => {

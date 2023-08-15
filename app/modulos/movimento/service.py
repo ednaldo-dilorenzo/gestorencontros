@@ -29,8 +29,10 @@ def atualizar_equipe(equipe_atual, nova_equipe):
     equipe_atual.nome = nova_equipe.nome
     equipe_atual.descricao = nova_equipe.descricao
 
-def criar_evento(evento):
-    encontro_dao.salvar_evento(evento)
+
+@transactional
+def criar_encontro(encontro):
+    encontro_dao.salvar_encontro(encontro)
 
 
 @transactional
@@ -38,13 +40,13 @@ def atualizar_encontro(encontro, encontro_atual):
     encontro_atual.nome = encontro.nome
 
 
-def buscar_encontro_por_id(_id: int, paroquia: int):
+def buscar_movimento_por_id(_id: int, paroquia: int):
     return encontro_dao.buscar_por_id(_id, paroquia)
 
 
-def buscar_eventos_por_encontro(id_encontro):
-    return encontro_dao.buscar_eventos_por_encontro(id_encontro)
+def buscar_encontros_por_movimento(id_movimento):
+    return encontro_dao.buscar_encontros_por_movimento(id_movimento)
 
 
-def buscar_evento_por_id(id_evento):
-    return encontro_dao.buscar_evento_por_id(id_evento)
+def buscar_encontro_por_id(id_movimento, id_encontro):
+    return encontro_dao.buscar_encontro_por_id(id_movimento, id_encontro)

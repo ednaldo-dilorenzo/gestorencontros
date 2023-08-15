@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Cadastro de Evento</h2>
+  <h2 class="fs-4">Cadastro de Encontro</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -8,26 +8,26 @@
       </li>
       <li class="breadcrumb-item active" aria-current="page">
         <a
-          href="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
+          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
           data-link
-          >Eventos</a
+          >Encontros</a
         >
       </li>
-      <li class="breadcrumb-item active" aria-current="page">Novo Evento</li>
+      <li class="breadcrumb-item active" aria-current="page">Novo Encontro</li>
     </ol>
   </nav>
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('encontro.edit', id=form.id.data) }}{% else %}{{ url_for('encontro.register_event', _id=encontro.id) }}{% endif %}"
-  target="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
+  action="{% if form.id.data %}{{ url_for('movimento.edit', id=form.id.data) }}{% else %}{{ url_for('movimento.novo_encontro', _id=movimento.id) }}{% endif %}"
+  target="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
   method="post"
   novalidate
 >
   {{ form.csrf_token }} {% if form.id.data %}
   <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
   {% endif %}
-  <div class="row g-3">
+  <div class="row g-3 mb-3">
     <div class="col-md-6">
       <label for="iptNome" class="form-label">Nome</label>
       <input
@@ -36,6 +36,7 @@
         name="nome"
         class="form-control"
         id="iptNome"
+        autofocus
       />
     </div>
     <div class="col-md-6">
@@ -49,7 +50,7 @@
       />
     </div>
   </div>
-  <div class="row g-3">
+  <div class="row g-3 mb-3">
     <div class="col-md-6">
       <label for="iptAno" class="form-label">Ano</label>
       <input
@@ -60,13 +61,35 @@
         id="iptAno"
       />
     </div>
+    <div class="col-md-6">
+      <label for="iptDataInicio" class="form-label">Data início</label>
+      <input
+        type="date"
+        value="{% if form.data_inicio.data %}{{ form.data_inicio.data }}{% endif %}"
+        name="data_inicio"
+        class="form-control"
+        id="iptDataInicio"
+      />
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label for="iptDataTermino" class="form-label">Data término</label>
+      <input
+        type="date"
+        value="{% if form.data_termino.data %}{{ form.data_termino.data }}{% else %}{{ '' }}{% endif %}"
+        name="data_termino"
+        class="form-control"
+        id="iptDataTermino"
+      />
+    </div>
   </div>
   <hr class="my-4" />
   <div class="row g-3">
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('encontro.events', _id=encontro.id) }}"
+          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"

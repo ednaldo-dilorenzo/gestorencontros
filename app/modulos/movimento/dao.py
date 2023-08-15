@@ -1,49 +1,5 @@
 from app.extensoes import db
-from app.model import Movimento, Equipe
-
-
-class Encontro:
-    def __init__(self, id, nome, paroquia):
-        self.id = id
-        self.nome = nome
-        self.paroquia = paroquia
-
-
-class Evento:
-    def __init__(self, id, nome, ano, tema, data_inicio, data_fim, encontro, paroquia):
-        self.id = id
-        self.nome = nome
-        self.ano = ano
-        self.tema = tema
-        self.data_inicio = data_inicio
-        self.data_fim = data_fim
-        self.encontro = encontro
-        self.paroquia = paroquia
-
-
-encontros = [
-    Encontro(1, "Encontro de Casais com Cristo", 1),
-    Encontro(2, "Encontro de Jovens com Cristo", 1),
-    Encontro(3, "Segue-me I", 1),
-    Encontro(4, "Segue-me II", 1),
-    Encontro(1, "Encontro de Casais com Cristo", 2),
-    Encontro(2, "Encontro de Jovens com Cristo", 2),
-]
-
-
-eventos = [
-    Evento(1, "XXXVI ECC Neves", 2016, "Tu és meu", "2016-09-24", "2016-09-26", 1, 1),
-    Evento(
-        2,
-        "XXXVII ECC Neves",
-        2018,
-        "Minha família vossa é",
-        "2018-09-24",
-        "2018-09-26",
-        1,
-        1,
-    ),
-]
+from app.model import Movimento, Equipe, Encontro
 
 
 def buscar_por_paroquia(id_paroquia: int):
@@ -67,22 +23,12 @@ def salvar(movimento):
     db.session.add(movimento)
 
 
-def salvar_evento(evento: Evento):
-    eventos.append(evento)
+def salvar_encontro(encontro: Encontro):
+    db.session.add(encontro)
 
 
 def atualizar(valor):
-    encontro_atual = next(
-        filter(
-            lambda encontro: encontro.paroquia == valor.paroquia
-            and encontro.id == valor.id,
-            encontros,
-        )
-    )
-
-    encontro_atual.nome = valor.nome
-
-    return encontro_atual
+    pass
 
 
 def buscar_equipes_por_movimento(id_movimento: int) -> list:
@@ -106,25 +52,18 @@ def salvar_equipe(equipe: Equipe):
     db.session.add(equipe)
 
 
-def buscar_eventos_por_encontro(id_encontro):
-    try:
-        return list(
-            filter(
-                lambda evento: evento.encontro == id_encontro,
-                eventos,
-            )
-        )
-    except StopIteration:
-        return None
+def buscar_encontros_por_movimento(id_movimento):
+    return (
+        db.session.query(Encontro)
+        .filter(Encontro.id_movimento == id_movimento)
+        .order_by(Encontro.ano.desc())
+        .all()
+    )
 
 
-def buscar_evento_por_id(_id: int) -> Encontro:
-    try:
-        return next(
-            filter(
-                lambda evento: evento.id == _id,
-                eventos,
-            )
-        )
-    except StopIteration:
-        return None
+def buscar_encontro_por_id(id_movimento: int, id_encontro: int) -> Encontro:
+    return (
+        db.session.query(Encontro)
+        .filter(Encontro.id_movimento == id_movimento, Encontro.id == id_encontro)
+        .first()
+    )

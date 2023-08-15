@@ -29,7 +29,7 @@
     width: 840px;
     background-repeat: no-repeat;
     background-size: cover;
-    position: relative;
+    margin: auto;
 }
 
 .data-not-found h1 {
