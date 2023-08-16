@@ -54,9 +54,21 @@ class Equipe(db.Model):
 
 class Encontro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String, nullable=False)    
+    nome = db.Column(db.String, nullable=False)
     ano = db.Column(db.Integer, nullable=False)
     tema = db.Column(db.String, nullable=False)
     data_inicio = db.Column(db.Date, nullable=False)
     data_termino = db.Column(db.Date, nullable=False)
     id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)
+
+
+class Circulo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String)
+    cor = db.Column(db.String, nullable=False)
+    id_coordenador = db.Column(db.Integer, db.ForeignKey("casal.id"))
+    coordenador = db.relationship(
+        "Casal", backref="coordenador", uselist=False, foreign_keys=[id_coordenador]
+    )
+    id_encontro = db.Column(db.Integer, db.ForeignKey("encontro.id"))
+    id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"))

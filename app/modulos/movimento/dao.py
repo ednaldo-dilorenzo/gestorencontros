@@ -1,5 +1,5 @@
 from app.extensoes import db
-from app.model import Movimento, Equipe, Encontro
+from app.model import Movimento, Equipe, Encontro, Circulo
 
 
 def buscar_por_paroquia(id_paroquia: int):
@@ -67,3 +67,11 @@ def buscar_encontro_por_id(id_movimento: int, id_encontro: int) -> Encontro:
         .filter(Encontro.id_movimento == id_movimento, Encontro.id == id_encontro)
         .first()
     )
+
+
+def buscar_circulos_por_encontro(id_encontro: int) -> list:
+    return db.session.query(Circulo).filter(Circulo.id_encontro == id_encontro).all()
+
+
+def salvar_circulo(circulo: Circulo):
+    db.session.add(circulo)

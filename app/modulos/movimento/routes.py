@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 import app.modulos.movimento.service as movimento_service
-from app.model import Movimento, Equipe, Encontro
+from app.model import Movimento, Equipe, Encontro, Circulo
 from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired, Optional
 from flask_wtf import FlaskForm
@@ -28,9 +28,9 @@ class EquipeForm(FlaskForm):
 
 class EncontroForm(FlaskForm):
     id = StringField("id")
-    nome = StringField("Nome")
-    tema = StringField("Tema")
-    ano = IntegerField("Ano")
+    nome = StringField("Nome", validators=[DataRequired()])
+    tema = StringField("Tema", validators=[DataRequired()])
+    ano = IntegerField("Ano", validators=[DataRequired()])
     data_inicio = DateField("Data", validators=[Optional()])
     data_termino = DateField("Data fim", validators=[Optional()])
 
@@ -86,7 +86,7 @@ def edit(id):
 
     novo_movimento = Movimento()
     novo_movimento.nome = movimento_form.nome.data
-    movimento_service.atualizar_encontro(novo_movimento, movimento)
+    movimento_service.atualizar_movimento(movimento, novo_movimento)
     return "200", 200
 
 
@@ -181,7 +181,9 @@ def novo_encontro(_id):
     return "200", 201
 
 
-@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/edit", methods=["GET", "POST"])
+@movimento_bp.route(
+    "/<int:id_movimento>/encontros/<int:id_encontro>/edit", methods=["GET", "POST"]
+)
 def editar_encontro(id_movimento, id_encontro):
     movimento = movimento_service.buscar_movimento_por_id(id_movimento, 1)
     encontro = movimento_service.buscar_encontro_por_id(id_movimento, id_encontro)
@@ -194,9 +196,10 @@ def editar_encontro(id_movimento, id_encontro):
     if request.method == "GET":
         encontro_form.id.data = encontro.id
         encontro_form.nome.data = encontro.nome
+        encontro_form.tema.data = encontro.tema
         encontro_form.ano.data = encontro.ano
-        encontro_form.data_inicio.data = encontro.data_inicio
-        encontro_form.data_termino.data = encontro.data_termino
+        encontro_form.data_inicio.data = encontro.data_inicio.date()
+        encontro_form.data_termino.data = encontro.data_termino.date()
         return render_template(
             "movimento/encontro_registro.html", form=encontro_form, movimento=movimento
         )
@@ -204,6 +207,57 @@ def editar_encontro(id_movimento, id_encontro):
     if not encontro_form.validate_on_submit():
         return "Falha na validação do formulário", 400
 
-    movimento_service.criar_evento(None)
+    encontro_alterado = encontro_form.retorna_encontro()
+
+    movimento_service.atualizar_encontro(encontro, encontro_alterado)
+
+    return "ok", 200
+
+
+@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/circulos")
+def circulos(id_movimento, id_encontro):
+    circulos = movimento_service.buscar_circulos_por_encontro(id_encontro)
+    return render_template(
+        "movimento/circulo.html",
+        items=circulos,
+        id_movimento=id_movimento,
+        id_encontro=id_encontro,
+    )
+
+
+class CirculoForm(FlaskForm):
+    id = StringField("id")
+    nome = StringField("Nome")
+    cor = StringField("Cor", validators=[DataRequired()])
+
+    def retorna_circulo(self):
+        resultado = Circulo()
+        resultado.id = self.id.data
+        resultado.nome = self.nome.data
+        resultado.cor = self.cor.data
+        return resultado
+
+
+@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/novo", methods=["GET", "POST"])
+def novo_circulo(id_movimento, id_encontro):
+    circulo_form = CirculoForm()
+
+    if request.method == "GET":
+        return render_template(
+            "movimento/circulo_registro.html",
+            form=circulo_form,
+            id_movimento=id_movimento,
+            id_encontro=id_encontro,
+        )
+
+    if not circulo_form.validate_on_submit():
+        return "Falha na validação do formulário", 400
+
+    novo_circulo = circulo_form.retorna_circulo()
+    novo_circulo.id_movimento = id_movimento
+    novo_circulo.id_encontro = id_encontro
+    novo_circulo.id_paroquia = 1
+
+    movimento_service.criar_circulo(novo_circulo)
 
     return "200", 201

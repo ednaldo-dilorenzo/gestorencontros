@@ -1,0 +1,41 @@
+<h2 class="fs-4">Círculos</h2>
+<hr />
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a
+      href="/pages{{ url_for('movimento.encontros', _id=id_movimento) }}"
+      class="btn btn-primary"
+      data-link
+      >Voltar</a
+    >
+    <a
+      href="/pages{{ url_for('movimento.novo_circulo', id_movimento=id_movimento, id_encontro=id_encontro) }}"
+      class="btn btn-primary"
+      data-link
+      >+ Novo</a
+    >
+  </div>
+</nav>
+<div class="d-flex flex-wrap justify-content-evenly">
+  {% if items %} {% for item in items %}
+  <div
+    class="card m-3"
+    style="width: 10rem; height: 10rem; border-radius: 100%; background: {{ item.cor }}"
+  >
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <a class="btn btn-sm" href="#" data-link>
+          <i class="fas fa-pen"></i>
+        </a>
+      </div>
+      <p class="card-text text-center">
+        {% if item.nome %}{{ item.nome }}{% else %}Sem nome{% endif %}
+      </p>
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <div class="data-not-found py-3">
+    <h1>Nenhum dado encontrado...</h1>
+  </div>
+  {% endif %}
+</div>

@@ -7,6 +7,11 @@ def buscar_encontros(paroquia: int):
 
 
 @transactional
+def atualizar_movimento(movimento_atual, movimento_alterado):
+    movimento_atual.nome = movimento_alterado.nome
+
+
+@transactional
 def criar_encontro(encontro):
     encontro_dao.salvar(encontro)
 
@@ -31,13 +36,12 @@ def atualizar_equipe(equipe_atual, nova_equipe):
 
 
 @transactional
-def criar_encontro(encontro):
-    encontro_dao.salvar_encontro(encontro)
-
-
-@transactional
-def atualizar_encontro(encontro, encontro_atual):
-    encontro_atual.nome = encontro.nome
+def atualizar_encontro(encontro_atual, encontro_alterado):
+    encontro_atual.nome = encontro_alterado.nome
+    encontro_atual.tema = encontro_alterado.tema
+    encontro_atual.ano = encontro_alterado.ano
+    encontro_atual.data_inicio = encontro_alterado.data_inicio
+    encontro_atual.data_termino = encontro_alterado.data_termino
 
 
 def buscar_movimento_por_id(_id: int, paroquia: int):
@@ -50,3 +54,12 @@ def buscar_encontros_por_movimento(id_movimento):
 
 def buscar_encontro_por_id(id_movimento, id_encontro):
     return encontro_dao.buscar_encontro_por_id(id_movimento, id_encontro)
+
+
+def buscar_circulos_por_encontro(id_encontro: int) -> list:
+    return encontro_dao.buscar_circulos_por_encontro(id_encontro)
+
+
+@transactional
+def criar_circulo(circulo):
+    encontro_dao.salvar_circulo(circulo)

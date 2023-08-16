@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Cadastro de Encontro</h2>
+  <h2 class="fs-4">Cadastro de Círculo</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -7,23 +7,18 @@
         <a href="/pages{{ url_for('movimento.index')}}" data-link>Movimentos</a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a
-          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
-          data-link
-          >Encontros</a
-        >
+        <a href="#" data-link>Encontros</a>
       </li>
-      <li class="breadcrumb-item active" aria-current="page">Novo Encontro</li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="#" data-link>Círculos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Novo Círculo</li>
     </ol>
   </nav>
 </div>
 <hr />
-<form
-  action="{% if form.id.data %}{{ url_for('movimento.editar_encontro', id_movimento=movimento.id, id_encontro=form.id.data) }}{% else %}{{ url_for('movimento.novo_encontro', _id=movimento.id) }}{% endif %}"
-  target="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
-  method="post"
-  novalidate
->
+<form action="{% if form.id.data %}{{ url_for('movimento.edit', id=form.id.data) }}{% else %}{{ url_for('movimento.novo_circulo', id_movimento=id_movimento, id_encontro=id_encontro) }}{% endif %}" 
+  target="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}" method="post" novalidate>
   {{ form.csrf_token }} {% if form.id.data %}
   <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
   {% endif %}
@@ -40,47 +35,14 @@
       />
     </div>
     <div class="col-md-6">
-      <label for="iptTema" class="form-label">Tema</label>
+      <label for="iptCor" class="form-label">Cor</label>
       <input
-        type="text"
-        value="{% if form.tema.data %}{{ form.tema.data }}{% endif %}"
-        name="tema"
-        class="form-control"
-        id="iptTema"
-      />
-    </div>
-  </div>
-  <div class="row g-3 mb-3">
-    <div class="col-md-6">
-      <label for="iptAno" class="form-label">Ano</label>
-      <input
-        type="number"
-        value="{% if form.ano.data %}{{ form.ano.data }}{% endif %}"
-        name="ano"
-        class="form-control"
-        id="iptAno"
-      />
-    </div>
-    <div class="col-md-6">
-      <label for="iptDataInicio" class="form-label">Data início</label>
-      <input
-        type="date"
-        value="{% if form.data_inicio.data %}{{ form.data_inicio.data }}{% endif %}"
-        name="data_inicio"
-        class="form-control"
-        id="iptDataInicio"
-      />
-    </div>
-  </div>
-  <div class="row g-3">
-    <div class="col-md-6">
-      <label for="iptDataTermino" class="form-label">Data término</label>
-      <input
-        type="date"
-        value="{% if form.data_termino.data %}{{ form.data_termino.data }}{% else %}{{ '' }}{% endif %}"
-        name="data_termino"
-        class="form-control"
-        id="iptDataTermino"
+        type="color"
+        name="cor"
+        class="form-control form-control-color"
+        id="iptCor"
+        value="#563d7c"
+        title="Selecione a cor"
       />
     </div>
   </div>
@@ -89,7 +51,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
+          href="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"
@@ -121,21 +83,9 @@
     const form = document.querySelector("form");
     const formValidations = [
       {
-        selector: "#iptNome",
+        selector: "#iptCor",
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
-        ],
-      },
-      {
-        selector: "#iptTema",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o tema" },
-        ],
-      },
-      {
-        selector: "#iptAno",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o ano" },
         ],
       },
     ];

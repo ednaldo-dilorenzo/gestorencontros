@@ -8,7 +8,7 @@
       </li>
       <li class="breadcrumb-item active" aria-current="page">
         Cadastro de Encontro
-      </li>      
+      </li>
     </ol>
   </nav>
 </div>
@@ -19,21 +19,15 @@
   method="post"
   novalidate
 >
-  {{ form.csrf_token }}
-  {% if form.id.data %}
-  <input
-    type="hidden"
-    name="id"
-    id="iptId"
-    value="{{ form.id.data }}"
-  />
+  {{ form.csrf_token }} {% if form.id.data %}
+  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
   {% endif %}
   <div class="row g-3">
     <div class="col-md-6">
       <label for="iptNome" class="form-label">Nome</label>
       <input
         type="text"
-        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"        
+        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"
         name="nome"
         class="form-control"
         id="iptNome"
@@ -81,7 +75,7 @@
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
         ],
-      },      
+      },
     ];
 
     form.addEventListener("submit", (event) => {
@@ -89,7 +83,9 @@
       event.stopPropagation();
       event.target.classList.add("was-validated");
       const itemId = event.target.querySelector("#iptId");
-      const successMsg = itemId ? "Encontro atualizado com sucesso" : "Encontro criado com sucesso";
+      const successMsg = itemId
+        ? "Movimento atualizado com sucesso"
+        : "Movimento criado com sucesso";
 
       if (validateForm(formValidations)) {
         sendFormData(event.target, successMsg);
