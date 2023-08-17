@@ -79,7 +79,7 @@ def register():
     if not casal_form.validate_on_submit():
         return "Falha na validação", 400
 
-    novo_casal = casal_form.retorna_casal()    
+    novo_casal = casal_form.retorna_casal()
 
     casal_service.salvar(novo_casal)
 
@@ -109,7 +109,7 @@ def editar(id):
         casal_form.email_esposo.data = casal.esposo.email
         casal_form.email_esposa.data = casal.esposa.email
         casal_form.telefone_esposo.data = casal.esposo.telefone
-        casal_form.telefone_esposa.data = casal.esposa.telefone        
+        casal_form.telefone_esposa.data = casal.esposa.telefone
         casal_form.nascimento_esposa.data = casal.esposa.nascimento
 
         return render_template(
@@ -124,3 +124,18 @@ def editar(id):
     casal_service.atualizar_casal(casal, casal_atualizado)
 
     return "Casal atualizado com sucesso", 200
+
+
+@casal_bp.route("/busca")
+def buscar_por_filtro():
+    filtro = request.args.get("filtro")
+    encontro = request.args.get("encontro")
+    resultado = []
+    if encontro and encontro.isdigit():
+        casais = casal_service.buscar_por_filtro_nao_inscrito(filtro, 1, int(encontro))
+        resultado = [
+            {"id": casal.id, "nome": f"{casal.esposo.nome}/{casal.esposa.nome}"}
+            for casal in casais
+        ]
+
+    return resultado

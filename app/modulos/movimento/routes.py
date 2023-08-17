@@ -229,16 +229,21 @@ class CirculoForm(FlaskForm):
     id = StringField("id")
     nome = StringField("Nome")
     cor = StringField("Cor", validators=[DataRequired()])
+    id_coordenador = IntegerField("id_coordenador", validators=[Optional()])
+    coordenador = StringField("coordenador")
 
     def retorna_circulo(self):
         resultado = Circulo()
         resultado.id = self.id.data
         resultado.nome = self.nome.data
         resultado.cor = self.cor.data
+        resultado.id_coordenador = self.id_coordenador.data
         return resultado
 
 
-@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/novo", methods=["GET", "POST"])
+@movimento_bp.route(
+    "/<int:id_movimento>/encontros/<int:id_encontro>/novo", methods=["GET", "POST"]
+)
 def novo_circulo(id_movimento, id_encontro):
     circulo_form = CirculoForm()
 
@@ -261,3 +266,42 @@ def novo_circulo(id_movimento, id_encontro):
     movimento_service.criar_circulo(novo_circulo)
 
     return "200", 201
+
+
+@movimento_bp.route(
+    "/<int:id_movimento>/encontros/<int:id_encontro>/circulos/<int:id_circulo>",
+    methods=["GET", "POST"],
+)
+def editar_circulo(id_movimento, id_encontro, id_circulo):
+    circulo_atual = movimento_service.buscar_circulo_por_id_e_encontro(
+        id_circulo, id_encontro
+    )
+
+    circulo_form = CirculoForm()
+
+    if request.method == "GET":
+        circulo_form.id.data = circulo_atual.id
+        circulo_form.nome.data = circulo_atual.nome
+        circulo_form.cor.data = circulo_atual.cor
+        circulo_form.id_coordenador = circulo_atual.id_coordenador
+        circulo_form.coordenador = (
+            f"{circulo_atual.coordenador.esposo.nome}/{circulo_atual.coordenador.esposa.nome}"
+        )
+        return render_template(
+            "movimento/circulo_registro.html",
+            form=circulo_form,
+            id_movimento=id_movimento,
+            id_encontro=id_encontro,
+        )
+
+    if not circulo_form.validate_on_submit():
+        return "Falha na validação do formulário", 400
+
+    novo_circulo = circulo_form.retorna_circulo()
+    novo_circulo.id_movimento = id_movimento
+    novo_circulo.id_encontro = id_encontro
+    novo_circulo.id_paroquia = 1
+
+    movimento_service.atualizar_circulo(circulo_atual, novo_circulo)
+
+    return "ok", 200

@@ -24,7 +24,11 @@
   >
     <div class="card-body">
       <div class="d-flex justify-content-between">
-        <a class="btn btn-sm" href="#" data-link>
+        <a
+          class="btn btn-sm"
+          href="/pages{{ url_for('movimento.editar_circulo', id_movimento=id_movimento, id_encontro=id_encontro, id_circulo=item.id) }}"
+          data-link
+        >
           <i class="fas fa-pen"></i>
         </a>
       </div>

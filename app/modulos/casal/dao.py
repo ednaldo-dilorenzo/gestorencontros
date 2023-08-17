@@ -1,5 +1,6 @@
 from app.extensoes import db
 from app.model import Casal, Pessoa
+from sqlalchemy import or_
 
 
 def criar_pessoa(pessoa: Pessoa):
@@ -35,4 +36,20 @@ def buscar_casal_por_id(id_casal: int, id_paroquia: int) -> Casal:
         db.session.query(Casal)
         .filter(Casal.id_paroquia == id_paroquia, Casal.id == id_casal)
         .first()
+    )
+
+
+def buscar_por_filtro_nao_inscrito(
+    filtro: str, id_paroquia: int, id_encontro: int
+) -> list:
+    busca = "%{}%".format(filtro)
+    return (
+        db.session.query(Casal)
+        .filter(
+            Casal.id_paroquia == id_paroquia,
+            Casal.extenso.like(busca),
+            or_(Casal.id_inscrito != id_encontro, Casal.id_inscrito == None),
+        )
+        .order_by(Casal.id)
+        .all()
     )

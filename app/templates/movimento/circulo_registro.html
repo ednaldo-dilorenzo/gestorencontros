@@ -17,8 +17,12 @@
   </nav>
 </div>
 <hr />
-<form action="{% if form.id.data %}{{ url_for('movimento.edit', id=form.id.data) }}{% else %}{{ url_for('movimento.novo_circulo', id_movimento=id_movimento, id_encontro=id_encontro) }}{% endif %}" 
-  target="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}" method="post" novalidate>
+<form
+  action="{% if form.id.data %}{{ url_for('movimento.editar_circulo', id_movimento=id_movimento, id_encontro=id_encontro, id_circulo=form.id.data) }}{% else %}{{ url_for('movimento.novo_circulo', id_movimento=id_movimento, id_encontro=id_encontro) }}{% endif %}"
+  target="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
+  method="post"
+  novalidate
+>
   {{ form.csrf_token }} {% if form.id.data %}
   <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
   {% endif %}
@@ -39,11 +43,23 @@
       <input
         type="color"
         name="cor"
-        class="form-control form-control-color"
+        class="form-control form-control-color w-100"
         id="iptCor"
-        value="#563d7c"
+        value="{% if form.cor.data %}{{ form.cor.data }}{% endif %}"
         title="Selecione a cor"
       />
+    </div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <label for="iptCoord" class="form-label">Casal Coordenador</label>
+      <select
+        style="width: 100%"
+        class="js-example-basic-single"
+        name="id_coordenador"
+      >
+        <option value="">Selecione...</option>
+      </select>
     </div>
   </div>
   <hr class="my-4" />
@@ -79,16 +95,35 @@
   (() => {
     "use strict";
 
+    $(document).ready(function () {
+      const selectCoordenadores = $(".js-example-basic-single").select2({
+        theme: "bootstrap-5",
+        ajax: {
+          url: "{{ url_for('casal.buscar_por_filtro') }}",
+          dataType: "json",
+          delay: 250,
+          data: function (params) {
+            var query = {
+              filtro: params.term,
+              encontro: "{{ id_encontro }}",
+            };            
+            return query;
+          },
+          processResults: function (data) {
+            return {
+              results: data.map((item) => ({ id: item.id, text: item.nome })),
+            };
+          },
+        },
+      });
+      {% if form.data.id %}
+      const newOption = new Option("{{ form.coordenador }}", {{ form.id_coordenador }}, true, true);
+      selectCoordenadores.append(newOption).trigger('change');
+      {% endif %}
+    });
+
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const form = document.querySelector("form");
-    const formValidations = [
-      {
-        selector: "#iptCor",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
-        ],
-      },
-    ];
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -96,10 +131,10 @@
       event.target.classList.add("was-validated");
       const itemId = event.target.querySelector("#iptId");
       const successMsg = itemId
-        ? "Encontro atualizado com sucesso"
-        : "Encontro criado com sucesso";
+        ? "Círculo atualizado com sucesso"
+        : "Círculo criado com sucesso";
 
-      if (validateForm(formValidations)) {
+      if (validateForm([])) {
         sendFormData(event.target, successMsg);
       }
     });

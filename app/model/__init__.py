@@ -36,7 +36,7 @@ class Casal(db.Model):
         "Pessoa", backref="esposo", uselist=False, foreign_keys=[id_esposo]
     )
     extenso = db.Column(db.String)
-    # away_ref = db.relationship("Pessoa", backref="fixture", uselist=False, foreign_keys=[away_id])
+    id_inscrito = db.Column(db.Integer, db.ForeignKey("encontro.id"))
 
 
 class Movimento(db.Model):

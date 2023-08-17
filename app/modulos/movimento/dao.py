@@ -75,3 +75,11 @@ def buscar_circulos_por_encontro(id_encontro: int) -> list:
 
 def salvar_circulo(circulo: Circulo):
     db.session.add(circulo)
+
+
+def buscar_circulo_por_id_e_encontro(id_circulo: int, id_encontro: int) -> Circulo:
+    return (
+        db.session.query(Circulo)
+        .filter(Circulo.id_encontro == id_encontro, Circulo.id == id_circulo)
+        .first()
+    )

@@ -63,3 +63,14 @@ def buscar_circulos_por_encontro(id_encontro: int) -> list:
 @transactional
 def criar_circulo(circulo):
     encontro_dao.salvar_circulo(circulo)
+
+
+def buscar_circulo_por_id_e_encontro(id_circulo: int, id_encontro: int):
+    return encontro_dao.buscar_circulo_por_id_e_encontro(id_circulo, id_encontro)
+
+
+@transactional
+def atualizar_circulo(circulo_atual, circulo_alterado):
+    circulo_atual.nome = circulo_alterado.nome
+    circulo_atual.cor = circulo_alterado.cor
+    circulo_atual.id_coordenador = circulo_alterado.id_coordenador

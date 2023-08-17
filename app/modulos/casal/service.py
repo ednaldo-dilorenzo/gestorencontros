@@ -40,3 +40,9 @@ def atualizar_pessoa(pessoa, pessoa_atualizada):
         pessoa.email = pessoa_atualizada.email
     if pessoa_atualizada.telefone:
         pessoa.telefone = pessoa_atualizada.telefone
+
+
+def buscar_por_filtro_nao_inscrito(
+    filtro: str, id_paroquia: int, id_encontro: int
+) -> list:
+    return casal_dao.buscar_por_filtro_nao_inscrito(filtro, id_paroquia, id_encontro)
