@@ -220,3 +220,24 @@ const sendFormData = (form, toastMsg = "") => {
       }
     });
 };
+
+const sidebarMenuButton = document.querySelector("#sidebar-menu-button");
+const navbarMenuButton = document.querySelector(".navbar-brand.menu-button");
+const sidebar = document.querySelector(".sidebar");
+const backdrop = document.getElementById("backdrop");
+
+sidebarMenuButton.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+  sidebar.classList.toggle("close");
+  backdrop.classList.toggle("d-block");
+});
+
+navbarMenuButton.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+  backdrop.classList.toggle("d-block");
+});
+
+backdrop.addEventListener("click", () => {
+  sidebar.classList.remove("open");
+  backdrop.classList.remove("d-block");
+});

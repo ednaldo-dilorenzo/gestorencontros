@@ -1,6 +1,7 @@
 from werkzeug.security import check_password_hash
 from app.modulos.autenticacao import dao as auth_dao
 from app.model import Usuario
+from app.extensoes import login_manager
 
 
 def valida_usuario(login: str, senha: str, paroquia: int = None) -> Usuario:
@@ -35,3 +36,8 @@ def salvar_aluno(usuario: Usuario) -> bool:
 def atualizar_aluno(id: int, usuario: Usuario) -> bool:
     usuario.papel = "ALUNO"
     return auth_dao.atualizar(id, usuario)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return auth_dao.buscar_usuario_por_id(user_id)

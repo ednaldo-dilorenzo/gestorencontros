@@ -198,8 +198,8 @@ def editar_encontro(id_movimento, id_encontro):
         encontro_form.nome.data = encontro.nome
         encontro_form.tema.data = encontro.tema
         encontro_form.ano.data = encontro.ano
-        encontro_form.data_inicio.data = encontro.data_inicio.date()
-        encontro_form.data_termino.data = encontro.data_termino.date()
+        encontro_form.data_inicio.data = encontro.data_inicio
+        encontro_form.data_termino.data = encontro.data_termino
         return render_template(
             "movimento/encontro_registro.html", form=encontro_form, movimento=movimento
         )
@@ -284,9 +284,10 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
         circulo_form.nome.data = circulo_atual.nome
         circulo_form.cor.data = circulo_atual.cor
         circulo_form.id_coordenador = circulo_atual.id_coordenador
-        circulo_form.coordenador = (
-            f"{circulo_atual.coordenador.esposo.nome}/{circulo_atual.coordenador.esposa.nome}"
-        )
+        if circulo_atual.coordenador:
+            circulo_form.coordenador = (
+                f"{circulo_atual.coordenador.esposo.nome}/{circulo_atual.coordenador.esposa.nome}"
+            )
         return render_template(
             "movimento/circulo_registro.html",
             form=circulo_form,

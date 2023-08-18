@@ -21,6 +21,7 @@ class Pessoa(db.Model):
     email = db.Column(db.String)
     telefone = db.Column(db.String, nullable=False)
     nascimento = db.Column(db.Date)
+    apelido = db.Column(db.String, nullable=False)
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"))
 
 

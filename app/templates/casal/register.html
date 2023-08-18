@@ -35,13 +35,13 @@
       />
     </div>
     <div class="col-md-6">
-      <label for="iptEmailEsposo" class="form-label">Email</label>
+      <label for="iptApelidoEsposo" class="form-label">Nome Usual</label>
       <input
         type="text"
-        value="{% if form.email_esposo.data %}{{ form.email_esposo.data }}{% endif %}"
-        name="email_esposo"
+        value="{% if form.apelido_esposo.data %}{{ form.apelido_esposo.data }}{% endif %}"
+        name="apelido_esposo"
         class="form-control"
-        id="iptEmailEsposo"
+        id="iptApelidoEsposo"
       />
     </div>
   </div>
@@ -67,6 +67,18 @@
       />
     </div>
   </div>
+  <div class="row g-3 my-1">
+    <div class="col-md-6">
+      <label for="iptEmailEsposo" class="form-label">Email</label>
+      <input
+        type="text"
+        value="{% if form.email_esposo.data %}{{ form.email_esposo.data }}{% endif %}"
+        name="email_esposo"
+        class="form-control"
+        id="iptEmailEsposo"
+      />
+    </div>
+  </div>
   <h3 class="fs-5 my-4">Esposa</h3>
   <div class="row g-3">
     <div class="col-md-6">
@@ -80,13 +92,13 @@
       />
     </div>
     <div class="col-md-6">
-      <label for="iptEmailEsposa" class="form-label">Email</label>
+      <label for="iptApelidoEsposa" class="form-label">Nome Usual</label>
       <input
         type="text"
-        value="{% if form.email_esposa.data %}{{ form.email_esposa.data }}{% endif %}"
-        name="email_esposa"
+        value="{% if form.apelido_esposa.data %}{{ form.apelido_esposa.data }}{% endif %}"
+        name="apelido_esposa"
         class="form-control"
-        id="iptEmailEsposa"
+        id="iptApelidoEsposa"
       />
     </div>
   </div>
@@ -109,6 +121,18 @@
         name="telefone_esposa"
         class="form-control"
         id="iptTelefoneEsposa"
+      />
+    </div>
+  </div>
+  <div class="row g-3 my-1">
+    <div class="col-md-6">
+      <label for="iptEmailEsposa" class="form-label">Email</label>
+      <input
+        type="text"
+        value="{% if form.email_esposa.data %}{{ form.email_esposa.data }}{% endif %}"
+        name="email_esposa"
+        class="form-control"
+        id="iptEmailEsposa"
       />
     </div>
   </div>
@@ -210,6 +234,12 @@
         ],
       },
       {
+        selector: "#iptApelidoEsposo",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nome usual" },
+        ],
+      },
+      {
         selector: "#iptEmailEsposo",
         validations: [
           { handler: isRequired, message: "Por favor informe o email" },
@@ -226,6 +256,12 @@
         selector: "#iptNomeEsposa",
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
+        ],
+      },
+      {
+        selector: "#iptApelidoEsposa",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nome usual" },
         ],
       },
       {

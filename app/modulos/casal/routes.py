@@ -14,11 +14,13 @@ class CasalForm(FlaskForm):
     id = StringField("id")
     id_esposo = IntegerField("id_esposo")
     nome_esposo = StringField("nome_esposo", validators=[DataRequired()])
+    apelido_esposo = StringField("apelido_esposo", validators=[DataRequired()])
     email_esposo = EmailField("email_esposo", validators=[DataRequired()])
     nascimento_esposo = DateField("nascimento_esposo", validators=[Optional()])
     telefone_esposo = StringField("telefone_esposo", validators=[DataRequired()])
     id_esposa = IntegerField("id_esposa")
     nome_esposa = StringField("nome_esposa", validators=[DataRequired()])
+    apelido_esposa = StringField("apelido_esposa", validators=[DataRequired()])
     email_esposa = EmailField("email_esposa", validators=[DataRequired()])
     nascimento_esposa = DateField("nascimento_esposa", validators=[Optional()])
     telefone_esposa = StringField("telefone_esposa", validators=[DataRequired()])
@@ -36,6 +38,7 @@ class CasalForm(FlaskForm):
         casal.esposo.id = self.id_esposo.data if self.id_esposo.data else None
         casal.esposo.id_paroquia = 1
         casal.esposo.nome = self.nome_esposo.data
+        casal.esposo.apelido = self.apelido_esposo.data
         casal.esposo.email = self.email_esposo.data
         casal.esposo.telefone = self.telefone_esposo.data
         casal.esposo.nascimento = self.nascimento_esposo.data
@@ -43,6 +46,7 @@ class CasalForm(FlaskForm):
         casal.esposa.id = self.id_esposa.data if self.id_esposa.data else None
         casal.esposa.id_paroquia = 1
         casal.esposa.nome = self.nome_esposa.data
+        casal.esposa.apelido = self.apelido_esposa.data
         casal.esposa.email = self.email_esposa.data
         casal.esposa.telefone = self.telefone_esposa.data
         casal.esposa.nascimento = self.nascimento_esposa.data
@@ -104,8 +108,10 @@ def editar(id):
     if request.method == "GET":
         casal_form.id.data = casal.id
         casal_form.nome_esposo.data = casal.esposo.nome
+        casal_form.apelido_esposo.data = casal.esposo.apelido
         casal_form.nascimento_esposo.data = casal.esposo.nascimento
         casal_form.nome_esposa.data = casal.esposa.nome
+        casal_form.apelido_esposa.data = casal.esposa.apelido
         casal_form.email_esposo.data = casal.esposo.email
         casal_form.email_esposa.data = casal.esposa.email
         casal_form.telefone_esposo.data = casal.esposo.telefone
@@ -134,7 +140,7 @@ def buscar_por_filtro():
     if encontro and encontro.isdigit():
         casais = casal_service.buscar_por_filtro_nao_inscrito(filtro, 1, int(encontro))
         resultado = [
-            {"id": casal.id, "nome": f"{casal.esposo.nome}/{casal.esposa.nome}"}
+            {"id": casal.id, "nome": f"{casal.esposo.apelido}/{casal.esposa.apelido}"}
             for casal in casais
         ]
 

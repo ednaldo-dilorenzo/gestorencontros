@@ -1,11 +1,7 @@
 from flask import Flask
-from flask_login import LoginManager
 from app.modulos import auth_bp, casal_bp, movimento_bp
-from app.extensoes import db
+from app.extensoes import db, login_manager, migrate
 import logging
-
-
-login_manager = LoginManager()
 
 
 def create_app(config_filename: str = ""):
@@ -19,11 +15,10 @@ def create_app(config_filename: str = ""):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_pyfile(config_filename)
     db.init_app(app)
+    migrate.init_app(app, db)
     login_manager.init_app(app)
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return None
+    login_manager.login_view = "authentication.login"
+    login_manager.login_message = "Por favor realize o login para executar esta ação."
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(casal_bp)

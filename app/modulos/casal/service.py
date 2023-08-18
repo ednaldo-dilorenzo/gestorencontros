@@ -20,7 +20,7 @@ def buscar_por_id(id_casal: int, id_paroquia: int) -> Casal:
 def salvar(casal):
     casal_dao.criar_pessoa(casal.esposo)
     casal_dao.criar_pessoa(casal.esposa)
-    casal.extenso = f"{casal.esposo.nome} {casal.esposa.nome}".lower()
+    casal.extenso = f"{casal.esposo.nome} {casal.esposo.apelido} {casal.esposa.nome} {casal.esposa.apelido}".lower()
     casal_dao.criar_casal(casal)
 
 
