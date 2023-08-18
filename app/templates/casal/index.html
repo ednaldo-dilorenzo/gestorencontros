@@ -35,23 +35,28 @@
     </form>
   </div>
 </nav>
-<table class="table table-striped table-hover">
+{% if page.items %}
+<table class="table table-striped table-hover table-responsive">
   <thead>
     <tr>
-      <th scope="col">Esposo</th>
-      <th scope="col">Telefone</th>
-      <th scope="col">Esposa</th>
-      <th scope="col">Telefone</th>
+      <th scope="col" class="table-bigger-screen">Esposo</th>
+      <th scope="col" class="table-smaller-screen">Esposo/Esposa</th>
+      <th scope="col" class="table-bigger-screen">Telefone</th>      
+      <th scope="col" class="table-bigger-screen">Esposa</th>
+      <th scope="col" class="table-bigger-screen">Telefone</th>
+      <th scope="col" class="table-smaller-screen">Telefones</th>
       <th scope="col">Ações</th>
     </tr>
   </thead>
   <tbody>
     {% for casal in page.items %}
     <tr>
-      <td>{{ casal.esposo.nome }}</td>
-      <td>{{ casal.esposo.telefone }}</td>
-      <td>{{ casal.esposa.nome }}</td>
-      <td>{{ casal.esposa.telefone }}</td>
+      <td class="table-bigger-screen">{{ casal.esposo.apelido }}</td>
+      <td class="table-smaller-screen">{{ casal.esposo.apelido }}/{{ casal.esposa.apelido }}</td>
+      <td class="table-bigger-screen">{{ casal.esposo.telefone }}</td>
+      <td class="table-bigger-screen">{{ casal.esposa.apelido }}</td>
+      <td class="table-bigger-screen">{{ casal.esposa.telefone }}</td>
+      <td class="table-smaller-screen">{{ casal.esposo.telefone }}/{{ casal.esposa.telefone }}</td>
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
@@ -62,9 +67,14 @@
         </a>        
       </td>
     </tr>
-    {% endfor %}
+    {% endfor %}    
   </tbody>
 </table>
+{% else %}
+  <div class="data-not-found py-3">
+    <h1>Nenhum dado encontrado...</h1>
+  </div>
+{% endif %}
 <nav aria-label="Navegação da página">
   <ul class="pagination justify-content-center">
     <li class="page-item">
