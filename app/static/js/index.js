@@ -63,6 +63,18 @@ const router = async () => {
       path: "/pages/movimentos/:id_movimento/encontros/:id_encontro/circulos/:id_circulo",
       view: "/movimentos/:id_movimento/encontros/:id_encontro/circulos/:id_circulo",
     },
+    {
+      path: "/pages/usuarios/",
+      view: "/usuarios",
+    },
+    {
+      path: "/pages/usuarios/registrar",
+      view: "/usuarios/registrar",
+    },
+    {
+      path: "/pages/usuarios/:id_usuario",
+      view: "/usuarios/:id_usuario",
+    },
   ];
 
   const potentialMatches = routes.map((route) => {

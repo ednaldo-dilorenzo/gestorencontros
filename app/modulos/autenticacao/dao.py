@@ -11,9 +11,10 @@ def buscar_admin_pelo_login(login: str) -> Usuario:
     return usuario
 
 
-def buscar_usuario_pelo_login_e_paroquia(login: str, paroquia: int) -> Usuario:
-    usuario = db.execute(db.select(Usuario).where(Usuario.username == login)).first()
-    return usuario
+def buscar_usuario_pelo_login_e_paroquia(login: str, id_paroquia: int) -> Usuario:
+    return db.session.query(Usuario).filter(
+        Usuario.username == login, Usuario.id_paroquia == id_paroquia
+    ).first()
 
 
 def buscar_usuario_por_id(id: int) -> Usuario:

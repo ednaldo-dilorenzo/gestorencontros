@@ -13,6 +13,8 @@ class Usuario(db.Model, UserMixin):
     senha = db.Column(db.String, nullable=False)
     nome = db.Column(db.String, nullable=False)
     papel = db.Column(db.String, nullable=False)
+    ativo = db.Column(db.Boolean, nullable=False, default=True)
+    id_paroquia = db.Column(db.Integer)
 
 
 class Pessoa(db.Model):

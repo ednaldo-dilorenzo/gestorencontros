@@ -3,6 +3,7 @@ import app.modulos.movimento.service as movimento_service
 from app.model import Movimento, Equipe, Encontro, Circulo
 from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired, Optional
+from flask_login import login_required
 from flask_wtf import FlaskForm
 
 movimento_bp = Blueprint("movimento", __name__, url_prefix="/movimentos")
@@ -46,12 +47,14 @@ class EncontroForm(FlaskForm):
 
 
 @movimento_bp.route("/")
+@login_required
 def index():
     movimentos = movimento_service.buscar_encontros(1)
     return render_template("movimento/index.html", movimentos=movimentos)
 
 
 @movimento_bp.route("/register", methods=["GET", "POST"])
+@login_required
 def register():
     movimento_form = MovimentoForm()
     if request.method == "GET":
@@ -68,6 +71,7 @@ def register():
 
 
 @movimento_bp.route("/<int:id>/edit", methods=["GET", "POST"])
+@login_required
 def edit(id):
     movimento = movimento_service.buscar_movimento_por_id(id, 1)
 
@@ -91,6 +95,7 @@ def edit(id):
 
 
 @movimento_bp.route("/<int:id_movimento>/equipes")
+@login_required
 def equipes(id_movimento):
     equipes = movimento_service.buscar_equipes_por_movimento(id_movimento)
     return render_template(
@@ -99,6 +104,7 @@ def equipes(id_movimento):
 
 
 @movimento_bp.route("/<int:id_movimento>/equipes/nova", methods=["GET", "POST"])
+@login_required
 def nova_equipe(id_movimento):
     equipe_form = EquipeForm()
 
@@ -122,6 +128,7 @@ def nova_equipe(id_movimento):
 @movimento_bp.route(
     "/<int:id_movimento>/equipes/<int:id_equipe>", methods=["GET", "POST"]
 )
+@login_required
 def editar_equipe(id_movimento, id_equipe):
     equipe_atual = movimento_service.buscar_equipe_por_id_e_movimento(
         id_equipe, id_movimento
@@ -152,6 +159,7 @@ def editar_equipe(id_movimento, id_equipe):
 
 
 @movimento_bp.route("/<int:_id>/encontros")
+@login_required
 def encontros(_id):
     movimento = movimento_service.buscar_movimento_por_id(_id, 1)
     encontros = movimento_service.buscar_encontros_por_movimento(_id)
@@ -161,6 +169,7 @@ def encontros(_id):
 
 
 @movimento_bp.route("/<int:_id>/encontros/register", methods=["GET", "POST"])
+@login_required
 def novo_encontro(_id):
     movimento = movimento_service.buscar_movimento_por_id(_id, 1)
     encontro_form = EncontroForm()
@@ -184,6 +193,7 @@ def novo_encontro(_id):
 @movimento_bp.route(
     "/<int:id_movimento>/encontros/<int:id_encontro>/edit", methods=["GET", "POST"]
 )
+@login_required
 def editar_encontro(id_movimento, id_encontro):
     movimento = movimento_service.buscar_movimento_por_id(id_movimento, 1)
     encontro = movimento_service.buscar_encontro_por_id(id_movimento, id_encontro)
@@ -215,6 +225,7 @@ def editar_encontro(id_movimento, id_encontro):
 
 
 @movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/circulos")
+@login_required
 def circulos(id_movimento, id_encontro):
     circulos = movimento_service.buscar_circulos_por_encontro(id_encontro)
     return render_template(
@@ -244,6 +255,7 @@ class CirculoForm(FlaskForm):
 @movimento_bp.route(
     "/<int:id_movimento>/encontros/<int:id_encontro>/novo", methods=["GET", "POST"]
 )
+@login_required
 def novo_circulo(id_movimento, id_encontro):
     circulo_form = CirculoForm()
 
@@ -272,6 +284,7 @@ def novo_circulo(id_movimento, id_encontro):
     "/<int:id_movimento>/encontros/<int:id_encontro>/circulos/<int:id_circulo>",
     methods=["GET", "POST"],
 )
+@login_required
 def editar_circulo(id_movimento, id_encontro, id_circulo):
     circulo_atual = movimento_service.buscar_circulo_por_id_e_encontro(
         id_circulo, id_encontro
@@ -285,9 +298,7 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
         circulo_form.cor.data = circulo_atual.cor
         circulo_form.id_coordenador = circulo_atual.id_coordenador
         if circulo_atual.coordenador:
-            circulo_form.coordenador = (
-                f"{circulo_atual.coordenador.esposo.nome}/{circulo_atual.coordenador.esposa.nome}"
-            )
+            circulo_form.coordenador = f"{circulo_atual.coordenador.esposo.nome}/{circulo_atual.coordenador.esposa.nome}"
         return render_template(
             "movimento/circulo_registro.html",
             form=circulo_form,

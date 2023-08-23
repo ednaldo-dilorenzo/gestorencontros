@@ -39,8 +39,8 @@ def login():
         form.login.data, form.senha.data, form.paroquia.data
     ):
         login_user(logged_user)
-        next = request.args.get("next")
-        return redirect(url_for(next)) if next else redirect(url_for("root"))
+        next_url = request.args.get("next")
+        return redirect(url_for(next_url)) if next_url else redirect(url_for("root"))
 
     flash("Login ou senha inválida")
     return render_template("login.html", form=form, paroquias=paroquias)

@@ -1,0 +1,131 @@
+<div class="d-flex justify-content-between">
+  <h2 class="fs-4">Cadastro de Usuário</h2>
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="" data-link>Encontros</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Cadastro de Usuário
+      </li>
+    </ol>
+  </nav>
+</div>
+<hr />
+<form
+  action="{% if form.id.data %}{{ url_for('usuario.editar', id_usuario=form.id.data) }}{% else %}{{ url_for('usuario.registrar') }}{% endif %}"
+  target="/pages{{ url_for('usuario.index') }}"
+  method="post"
+  novalidate
+>
+  {{ form.csrf_token }} {% if form.id.data %}
+  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
+  {% endif %}
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <label for="iptNome" class="form-label">Nome</label>
+      <input
+        type="text"
+        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"
+        name="nome"
+        class="form-control"
+        id="iptNome"
+        autofocus
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iptEmail" class="form-label">Email</label>
+      <input
+        type="text"
+        value="{% if form.username.data %}{{ form.username.data }}{% endif %}"
+        name="username"
+        class="form-control"
+        id="iptEmail"
+      />
+    </div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <label for="iptSenha" class="form-label">Senha</label>
+      <input
+        type="password"
+        value="{% if form.senha.data %}{{ form.senha.data }}{% endif %}"
+        name="senha"
+        class="form-control"
+        id="iptSenha"
+      />
+    </div>
+    <div class="col-md-6 m-auto">
+      <div class="form-check form-switch">
+        <input name="ativo" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {% if form.ativo.data %}checked{% endif %}>
+        <label class="form-check-label" for="flexSwitchCheckChecked">Ativo</label>
+      </div>
+    </div>
+  </div>
+  <hr class="my-4" />
+  <div class="row g-3">
+    <div class="col-6">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a
+          href="/pages{{ url_for('usuario.index') }}"
+          style="width: 100px"
+          class="btn btn-secondary"
+          type="button"
+          data-link
+          >Cancelar</a
+        >
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button
+          type="submit"
+          style="width: 100px"
+          class="btn btn-dark"
+          type="button"
+        >
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const form = document.querySelector("form");
+    const formValidations = [
+      {
+        selector: "#iptNome",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nome" },
+        ],
+      },
+      {
+        selector: "#iptEmail",
+        validations: [
+          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: isEmailValid, message: "Formato de email inválido" },
+        ],
+      },
+    ];
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.classList.add("was-validated");
+      const itemId = event.target.querySelector("#iptId");
+      const successMsg = itemId
+        ? "Usuário atualizado com sucesso"
+        : "Usuário criado com sucesso";
+
+      if (validateForm(formValidations)) {
+        sendFormData(event.target, successMsg);
+      }
+    });
+  })();
+</script>
