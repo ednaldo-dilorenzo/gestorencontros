@@ -28,7 +28,7 @@ class Pessoa(db.Model):
 
 
 class Casal(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_esposo = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
     id_esposa = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
     esposa = db.relationship(
@@ -40,23 +40,24 @@ class Casal(db.Model):
     )
     extenso = db.Column(db.String)
     id_inscrito = db.Column(db.Integer, db.ForeignKey("encontro.id"))
+    id_circulo = db.Column(db.Integer, db.ForeignKey("circulo.id"))
 
 
 class Movimento(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"), nullable=False)
 
 
 class Equipe(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     descricao = db.Column(db.String, nullable=False)
     id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)
 
 
 class Encontro(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     ano = db.Column(db.Integer, nullable=False)
     tema = db.Column(db.String, nullable=False)
@@ -66,7 +67,7 @@ class Encontro(db.Model):
 
 
 class Circulo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String)
     cor = db.Column(db.String, nullable=False)
     id_coordenador = db.Column(db.Integer, db.ForeignKey("casal.id"))

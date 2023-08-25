@@ -74,3 +74,6 @@ def atualizar_circulo(circulo_atual, circulo_alterado):
     circulo_atual.nome = circulo_alterado.nome
     circulo_atual.cor = circulo_alterado.cor
     circulo_atual.id_coordenador = circulo_alterado.id_coordenador
+
+def buscar_casais_inscritos_sem_circulo(id_encontro: int) -> list:
+    pass

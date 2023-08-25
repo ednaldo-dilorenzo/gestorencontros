@@ -1,6 +1,7 @@
 import app.modulos.casal.dao as casal_dao
 from app.model import Casal
 from app.extensoes import transactional
+from typing import Optional
 
 
 def buscar_todos(paroquia: int, page: int = 1, per_page: int = 10):
@@ -28,8 +29,10 @@ def salvar(casal):
 def atualizar_casal(casal, casal_atualizado):
     atualizar_pessoa(casal.esposo, casal_atualizado.esposo)
     atualizar_pessoa(casal.esposa, casal_atualizado.esposa)
+    if casal_atualizado.id_circulo:
+        casal.id_circulo = casal_atualizado.id_circulo
     casal.extenso = (
-        f"{casal_atualizado.esposo.nome} {casal_atualizado.esposa.nome}".lower()
+        f"{casal.esposo.nome} {casal.esposa.nome}".lower()
     )
 
 
@@ -42,7 +45,27 @@ def atualizar_pessoa(pessoa, pessoa_atualizada):
         pessoa.telefone = pessoa_atualizada.telefone
 
 
+def buscar_casais_inscritos_sem_circulo(id_encontro: int) -> list:
+    return casal_dao.buscar_casais_inscritos_sem_circulo(id_encontro)
+
+
+def buscar_casais_inscritos_no_circulo(id_encontro, id_circulo) -> list:
+    return casal_dao.buscar_casais_inscritos_no_circulo(id_encontro, id_circulo)
+
+
 def buscar_por_filtro_nao_inscrito(
     filtro: str, id_paroquia: int, id_encontro: int
 ) -> list:
     return casal_dao.buscar_por_filtro_nao_inscrito(filtro, id_paroquia, id_encontro)
+
+
+def buscar_por_filtro_test(
+    filtro: str,
+    id_paroquia: int,
+    id_encontro: Optional[int] = None,
+    inscrito: Optional[bool] = True,
+    id_circulo: Optional[int] = None,
+) -> list:
+    return casal_dao.buscar_por_filtro_test(
+        filtro, id_paroquia, id_encontro, inscrito, id_circulo
+    )

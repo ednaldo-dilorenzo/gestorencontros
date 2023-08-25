@@ -29,6 +29,7 @@ class CasalForm(FlaskForm):
     cidade = StringField("cidade")
     estado = StringField("estado")
     cep = StringField("cep")
+    id_circulo = IntegerField("id_circulo")
 
     def retorna_casal(self) -> Casal:
         casal = Casal()
@@ -50,6 +51,7 @@ class CasalForm(FlaskForm):
         casal.esposa.email = self.email_esposa.data
         casal.esposa.telefone = self.telefone_esposa.data
         casal.esposa.nascimento = self.nascimento_esposa.data
+        casal.id_circulo = self.id_circulo.data
 
         return casal
 
@@ -90,18 +92,13 @@ def register():
     return "ok", 201
 
 
-@casal_bp.route("/<int:id>/editar", methods=["GET", "POST"])
+@casal_bp.route("/<int:id>", methods=["GET", "POST", "PATCH"])
 @login_required
 def editar(id):
     casal = casal_service.buscar_por_id(id, 1)
 
     if not casal:
         return "Casal não encontrado", 404
-
-    page = request.args.get("page", None)
-    page = int(page) if page and page.isdigit() else 1
-    per_page = request.args.get("per_page", None)
-    per_page = int(per_page) if per_page and per_page.isdigit() else 10
 
     casal_form = CasalForm()
 
@@ -118,12 +115,15 @@ def editar(id):
         casal_form.telefone_esposa.data = casal.esposa.telefone
         casal_form.nascimento_esposa.data = casal.esposa.nascimento
 
+        page = request.args.get("page", 1, type=int)
+        per_page = request.args.get("per_page", 10, type=int)
+
         return render_template(
             "casal/register.html", form=casal_form, page=page, per_page=per_page
         )
-
-    if not casal_form.validate_on_submit():
-        return "Falha na validação do formulário", 400
+    elif request.method == "POST":
+        if not casal_form.validate_on_submit():
+            return "Falha na validação do formulário", 400
 
     casal_atualizado = casal_form.retorna_casal()
 
@@ -135,13 +135,15 @@ def editar(id):
 @casal_bp.route("/busca")
 def buscar_por_filtro():
     filtro = request.args.get("filtro")
-    encontro = request.args.get("encontro")
-    resultado = []
-    if encontro and encontro.isdigit():
-        casais = casal_service.buscar_por_filtro_nao_inscrito(filtro, 1, int(encontro))
-        resultado = [
-            {"id": casal.id, "nome": f"{casal.esposo.apelido}/{casal.esposa.apelido}"}
-            for casal in casais
-        ]
+    inscrito = request.args.get("inscrito", type=bool)
+    circulo = request.args.get("circulo")
+    encontro = request.args.get("encontro", type=int)
 
-    return resultado
+    casais = casal_service.buscar_por_filtro_test(
+        filtro, 1, encontro, inscrito, circulo
+    )
+
+    return [
+        {"id": casal.id, "nome": f"{casal.esposo.apelido}/{casal.esposa.apelido}"}
+        for casal in casais
+    ]

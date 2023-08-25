@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+   docker-postgres:
+      container_name: docker-postgres
+      image: postgres:15.3-alpine
+      environment:
+         - POSTGRES_PASSWORD=secret
+         - POSTGRES_USER=master
+         - POSTGRES_DB=encontros
+
+   encontros:
+      container_name: gestencontros
+      build: ./
+      image: gestencontros
+      depends_on:
+         - docker-postgres
+      ports:
+         - "5000:5000"
+      environment:
+         - DATABASE_HOST=docker-postgres
+         - DATABASE_USERNAME=master
+         - DATABASE_PASSWORD=secret         
+         - WAIT_HOSTS=docker-postgres:5432

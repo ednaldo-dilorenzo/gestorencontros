@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 import app.modulos.movimento.service as movimento_service
+import app.modulos.casal.service as casal_service
 from app.model import Movimento, Equipe, Encontro, Circulo
 from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired, Optional
@@ -296,9 +297,9 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
         circulo_form.id.data = circulo_atual.id
         circulo_form.nome.data = circulo_atual.nome
         circulo_form.cor.data = circulo_atual.cor
-        circulo_form.id_coordenador = circulo_atual.id_coordenador
+        circulo_form.id_coordenador.data = circulo_atual.id_coordenador
         if circulo_atual.coordenador:
-            circulo_form.coordenador = f"{circulo_atual.coordenador.esposo.nome}/{circulo_atual.coordenador.esposa.nome}"
+            circulo_form.coordenador.data = f"{circulo_atual.coordenador.esposo.apelido}/{circulo_atual.coordenador.esposa.apelido}"
         return render_template(
             "movimento/circulo_registro.html",
             form=circulo_form,
@@ -317,3 +318,21 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
     movimento_service.atualizar_circulo(circulo_atual, novo_circulo)
 
     return "ok", 200
+
+
+@movimento_bp.route(
+    "/<int:id_movimento>/encontros/<int:id_encontro>/circulos/montagem",
+    methods=["GET"],
+)
+@login_required
+def montar_circulo(id_movimento, id_encontro):
+    casais_sem_circulo = casal_service.buscar_casais_inscritos_sem_circulo(id_encontro)
+    circulos_corrente = movimento_service.buscar_circulos_por_encontro(id_encontro)
+
+    return render_template(
+        "movimento/circulo_montagem.html",
+        casais_sem_circulo=casais_sem_circulo,
+        circulos_corrente=circulos_corrente,
+        id_movimento=id_movimento,
+        id_encontro=id_encontro,
+    )

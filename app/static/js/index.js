@@ -26,7 +26,7 @@ const router = async () => {
     { path: "/", view: "/" },
     { path: "/pages/casais/", view: "/casais" },
     { path: "/pages/casais/register", view: "/casais/register" },
-    { path: "/pages/casais/:id/editar", view: "/casais/:id/editar" },
+    { path: "/pages/casais/:id", view: "/casais/:id" },
     { path: "/pages/movimentos/", view: "/movimentos" },
     { path: "/pages/movimentos/register", view: "/movimentos/register" },
     { path: "/pages/movimentos/:id/edit", view: "/movimentos/:id/edit" },
@@ -62,6 +62,10 @@ const router = async () => {
     {
       path: "/pages/movimentos/:id_movimento/encontros/:id_encontro/circulos/:id_circulo",
       view: "/movimentos/:id_movimento/encontros/:id_encontro/circulos/:id_circulo",
+    },
+    {
+      path: "/pages/movimentos/:id_movimento/encontros/:id_encontro/circulos/montagem",
+      view: "/movimentos/:id_movimento/encontros/:id_encontro/circulos/montagem",
     },
     {
       path: "/pages/usuarios/",

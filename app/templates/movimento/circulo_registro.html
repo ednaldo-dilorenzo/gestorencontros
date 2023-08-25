@@ -116,8 +116,9 @@
           },
         },
       });
-      {% if form.data.id %}
-      const newOption = new Option("{{ form.coordenador }}", {{ form.id_coordenador }}, true, true);
+    
+      {% if form.id.data and form.id_coordenador.data %}
+      const newOption = new Option("{{ form.coordenador.data }}", {{ form.id_coordenador.data }}, true, true);
       selectCoordenadores.append(newOption).trigger('change');
       {% endif %}
     });

@@ -92,3 +92,12 @@
   font-size: 2rem;
   text-align: center;
 }
+
+.lista-casais {
+  min-height: 42px;
+  border: solid 1px;
+}
+
+.lista-casais li {
+  cursor: grabbing;
+}

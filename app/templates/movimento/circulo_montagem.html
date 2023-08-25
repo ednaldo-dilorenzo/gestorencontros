@@ -1,0 +1,152 @@
+<div class="d-flex justify-content-between">
+  <h2 class="fs-4">
+    Montagem dos Círculo
+  </h2>
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="/pages{{ url_for('movimento.index')}}" data-link>Movimentos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="#" data-link>Encontros</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="#" data-link>Círculos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Novo Círculo</li>
+    </ol>
+  </nav>
+</div>
+<hr />
+<div class="row">
+  <div class="col-md-6">
+    <h4>Casais sem círculo</h4>
+    <input
+      class="form-control mb-3"
+      type="search"
+      name="nome"
+      id="iptNome"
+      placeholder="Pesquisar casal inscrito"
+    />
+    <ul id="lstCasaisInscritos" class="list-group lista-casais">
+      {% for casal_sem_circulo in casais_sem_circulo %}
+      <li class="list-group-item" value="{{ casal_sem_circulo.id }}">
+        {{casal_sem_circulo.esposo.apelido}}/{{casal_sem_circulo.esposa.apelido}}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <h4>Casais incluídos</h4>
+    <select id="sltCirculos" class="form-select mb-3">
+      <option value="" selected>Selecione o círculo...</option>
+      {% for circulo in circulos_corrente %}
+      <option value="{{ circulo.id }}" style="background: {{ circulo.cor }};">
+        {% if circulo.nome %}{{ circulo.nome }}{% else %}Sem nome{% endif %}
+      </option>
+      {% endfor %}
+    </select>
+    <ul id="lstCasaisIncluidos" class="list-group lista-casais">      
+    </ul>
+  </div>
+</div>
+<hr class="my-4" />
+<div class="row g-3">
+  <div class="col-6">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+      <a
+        href="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
+        style="width: 100px"
+        class="btn btn-secondary"
+        type="button"
+        data-link
+        >Cancelar</a
+      >
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button
+        type="submit"
+        style="width: 100px"
+        class="btn btn-dark"
+        type="button"
+      >
+        Salvar
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $("#iptNome").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#lstCasaisInscritos li").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+    });
+
+    $("#lstCasaisInscritos, #lstCasaisIncluidos")
+      .sortable({
+        connectWith: "ul",
+        placeholder: "placeholder",
+        delay: 150,
+        remove: function (e, ui) {
+          const id_circulo = $("#sltCirculos").val();
+          if (!id_circulo.trim()) {
+            return false;
+          }
+        },
+      })
+      .disableSelection()
+      .dblclick(function (e) {
+        var item = e.target;
+        if (e.currentTarget.id === "lstCasaisInscritos") {
+          const id_casal = $(item).val();
+          $.ajax({
+            url: `/casais/${id_casal}`,
+            type: "PATCH",
+            data: {
+              id_circulo: $("#sltCirculos").find(":selected").val(),
+            },
+          });
+          $(item).fadeOut("fast", function () {
+            $(item).appendTo($("#lstCasaisIncluidos")).fadeIn("slow");
+          });
+        } else {
+          //move from user to all
+          $(item).fadeOut("fast", function () {
+            $(item).appendTo($("#lstCasaisInscritos")).fadeIn("slow");
+          });
+        }
+      });
+
+    $("#sltCirculos").on("change", function () {
+      const id_circulo = $(this).val();
+      if (id_circulo.trim()) {
+        $.ajax({
+          url: "{{ url_for('casal.buscar_por_filtro') }}",
+          dataType: "json",
+          type: "GET",
+          data: {
+            encontro: "{{ id_encontro }}",
+            inscrito: true,
+            circulo: $(this).val(),
+          },
+          contentType: "application/json",
+          dataType: "json",
+        }).done(function (response) {
+          $("#lstCasaisIncluidos").empty();
+          $.each(response, function (key, value) {
+            $("#lstCasaisIncluidos").append(
+              `<li class="list-group-item ui-sortable-handle" value="${value.id}">${value.nome}</li>`
+            );
+          });
+        });
+      } else {
+        $("#lstCasaisIncluidos").empty();
+      }
+    });
+  });
+</script>
