@@ -1,7 +1,5 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">
-    Montagem dos Círculo
-  </h2>
+  <h2 class="fs-4">Montagem dos Círculos</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -47,8 +45,7 @@
       </option>
       {% endfor %}
     </select>
-    <ul id="lstCasaisIncluidos" class="list-group lista-casais">      
-    </ul>
+    <ul id="lstCasaisIncluidos" class="list-group lista-casais"></ul>
   </div>
 </div>
 <hr class="my-4" />
@@ -87,6 +84,16 @@
       });
     });
 
+    const atualizaCirculoCasal = (id_casal, id_circulo) => {
+      $.ajax({
+        url: `/casais/${id_casal}`,
+        type: "PATCH",
+        data: {
+          id_circulo: id_circulo,
+        },
+      });
+    };
+
     $("#lstCasaisInscritos, #lstCasaisIncluidos")
       .sortable({
         connectWith: "ul",
@@ -98,24 +105,29 @@
             return false;
           }
         },
+        receive: function (event, ui) {
+          const id_casal = $(ui.item).val();
+
+          if (event.target.id === "lstCasaisIncluidos") {
+            const id_circulo = $("#sltCirculos").find(":selected").val();
+            atualizaCirculoCasal(id_casal, id_circulo);
+          } else {
+            atualizaCirculoCasal(id_casal, null);
+          }
+        },
       })
       .disableSelection()
       .dblclick(function (e) {
         var item = e.target;
+        const id_casal = $(item).val();
         if (e.currentTarget.id === "lstCasaisInscritos") {
-          const id_casal = $(item).val();
-          $.ajax({
-            url: `/casais/${id_casal}`,
-            type: "PATCH",
-            data: {
-              id_circulo: $("#sltCirculos").find(":selected").val(),
-            },
-          });
+          const id_circulo = $("#sltCirculos").find(":selected").val();
+          atualizaCirculoCasal(id_casal, id_circulo);
           $(item).fadeOut("fast", function () {
             $(item).appendTo($("#lstCasaisIncluidos")).fadeIn("slow");
           });
         } else {
-          //move from user to all
+          atualizaCirculoCasal(id_casal, null);
           $(item).fadeOut("fast", function () {
             $(item).appendTo($("#lstCasaisInscritos")).fadeIn("slow");
           });

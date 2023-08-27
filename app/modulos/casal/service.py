@@ -29,8 +29,7 @@ def salvar(casal):
 def atualizar_casal(casal, casal_atualizado):
     atualizar_pessoa(casal.esposo, casal_atualizado.esposo)
     atualizar_pessoa(casal.esposa, casal_atualizado.esposa)
-    if casal_atualizado.id_circulo:
-        casal.id_circulo = casal_atualizado.id_circulo
+    casal.id_circulo = casal_atualizado.id_circulo
     casal.extenso = (
         f"{casal.esposo.nome} {casal.esposa.nome}".lower()
     )
