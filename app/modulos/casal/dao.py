@@ -4,32 +4,46 @@ from sqlalchemy import or_
 from typing import Optional
 
 
-def criar_pessoa(pessoa: Pessoa):
+def criar_pessoa(pessoa: Pessoa) -> Pessoa:
     db.session.add(pessoa)
+    return pessoa
 
 
-def criar_casal(casal: Casal):
+def criar_casal(casal: Casal) -> Casal:
     db.session.add(casal)
+    return casal
 
 
-def buscar_casais(id_paroquia: int, page: int = 1, per_page: int = 10):
-    return (
-        db.session.query(Casal)
-        .filter(Casal.id_paroquia == id_paroquia)
-        .order_by(Casal.id)
-        .paginate(page=page, per_page=per_page)
-    )
+def buscar_casais(
+    id_paroquia: int,
+    page: int = 1,
+    per_page: int = 10,
+    id_inscrito: Optional[int] = None,
+):
+    resultado = db.session.query(Casal).filter(Casal.id_paroquia == id_paroquia)
+
+    if id_inscrito:
+        resultado = resultado.filter(Casal.id_inscrito == id_inscrito)
+
+    return resultado.order_by(Casal.id).paginate(page=page, per_page=per_page)
 
 
-def buscar_por_filtro(filtro: str, id_paroquia: int, page: int = 1, per_page: int = 10):
+def buscar_por_filtro(
+    filtro: str,
+    id_paroquia: int,
+    page: int = 1,
+    per_page: int = 10,
+    id_inscrito: Optional[int] = None,
+):
     busca = "%{}%".format(filtro)
-    result = (
-        db.session.query(Casal)
-        .filter(Casal.id_paroquia == id_paroquia, Casal.extenso.like(busca))
-        .order_by(Casal.id)
-        .paginate(page=page, per_page=per_page)
+    resultado = db.session.query(Casal).filter(
+        Casal.id_paroquia == id_paroquia, Casal.extenso.like(busca)
     )
-    return result
+
+    if id_inscrito:
+        resultado = resultado.filter(Casal.id_inscrito == id_inscrito)
+
+    return resultado.order_by(Casal.id).paginate(page=page, per_page=per_page)
 
 
 def buscar_casal_por_id(id_casal: int, id_paroquia: int) -> Casal:

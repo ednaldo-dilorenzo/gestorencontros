@@ -10,12 +10,19 @@
 <hr />
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
-    <a
-      href="/pages{{ url_for('casal.register', page=page.page, per_page=page.per_page) }}"
-      class="btn btn-primary"
-      data-link
-      >+ Novo</a
-    >
+    <div>
+      {% if back_link %}
+      <a href="/pages{{ back_link }}" class="btn btn-outline-primary me-2" data-link
+        ><i class="fa-solid fa-arrow-left"></i></a
+      >
+      {% endif %}
+      <a
+        href="/pages{{ novo_link }}"
+        class="btn btn-primary"
+        data-link
+        >+ Novo</a
+      >
+    </div>
     <form
       id="frmPesquisa"
       action="/pages{{ url_for('casal.index')}}"
@@ -23,6 +30,7 @@
       role="search"
       target="/pages{{ url_for('casal.index')}}"
     >
+      <input type="hidden" name="inscrito" value="{{inscrito}}" />
       <input
         class="form-control me-2"
         type="search"
@@ -41,7 +49,7 @@
     <tr>
       <th scope="col" class="table-bigger-screen">Esposo</th>
       <th scope="col" class="table-smaller-screen">Esposo/Esposa</th>
-      <th scope="col" class="table-bigger-screen">Telefone</th>      
+      <th scope="col" class="table-bigger-screen">Telefone</th>
       <th scope="col" class="table-bigger-screen">Esposa</th>
       <th scope="col" class="table-bigger-screen">Telefone</th>
       <th scope="col" class="table-smaller-screen">Telefones</th>
@@ -52,11 +60,15 @@
     {% for casal in page.items %}
     <tr>
       <td class="table-bigger-screen">{{ casal.esposo.apelido }}</td>
-      <td class="table-smaller-screen">{{ casal.esposo.apelido }}/{{ casal.esposa.apelido }}</td>
+      <td class="table-smaller-screen">
+        {{ casal.esposo.apelido }}/{{ casal.esposa.apelido }}
+      </td>
       <td class="table-bigger-screen">{{ casal.esposo.telefone }}</td>
       <td class="table-bigger-screen">{{ casal.esposa.apelido }}</td>
       <td class="table-bigger-screen">{{ casal.esposa.telefone }}</td>
-      <td class="table-smaller-screen">{{ casal.esposo.telefone }}/{{ casal.esposa.telefone }}</td>
+      <td class="table-smaller-screen">
+        {{ casal.esposo.telefone }}/{{ casal.esposa.telefone }}
+      </td>
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
@@ -64,16 +76,16 @@
           data-link
         >
           <i class="fas fa-pen"></i>
-        </a>        
+        </a>
       </td>
     </tr>
-    {% endfor %}    
+    {% endfor %}
   </tbody>
 </table>
 {% else %}
-  <div class="data-not-found py-3">
-    <h1>Nenhum dado encontrado...</h1>
-  </div>
+<div class="data-not-found py-3">
+  <h1>Nenhum dado encontrado...</h1>
+</div>
 {% endif %}
 <nav aria-label="Navegação da página">
   <ul class="pagination justify-content-center">

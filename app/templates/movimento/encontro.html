@@ -45,12 +45,15 @@
         >
           <i class="fas fa-pen"></i>
         </a>
-        <a 
+        <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('movimento.circulos', id_movimento=movimento.id, id_encontro=encontro.id) }}" 
+          href="/pages{{ url_for('movimento.circulos', id_movimento=movimento.id, id_encontro=encontro.id) }}"
           data-link
         >
           <i class="fa-solid fa-group-arrows-rotate"></i>
+        </a>
+        <a href="/pages{{ url_for('movimento.casais_inscritos', id_movimento=movimento.id, id_encontro=encontro.id ) }}" class="btn btn-sm icon-link icon-link-hover" data-link>
+          <i class="fa-solid fa-right-to-bracket"></i>
         </a>
       </td>
     </tr>

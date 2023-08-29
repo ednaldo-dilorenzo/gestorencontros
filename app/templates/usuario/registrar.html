@@ -17,52 +17,27 @@
   action="{% if form.id.data %}{{ url_for('usuario.editar', id_usuario=form.id.data) }}{% else %}{{ url_for('usuario.registrar') }}{% endif %}"
   target="/pages{{ url_for('usuario.index') }}"
   method="post"
+  class="row g-3"
   novalidate
 >
-  {{ form.csrf_token }} {% if form.id.data %}
-  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
-  {% endif %}
-  <div class="row g-3 mb-3">
-    <div class="col-md-6">
-      <label for="iptNome" class="form-label">Nome</label>
-      <input
-        type="text"
-        value="{% if form.nome.data %}{{ form.nome.data }}{% endif %}"
-        name="nome"
-        class="form-control"
-        id="iptNome"
-        autofocus
-      />
-    </div>
-    <div class="col-md-6">
-      <label for="iptEmail" class="form-label">Email</label>
-      <input
-        type="text"
-        value="{% if form.username.data %}{{ form.username.data }}{% endif %}"
-        name="username"
-        class="form-control"
-        id="iptEmail"
-      />
-    </div>
-  </div>
-  <div class="row g-3 mb-3">
-    <div class="col-md-6">
-      <label for="iptSenha" class="form-label">Senha</label>
-      <input
-        type="password"
-        value="{% if form.senha.data %}{{ form.senha.data }}{% endif %}"
-        name="senha"
-        class="form-control"
-        id="iptSenha"
-      />
-    </div>
+  {{ form.hidden_tag() }}
+  {% for field in form %}
+    {% if not field.type in ('HiddenField', 'CSRFTokenField') %}
+    {% if field.type == 'BooleanField' %}
     <div class="col-md-6 m-auto">
       <div class="form-check form-switch">
-        <input name="ativo" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {% if form.ativo.data %}checked{% endif %}>
-        <label class="form-check-label" for="flexSwitchCheckChecked">Ativo</label>
+        {{ field(class_="form-check-input") }}
+        {{ field.label(class_="form-check-label") }}
       </div>
     </div>
-  </div>
+    {% else %}
+    <div class="col-md-6">
+      {{ field.label(class_="form-label") }}
+      {{ field(class_="form-control") }}
+    </div>
+    {% endif %}
+    {% endif %}
+  {% endfor %}  
   <hr class="my-4" />
   <div class="row g-3">
     <div class="col-6">
@@ -100,13 +75,13 @@
     const form = document.querySelector("form");
     const formValidations = [
       {
-        selector: "#iptNome",
+        selector: "#nome",
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
         ],
       },
       {
-        selector: "#iptEmail",
+        selector: "#username",
         validations: [
           { handler: isRequired, message: "Por favor informe o nome" },
           { handler: isEmailValid, message: "Formato de email inválido" },
@@ -118,8 +93,8 @@
       event.preventDefault();
       event.stopPropagation();
       event.target.classList.add("was-validated");
-      const itemId = event.target.querySelector("#iptId");
-      const successMsg = itemId
+      const itemId = event.target.querySelector("#id");
+      const successMsg = itemId.value
         ? "Usuário atualizado com sucesso"
         : "Usuário criado com sucesso";
 

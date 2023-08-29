@@ -15,16 +15,21 @@
 <hr />
 <form
   action="{% if form.id.data %}{{ url_for('casal.editar', id=form.id.data) }}{% else %}{{ url_for('casal.register') }}{% endif %}"
-  target="/pages{{ url_for('casal.index', page=page.pate, per_page=page.per_page) }}"
+  target="/pages{{ back_link }}"
+  enctype="multipart/form-data"
   method="post"
+  class="row g-3"
   novalidate
 >
-  {{ form.csrf_token }} {% if form.id.data %}
-  <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
-  {% endif %}
-  <h3 class="fs-5 my-4">Esposo</h3>
+  {{ form.hidden_tag() }}
+  <h3 class="fs-5 my-3">Esposo</h3>    
+  <div class="col-md-6">
+    <img style="height: 204px;" src="{{ url_for('foto.foto', id_pessoa=form.id_esposo.data) }}" id="img_esposo" class="img-thumbnail" alt="...">    
+    <input name="foto_esposo" class="form-control" type="file" id="formFile">
+  </div>
+  <div class="col-md-6">
   <div class="row g-3">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <label for="iptNomeEsposo" class="form-label">Nome</label>
       <input
         type="text"
@@ -34,7 +39,7 @@
         id="iptNomeEsposo"
       />
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
       <label for="iptApelidoEsposo" class="form-label">Nome Usual</label>
       <input
         type="text"
@@ -43,10 +48,8 @@
         class="form-control"
         id="iptApelidoEsposo"
       />
-    </div>
-  </div>
-  <div class="row g-3 my-1">
-    <div class="col-md-6">
+    </div>  
+    <div class="col-md-12">
       <label for="iptNascimentoEsposo" class="form-label">Nascimento</label>
       <input
         type="date"
@@ -56,6 +59,8 @@
         id="iptNascimentoEsposo"
       />
     </div>
+  </div>
+  </div>    
     <div class="col-md-6">
       <label for="iptTelefoneEsposo" class="form-label">Telefone</label>
       <input
@@ -65,9 +70,7 @@
         class="form-control"
         id="iptTelefoneEsposo"
       />
-    </div>
-  </div>
-  <div class="row g-3 my-1">
+    </div>  
     <div class="col-md-6">
       <label for="iptEmailEsposo" class="form-label">Email</label>
       <input
@@ -77,41 +80,45 @@
         class="form-control"
         id="iptEmailEsposo"
       />
-    </div>
+    </div>  
+  <h3 class="fs-5 my-3">Esposa</h3>  
+  <div class="col-md-6">
+    <img style="height: 204px;" src="{{ url_for('foto.foto', id_pessoa=form.id_esposa.data, tipo='f') }}" id="img_esposa" class="img-thumbnail" alt="...">    
+    <input name="foto_esposa" class="form-control" type="file" id="formFile">
   </div>
-  <h3 class="fs-5 my-4">Esposa</h3>
-  <div class="row g-3">
-    <div class="col-md-6">
-      <label for="iptNomeEsposa" class="form-label">Nome</label>
-      <input
-        type="text"
-        value="{% if form.nome_esposa.data %}{{ form.nome_esposa.data }}{% endif %}"
-        name="nome_esposa"
-        class="form-control"
-        id="iptNomeEsposa"
-      />
+  <div class="col-md-6">
+    <div class="row g-3">
+      <div class="col-md-12">
+        <label for="iptNomeEsposa" class="form-label">Nome</label>
+        <input
+          type="text"
+          value="{% if form.nome_esposa.data %}{{ form.nome_esposa.data }}{% endif %}"
+          name="nome_esposa"
+          class="form-control"
+          id="iptNomeEsposa"
+        />
+      </div>
+      <div class="col-md-12">
+        <label for="iptApelidoEsposa" class="form-label">Nome Usual</label>
+        <input
+          type="text"
+          value="{% if form.apelido_esposa.data %}{{ form.apelido_esposa.data }}{% endif %}"
+          name="apelido_esposa"
+          class="form-control"
+          id="iptApelidoEsposa"
+        />
+      </div>  
+      <div class="col-md-12">
+        <label for="iptNascimentoEsposa" class="form-label">Nascimento</label>
+        <input
+          type="date"
+          value="{% if form.nascimento_esposa.data %}{{ form.nascimento_esposa.data }}{% endif %}"
+          name="nascimento_esposa"
+          class="form-control"
+          id="iptNascimentoEsposa"
+        />
     </div>
-    <div class="col-md-6">
-      <label for="iptApelidoEsposa" class="form-label">Nome Usual</label>
-      <input
-        type="text"
-        value="{% if form.apelido_esposa.data %}{{ form.apelido_esposa.data }}{% endif %}"
-        name="apelido_esposa"
-        class="form-control"
-        id="iptApelidoEsposa"
-      />
-    </div>
-  </div>
-  <div class="row g-3 my-1">
-    <div class="col-md-6">
-      <label for="iptNascimentoEsposa" class="form-label">Nascimento</label>
-      <input
-        type="date"
-        value="{% if form.nascimento_esposa.data %}{{ form.nascimento_esposa.data }}{% endif %}"
-        name="nascimento_esposa"
-        class="form-control"
-        id="iptNascimentoEsposa"
-      />
+  </div>    
     </div>
     <div class="col-md-6">
       <label for="iptTelefoneEsposa" class="form-label">Telefone</label>
@@ -122,9 +129,7 @@
         class="form-control"
         id="iptTelefoneEsposa"
       />
-    </div>
-  </div>
-  <div class="row g-3 my-1">
+    </div>  
     <div class="col-md-6">
       <label for="iptEmailEsposa" class="form-label">Email</label>
       <input
@@ -134,10 +139,8 @@
         class="form-control"
         id="iptEmailEsposa"
       />
-    </div>
-  </div>
-  <h3 class="fs-5 my-4">Endereço</h3>
-  <div class="row g-3">
+    </div>  
+  <h3 class="fs-5 my-4">Endereço</h3>  
     <div class="col-12">
       <label for="iptEndereco" class="form-label">Endereço</label>
       <input
@@ -196,7 +199,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('casal.index', page=page, per_page=per_page) }}"
+          href="/pages{{ back_link }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"
@@ -223,6 +226,26 @@
   // Example starter JavaScript for disabling form submissions if there are invalid fields
   (() => {
     "use strict";
+
+    document.querySelector('input[name="foto_esposo"]').addEventListener('change', function () {      
+      if (this.files&&this.files[0]) {        
+        var img = document.getElementById('img_esposo');
+        img.onload = () => {
+          URL.revokeObjectURL(img.src);
+        }
+        img.src = URL.createObjectURL(this.files[0]);
+      }
+    });
+
+    document.querySelector('input[name="foto_esposa"]').addEventListener('change', function () {      
+      if (this.files&&this.files[0]) {        
+        var img = document.getElementById('img_esposa');
+        img.onload = () => {
+          URL.revokeObjectURL(img.src);
+        }
+        img.src = URL.createObjectURL(this.files[0]);
+      }
+    });
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const form = document.querySelector("form");

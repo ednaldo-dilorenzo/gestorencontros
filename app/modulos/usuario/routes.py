@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request
 import app.modulos.usuario.service as usuario_service
 from app.model import Usuario
-from wtforms import StringField, PasswordField, BooleanField
-from wtforms.validators import DataRequired, Email
+from wtforms import StringField, PasswordField, BooleanField, HiddenField
+from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
 
 
@@ -16,11 +16,11 @@ def index():
 
 
 class UsuarioForm(FlaskForm):
-    id = StringField("id")
-    username = StringField("username", validators=[DataRequired()])
-    senha = PasswordField("senha")
-    nome = StringField("nome", validators=[DataRequired()])
-    ativo = BooleanField("ativo", default=False)
+    id = HiddenField("id")
+    username = StringField("Email", validators=[DataRequired()])
+    nome = StringField("Nome", validators=[DataRequired()])
+    senha = PasswordField("Senha")    
+    ativo = BooleanField("Ativo", default=False)
 
     def retorna_usuario(self):
         resultado = Usuario()

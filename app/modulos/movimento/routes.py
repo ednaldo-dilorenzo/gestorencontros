@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for
 import app.modulos.movimento.service as movimento_service
 import app.modulos.casal.service as casal_service
+from app.modulos.casal.handler import listar_casais, novo_casal, editar_casal
 from app.model import Movimento, Equipe, Encontro, Circulo
 from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired, Optional
@@ -59,7 +60,11 @@ def index():
 def register():
     movimento_form = MovimentoForm()
     if request.method == "GET":
-        return render_template("movimento/register.html", form=movimento_form)
+        return render_template(
+            "movimento/register.html",
+            form=movimento_form,
+            back_link=url_for("movimento.index"),
+        )
 
     if not movimento_form.validate_on_submit():
         return "Falha na validação do formulário", 400
@@ -71,7 +76,7 @@ def register():
     return "200", 200
 
 
-@movimento_bp.route("/<int:id>/edit", methods=["GET", "POST"])
+@movimento_bp.route("/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit(id):
     movimento = movimento_service.buscar_movimento_por_id(id, 1)
@@ -84,7 +89,11 @@ def edit(id):
     if request.method == "GET":
         movimento_form.id.data = movimento.id
         movimento_form.nome.data = movimento.nome
-        return render_template("movimento/register.html", form=movimento_form)
+        return render_template(
+            "movimento/register.html",
+            form=movimento_form,
+            back_link=url_for("movimento.index"),
+        )
 
     if not movimento_form.validate_on_submit():
         return "Falha na validação do formulário", 400
@@ -98,9 +107,12 @@ def edit(id):
 @movimento_bp.route("/<int:id_movimento>/equipes")
 @login_required
 def equipes(id_movimento):
-    equipes = movimento_service.buscar_equipes_por_movimento(id_movimento)
+    equipes_movimento = movimento_service.buscar_equipes_por_movimento(id_movimento)
     return render_template(
-        "movimento/equipe.html", items=equipes, id_movimento=id_movimento
+        "movimento/equipe.html",
+        items=equipes_movimento,
+        id_movimento=id_movimento,
+        back_link=url_for("movimento.index"),
     )
 
 
@@ -223,6 +235,48 @@ def editar_encontro(id_movimento, id_encontro):
     movimento_service.atualizar_encontro(encontro, encontro_alterado)
 
     return "ok", 200
+
+
+@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/inscritos")
+@login_required
+def casais_inscritos(id_movimento, id_encontro):
+    return listar_casais(
+        id_encontro,
+        url_for("movimento.encontros", _id=id_movimento),
+        novo_link=url_for(
+            "movimento.novo_inscrito",
+            id_movimento=id_movimento,
+            id_encontro=id_encontro,
+        ),
+    )
+
+
+@movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/inscritos/novo")
+@login_required
+def novo_inscrito(id_movimento, id_encontro):
+    return novo_casal(
+        back_link=url_for(
+            "movimento.casais_inscritos",
+            id_movimento=id_movimento,
+            id_encontro=id_encontro,
+        ),
+        id_inscrito=id_encontro,
+    )
+
+
+@movimento_bp.route(
+    "/<int:id_movimento>/encontros/<int:id_encontro>/inscritos/<int:id_casal>"
+)
+@login_required
+def editar_inscrito(id_movimento, id_encontro, id_casal):
+    return editar_casal(
+        id=id_casal,
+        back_link=url_for(
+            "movimento.casais_inscritos",
+            id_movimento=id_movimento,
+            id_encontro=id_encontro,
+        ),
+    )
 
 
 @movimento_bp.route("/<int:id_movimento>/encontros/<int:id_encontro>/circulos")

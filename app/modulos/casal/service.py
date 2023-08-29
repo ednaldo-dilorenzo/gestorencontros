@@ -4,12 +4,17 @@ from app.extensoes import transactional
 from typing import Optional
 
 
-def buscar_todos(paroquia: int, page: int = 1, per_page: int = 10):
-    return casal_dao.buscar_casais(paroquia, page, per_page)
+def buscar_todos(
+    paroquia: int,
+    page: int = 1,
+    per_page: int = 10,
+    id_inscrito: Optional[int] = None,
+):
+    return casal_dao.buscar_casais(paroquia, page, per_page, id_inscrito)
 
 
-def buscar_por_filtro(filtro: str, id_paroquia: int):
-    resultado = casal_dao.buscar_por_filtro(filtro.lower(), id_paroquia)
+def buscar_por_filtro(filtro: str, id_paroquia: int, id_inscrito: Optional[int]=None):
+    resultado = casal_dao.buscar_por_filtro(filtro.lower(), id_paroquia, id_inscrito=id_inscrito)
     return resultado
 
 
@@ -19,10 +24,11 @@ def buscar_por_id(id_casal: int, id_paroquia: int) -> Casal:
 
 @transactional
 def salvar(casal):
-    casal_dao.criar_pessoa(casal.esposo)
-    casal_dao.criar_pessoa(casal.esposa)
+    casal.esposo = casal_dao.criar_pessoa(casal.esposo)
+    casal.esposa = casal_dao.criar_pessoa(casal.esposa)
     casal.extenso = f"{casal.esposo.nome} {casal.esposo.apelido} {casal.esposa.nome} {casal.esposa.apelido}".lower()
-    casal_dao.criar_casal(casal)
+    casal = casal_dao.criar_casal(casal)
+    return casal
 
 
 @transactional
@@ -30,9 +36,7 @@ def atualizar_casal(casal, casal_atualizado):
     atualizar_pessoa(casal.esposo, casal_atualizado.esposo)
     atualizar_pessoa(casal.esposa, casal_atualizado.esposa)
     casal.id_circulo = casal_atualizado.id_circulo
-    casal.extenso = (
-        f"{casal.esposo.nome} {casal.esposa.nome}".lower()
-    )
+    casal.extenso = f"{casal.esposo.nome} {casal.esposa.nome}".lower()
 
 
 def atualizar_pessoa(pessoa, pessoa_atualizada):
