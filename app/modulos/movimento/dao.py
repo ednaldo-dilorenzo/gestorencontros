@@ -23,8 +23,10 @@ def salvar(movimento):
     db.session.add(movimento)
 
 
-def salvar_encontro(encontro: Encontro):
+def salvar_encontro(encontro: Encontro) -> Encontro:
     db.session.add(encontro)
+    db.session.flush()
+    return encontro
 
 
 def atualizar(valor):

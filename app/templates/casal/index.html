@@ -72,7 +72,7 @@
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('casal.editar', id=casal.id, page=page.page, per_page=page.per_page) }}"
+          href="/pages{{ edit_link }}/{{ casal.id }}"
           data-link
         >
           <i class="fas fa-pen"></i>

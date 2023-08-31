@@ -13,12 +13,20 @@
 <hr />
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
-    <a
-      href="/pages{{ url_for('movimento.novo_encontro', _id=movimento.id) }}"
-      class="btn btn-primary"
-      data-link
-      >+ Novo</a
-    >
+    <div>
+      <a
+        href="/pages{{ url_for('movimento.index')}}"
+        class="btn btn-outline-primary me-2"
+        data-link
+        ><i class="fa-solid fa-arrow-left"></i
+      ></a>
+      <a
+        href="/pages{{ url_for('movimento.encontro.novo', id_movimento=movimento.id) }}"
+        class="btn btn-primary"
+        data-link
+        >+ Novo</a
+      >
+    </div>
   </div>
 </nav>
 {% if encontros %}
@@ -40,20 +48,31 @@
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('movimento.editar_encontro', id_movimento=movimento.id, id_encontro=encontro.id) }}"
+          href="/pages{{ url_for('movimento.encontro.editar', id_movimento=movimento.id, id_encontro=encontro.id) }}"
           data-link
         >
           <i class="fas fa-pen"></i>
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('movimento.circulos', id_movimento=movimento.id, id_encontro=encontro.id) }}"
+          href="/pages{{ url_for('movimento.encontro.circulos', id_movimento=movimento.id, id_encontro=encontro.id) }}"
           data-link
         >
           <i class="fa-solid fa-group-arrows-rotate"></i>
         </a>
-        <a href="/pages{{ url_for('movimento.casais_inscritos', id_movimento=movimento.id, id_encontro=encontro.id ) }}" class="btn btn-sm icon-link icon-link-hover" data-link>
-          <i class="fa-solid fa-right-to-bracket"></i>
+        <a
+          href="/pages{{ url_for('movimento.encontro.casais_inscritos', id_movimento=movimento.id, id_encontro=encontro.id ) }}"
+          class="btn btn-sm icon-link icon-link-hover"
+          data-link
+        >
+          <i class="fa-solid fa-user-plus"></i>
+        </a>
+        <a
+          href="/pages{{ url_for('movimento.encontro.montar_circulo', id_movimento=movimento.id, id_encontro=encontro.id ) }}"
+          class="btn btn-sm icon-link icon-link-hover"
+          data-link
+        >
+          <i class="fa-solid fa-ring"></i>
         </a>
       </td>
     </tr>

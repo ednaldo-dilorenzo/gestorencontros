@@ -24,7 +24,7 @@ const navigateTo = (url) => {
 const router = async () => {
   const routes = [
     { path: "/", view: "/" },
-    { path: "/pages/casais/", view: "/casais" },
+    { path: "/pages/casais", view: "/casais" },
     { path: "/pages/casais/novo", view: "/casais/novo" },
     { path: "/pages/casais/:id", view: "/casais/:id" },
     { path: "/pages/movimentos/", view: "/movimentos" },

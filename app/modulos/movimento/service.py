@@ -1,4 +1,6 @@
+from app.model import Encontro, EquipeEncontro
 import app.modulos.movimento.dao as encontro_dao
+import app.modulos.movimento.equipe.dao as equipe_dao
 from app.extensoes import transactional
 
 
@@ -12,8 +14,16 @@ def atualizar_movimento(movimento_atual, movimento_alterado):
 
 
 @transactional
-def criar_encontro(encontro):
-    encontro_dao.salvar(encontro)
+def criar_encontro(encontro: Encontro):
+    equipes_movimento = equipe_dao.buscar_equipes_por_movimento(encontro.id_movimento)
+
+    novo_encontro = encontro_dao.salvar_encontro(encontro)
+
+    for equipe in equipes_movimento:
+        equipe_encontro = EquipeEncontro()
+        equipe_encontro.id_encontro = novo_encontro.id
+        equipe_encontro.id_equipe = equipe.id
+        equipe_dao.adicionar_equipe_encontro(equipe_encontro)
 
 
 def buscar_equipes_por_movimento(id_movimento: int) -> list:
@@ -74,6 +84,7 @@ def atualizar_circulo(circulo_atual, circulo_alterado):
     circulo_atual.nome = circulo_alterado.nome
     circulo_atual.cor = circulo_alterado.cor
     circulo_atual.id_coordenador = circulo_alterado.id_coordenador
+
 
 def buscar_casais_inscritos_sem_circulo(id_encontro: int) -> list:
     pass

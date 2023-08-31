@@ -76,3 +76,11 @@ class Circulo(db.Model):
     )
     id_encontro = db.Column(db.Integer, db.ForeignKey("encontro.id"))
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"))
+
+
+class EquipeEncontro(db.Model):
+    id_equipe = db.Column(db.BigInteger, db.ForeignKey("equipe.id"), primary_key=True)
+    id_encontro = db.Column(
+        db.BigInteger, db.ForeignKey("encontro.id"), primary_key=True
+    )
+    id_coordenador = db.Column(db.BigInteger, db.ForeignKey("casal.id"))

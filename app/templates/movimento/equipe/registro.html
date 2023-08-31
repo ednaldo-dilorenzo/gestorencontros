@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Cadastro de Encontro</h2>
+  <h2 class="fs-4">Cadastro de Equipe</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -7,20 +7,15 @@
         <a href="/pages{{ url_for('movimento.index')}}" data-link>Movimentos</a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a
-          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
-          data-link
-          >Encontros</a
-        >
+        Cadastro de Equipes
       </li>
-      <li class="breadcrumb-item active" aria-current="page">Novo Encontro</li>
     </ol>
   </nav>
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('movimento.editar_encontro', id_movimento=movimento.id, id_encontro=form.id.data) }}{% else %}{{ url_for('movimento.novo_encontro', _id=movimento.id) }}{% endif %}"
-  target="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
+  action="{% if form.id.data %}{{ url_for('movimento.equipe.editar_equipe', id_movimento=id_movimento, id_equipe=form.id.data) }}{% else %}{{ url_for('movimento.equipe.nova_equipe', id_movimento=id_movimento) }}{% endif %}"
+  target="/pages{{ url_for('movimento.equipe.index', id_movimento=id_movimento) }}"
   method="post"
   novalidate
 >
@@ -28,7 +23,7 @@
   <input type="hidden" name="id" id="iptId" value="{{ form.id.data }}" />
   {% endif %}
   <div class="row g-3 mb-3">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <label for="iptNome" class="form-label">Nome</label>
       <input
         type="text"
@@ -39,49 +34,16 @@
         autofocus
       />
     </div>
-    <div class="col-md-6">
-      <label for="iptTema" class="form-label">Tema</label>
-      <input
-        type="text"
-        value="{% if form.tema.data %}{{ form.tema.data }}{% endif %}"
-        name="tema"
-        class="form-control"
-        id="iptTema"
-      />
-    </div>
-  </div>
-  <div class="row g-3 mb-3">
-    <div class="col-md-6">
-      <label for="iptAno" class="form-label">Ano</label>
-      <input
-        type="number"
-        value="{% if form.ano.data %}{{ form.ano.data }}{% endif %}"
-        name="ano"
-        class="form-control"
-        id="iptAno"
-      />
-    </div>
-    <div class="col-md-6">
-      <label for="iptDataInicio" class="form-label">Data início</label>
-      <input
-        type="date"
-        value="{% if form.data_inicio.data %}{{ form.data_inicio.data }}{% endif %}"
-        name="data_inicio"
-        class="form-control"
-        id="iptDataInicio"
-      />
-    </div>
   </div>
   <div class="row g-3">
-    <div class="col-md-6">
-      <label for="iptDataTermino" class="form-label">Data término</label>
-      <input
-        type="date"
-        value="{% if form.data_termino.data %}{{ form.data_termino.data }}{% else %}{{ '' }}{% endif %}"
-        name="data_termino"
+    <div class="col-md-12">
+      <label for="iptDescricao" class="form-label">Descrição</label>
+      <textarea
+        type="text"
         class="form-control"
-        id="iptDataTermino"
-      />
+        id="iptDescricao"
+        name="descricao"
+      >{% if form.descricao.data %}{{ form.descricao.data }}{% endif %}</textarea>
     </div>
   </div>
   <hr class="my-4" />
@@ -89,7 +51,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
+          href="/pages{{ url_for('movimento.equipe.index', id_movimento=id_movimento) }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"
@@ -127,15 +89,9 @@
         ],
       },
       {
-        selector: "#iptTema",
+        selector: "#iptDescricao",
         validations: [
-          { handler: isRequired, message: "Por favor informe o tema" },
-        ],
-      },
-      {
-        selector: "#iptAno",
-        validations: [
-          { handler: isRequired, message: "Por favor informe o ano" },
+          { handler: isRequired, message: "Por favor informe a descrição" },
         ],
       },
     ];
@@ -146,8 +102,8 @@
       event.target.classList.add("was-validated");
       const itemId = event.target.querySelector("#iptId");
       const successMsg = itemId
-        ? "Encontro atualizado com sucesso"
-        : "Encontro criado com sucesso";
+        ? "Equipe atualizada com sucesso"
+        : "Equipe criada com sucesso";
 
       if (validateForm(formValidations)) {
         sendFormData(event.target, successMsg);

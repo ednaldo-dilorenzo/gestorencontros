@@ -2,18 +2,20 @@
 <hr />
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
-    <a
-      href="/pages{{ back_link }}"
-      class="btn btn-primary"
-      data-link
-      >Voltar</a
-    >
-    <a
-      href="/pages{{ url_for('movimento.nova_equipe', id_movimento=id_movimento) }}"
-      class="btn btn-primary"
-      data-link
-      >+ Nova</a
-    >
+    <div>
+      <a
+        href="/pages{{ back_link }}"
+        class="btn btn-outline-primary me-2"
+        data-link
+        ><i class="fa-solid fa-arrow-left"></i
+      ></a>
+      <a
+        href="/pages{{ url_for('movimento.equipe.nova_equipe', id_movimento=id_movimento) }}"
+        class="btn btn-primary"
+        data-link
+        >+ Nova</a
+      >
+    </div>
   </div>
 </nav>
 <div class="d-flex flex-wrap justify-content-evenly">
@@ -24,7 +26,7 @@
         <h5 class="card-title">{{ item.nome }}</h5>
         <a
           class="btn btn-sm"
-          href="/pages{{ url_for('movimento.editar_equipe', id_movimento=id_movimento, id_equipe=item.id)}}"
+          href="/pages{{ url_for('movimento.equipe.editar_equipe', id_movimento=id_movimento, id_equipe=item.id)}}"
           data-link
         >
           <i class="fas fa-pen"></i>

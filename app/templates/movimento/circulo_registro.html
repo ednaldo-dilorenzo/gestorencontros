@@ -18,8 +18,8 @@
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('movimento.editar_circulo', id_movimento=id_movimento, id_encontro=id_encontro, id_circulo=form.id.data) }}{% else %}{{ url_for('movimento.novo_circulo', id_movimento=id_movimento, id_encontro=id_encontro) }}{% endif %}"
-  target="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
+  action="{% if form.id.data %}{{ url_for('movimento.encontro.editar_circulo', id_movimento=id_movimento, id_encontro=id_encontro, id_circulo=form.id.data) }}{% else %}{{ url_for('movimento.encontro.novo_circulo', id_movimento=id_movimento, id_encontro=id_encontro) }}{% endif %}"
+  target="/pages{{ url_for('movimento.encontro.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
   method="post"
   novalidate
 >
@@ -67,7 +67,7 @@
     <div class="col-6">
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a
-          href="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
+          href="/pages{{ url_for('movimento.encontro.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
           style="width: 100px"
           class="btn btn-secondary"
           type="button"

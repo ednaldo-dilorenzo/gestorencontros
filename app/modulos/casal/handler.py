@@ -64,7 +64,7 @@ class CasalForm(FlaskForm):
         return casal
 
 
-def listar_casais(id_inscrito=None, back_link=None, novo_link=None):
+def listar_casais(id_inscrito=None, back_link=None, novo_link=None, edit_link=None):
     filtro = request.args.get("filtro")
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("per_page", 10, type=int)
@@ -81,7 +81,8 @@ def listar_casais(id_inscrito=None, back_link=None, novo_link=None):
         filtro=filtro,
         inscrito=id_inscrito,
         back_link=back_link,
-        novo_link=novo_link
+        novo_link=novo_link,
+        edit_link=edit_link
     )
 
 

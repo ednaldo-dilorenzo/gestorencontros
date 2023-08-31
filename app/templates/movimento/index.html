@@ -44,14 +44,14 @@
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('movimento.equipes', id_movimento=movimento.id) }}"
+          href="/pages{{ url_for('movimento.equipe.index', id_movimento=movimento.id) }}"
           data-link
         >
           <i class="fas fa-people-group"></i>
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
-          href="/pages{{ url_for('movimento.encontros', _id=movimento.id) }}"
+          href="/pages{{ url_for('movimento.encontro.index', id_movimento=movimento.id) }}"
           data-link
         >
           <i class="fa-solid fa-person-praying"></i>

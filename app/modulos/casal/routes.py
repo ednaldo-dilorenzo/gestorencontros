@@ -8,22 +8,24 @@ from app.util.file_handler import salvar_imagem
 casal_bp = Blueprint("casal", __name__, url_prefix="/casais")
 
 
-@casal_bp.route("/")
+@casal_bp.route("", strict_slashes=False)
 @login_required
 def index():
-    return listar_casais(novo_link=url_for('casal.register'))
+    return listar_casais(
+        novo_link=url_for("casal.register"), edit_link=url_for("casal.index")
+    )
 
 
 @casal_bp.route("/novo", methods=["GET", "POST"])
 @login_required
 def register():
-    return novo_casal(back_link=url_for('casal.index'))
+    return novo_casal(back_link=url_for("casal.index"))
 
 
 @casal_bp.route("/<int:id>", methods=["GET", "POST", "PATCH"])
 @login_required
 def editar(id):
-    return editar_casal(id, back_link=url_for('casal.index'))
+    return editar_casal(id, back_link=url_for("casal.index"))
 
 
 @casal_bp.route("/busca")

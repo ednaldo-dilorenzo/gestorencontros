@@ -17,6 +17,16 @@
   </nav>
 </div>
 <hr />
+<nav class="navbar bg-body-tertiary mb-3">
+  <div class="container-fluid">
+    <a
+      href="/pages{{ url_for('movimento.encontros', _id=id_movimento) }}"
+      class="btn btn-outline-primary me-2"
+      data-link
+      ><i class="fa-solid fa-arrow-left"></i
+    ></a>
+  </div>
+</nav>
 <div class="row">
   <div class="col-md-6">
     <h4>Casais sem círculo</h4>
@@ -46,33 +56,6 @@
       {% endfor %}
     </select>
     <ul id="lstCasaisIncluidos" class="list-group lista-casais"></ul>
-  </div>
-</div>
-<hr class="my-4" />
-<div class="row g-3">
-  <div class="col-6">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-      <a
-        href="/pages{{ url_for('movimento.circulos', id_movimento=id_movimento, id_encontro=id_encontro) }}"
-        style="width: 100px"
-        class="btn btn-secondary"
-        type="button"
-        data-link
-        >Cancelar</a
-      >
-    </div>
-  </div>
-  <div class="col-6">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button
-        type="submit"
-        style="width: 100px"
-        class="btn btn-dark"
-        type="button"
-      >
-        Salvar
-      </button>
-    </div>
   </div>
 </div>
 <script>
