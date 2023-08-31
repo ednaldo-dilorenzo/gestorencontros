@@ -27,7 +27,7 @@ const router = async () => {
     { path: "/pages/casais", view: "/casais" },
     { path: "/pages/casais/novo", view: "/casais/novo" },
     { path: "/pages/casais/:id", view: "/casais/:id" },
-    { path: "/pages/movimentos/", view: "/movimentos" },
+    { path: "/pages/movimentos", view: "/movimentos" },
     { path: "/pages/movimentos/register", view: "/movimentos/register" },
     { path: "/pages/movimentos/:id", view: "/movimentos/:id" },
     {

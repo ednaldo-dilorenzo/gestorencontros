@@ -18,7 +18,7 @@ class MovimentoForm(FlaskForm):
     id = StringField("id")
 
 
-@movimento_bp.route("/")
+@movimento_bp.route("", strict_slashes=False)
 @login_required
 def index():
     movimentos = movimento_service.buscar_encontros(1)

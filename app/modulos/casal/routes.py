@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, request, url_for, current_app
+from flask import Blueprint, request, url_for
 from flask_login import login_required
-from app.modulos.casal.handler import CasalForm, listar_casais, novo_casal, editar_casal
+from app.modulos.casal.handler import listar_casais, novo_casal, editar_casal
 import app.modulos.casal.service as casal_service
-from app.util.file_handler import salvar_imagem
 
 
 casal_bp = Blueprint("casal", __name__, url_prefix="/casais")

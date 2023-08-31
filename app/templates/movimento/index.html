@@ -33,7 +33,7 @@
     {% for movimento in movimentos %}
     <tr>
       <th scope="row">{{ movimento.id }}</th>
-      <td>{{ movimento.nome }}</td>
+      <td class="editable-cell">{{ movimento.nome }}</td>
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
@@ -66,4 +66,37 @@
     <h1>Nenhum dado encontrado...</h1>
   </div>
 {% endif %}
+<script>
+  $.fn.makeEditable = function() {
+    $(this).on('click',function(){
+      if($(this).find('input').is(':focus')) return this;
+      var cell = $(this);
+      var content = $(this).html();
+      $(this).html('<input class="form-control" type="text" value="' + $(this).html() + '" />')
+        .find('input')
+        .trigger('focus')
+        .on({
+          'blur': function(){
+            $(this).trigger('closeEditable');
+          },
+          'keyup':function(e){
+            if(e.which == '13'){ // enter
+              $(this).trigger('saveEditable');
+            } else if(e.which == '27'){ // escape
+              $(this).trigger('closeEditable');
+            }
+          },
+          'closeEditable':function(){
+            cell.html(content);
+          },
+          'saveEditable':function(){
+            content = $(this).val();
+            $(this).trigger('closeEditable');
+          }
+      });
+    });
+  return this;
+  }
 
+  $(".editable-cell").makeEditable();
+</script>
