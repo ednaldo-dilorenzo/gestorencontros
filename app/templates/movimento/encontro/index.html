@@ -74,6 +74,13 @@
         >
           <i class="fa-solid fa-ring"></i>
         </a>
+        <a
+          href="/pages{{ url_for('movimento.encontro.equipes_encontro_index', id_movimento=movimento.id, id_encontro=encontro.id ) }}"
+          class="btn btn-sm icon-link icon-link-hover"
+          data-link
+        >
+          <i class="fa-solid fa-ring"></i>
+        </a>
       </td>
     </tr>
     {% endfor %}

@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, Optional
 from flask_wtf import FlaskForm
 from app.modulos.casal.handler import listar_casais, novo_casal, editar_casal
 import app.modulos.casal.service as casal_service
+import app.modulos.equipe.service as equipe_service
 from app.model import Circulo, Encontro
 
 
@@ -129,9 +130,7 @@ def novo_inscrito(id_movimento, id_encontro):
     )
 
 
-@encontro_bp.route(
-    "/<int:id_encontro>/inscritos/<int:id_casal>"
-)
+@encontro_bp.route("/<int:id_encontro>/inscritos/<int:id_casal>")
 @login_required
 def editar_inscrito(id_movimento, id_encontro, id_casal):
     return editar_casal(
@@ -172,9 +171,7 @@ class CirculoForm(FlaskForm):
         return resultado
 
 
-@encontro_bp.route(
-    "/<int:id_encontro>/novo", methods=["GET", "POST"]
-)
+@encontro_bp.route("/<int:id_encontro>/novo", methods=["GET", "POST"])
 @login_required
 def novo_circulo(id_movimento, id_encontro):
     circulo_form = CirculoForm()
@@ -254,4 +251,15 @@ def montar_circulo(id_movimento, id_encontro):
         circulos_corrente=circulos_corrente,
         id_movimento=id_movimento,
         id_encontro=id_encontro,
+    )
+
+
+@encontro_bp.route("/<int:id_encontro>/equipes")
+def equipes_encontro_index(id_movimento, id_encontro):
+    equipes_encontro = equipe_service.buscar_equipes_por_encontro(id_encontro)
+    return render_template(
+        "movimento/equipe_encontro.html",
+        equipes_encontro=equipes_encontro,
+        id_encontro=id_encontro,
+        id_movimento=id_movimento,
     )

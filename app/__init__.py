@@ -1,5 +1,5 @@
 from flask import Flask
-from app.modulos import auth_bp, casal_bp, movimento_bp, usuario_bp, foto_bp
+from app.modulos import auth_bp, casal_bp, movimento_bp, usuario_bp, foto_bp, encontro_bp
 from app.extensoes import db, login_manager, migrate
 import logging
 
@@ -25,6 +25,7 @@ def create_app(config_filename: str = ""):
     app.register_blueprint(movimento_bp)
     app.register_blueprint(usuario_bp)
     app.register_blueprint(foto_bp)
+    app.register_blueprint(encontro_bp)    
     
 
     return app

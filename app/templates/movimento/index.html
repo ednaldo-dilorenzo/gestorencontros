@@ -3,9 +3,7 @@
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">
-        Movimentos
-      </li>
+      <li class="breadcrumb-item active" aria-current="page">Movimentos</li>
     </ol>
   </nav>
 </div>
@@ -62,41 +60,7 @@
   </tbody>
 </table>
 {% else %}
-  <div class="data-not-found py-3">
-    <h1>Nenhum dado encontrado...</h1>
-  </div>
+<div class="data-not-found py-3">
+  <h1>Nenhum dado encontrado...</h1>
+</div>
 {% endif %}
-<script>
-  $.fn.makeEditable = function() {
-    $(this).on('click',function(){
-      if($(this).find('input').is(':focus')) return this;
-      var cell = $(this);
-      var content = $(this).html();
-      $(this).html('<input class="form-control" type="text" value="' + $(this).html() + '" />')
-        .find('input')
-        .trigger('focus')
-        .on({
-          'blur': function(){
-            $(this).trigger('closeEditable');
-          },
-          'keyup':function(e){
-            if(e.which == '13'){ // enter
-              $(this).trigger('saveEditable');
-            } else if(e.which == '27'){ // escape
-              $(this).trigger('closeEditable');
-            }
-          },
-          'closeEditable':function(){
-            cell.html(content);
-          },
-          'saveEditable':function(){
-            content = $(this).val();
-            $(this).trigger('closeEditable');
-          }
-      });
-    });
-  return this;
-  }
-
-  $(".editable-cell").makeEditable();
-</script>

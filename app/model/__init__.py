@@ -84,3 +84,11 @@ class EquipeEncontro(db.Model):
         db.BigInteger, db.ForeignKey("encontro.id"), primary_key=True
     )
     id_coordenador = db.Column(db.BigInteger, db.ForeignKey("casal.id"))
+    equipe = db.relationship(
+        "Equipe", backref="equipe", uselist=False, foreign_keys=[id_equipe]
+    )
+    coordenador = db.relationship(
+        "Casal",
+        uselist=False,
+        foreign_keys=[id_coordenador],
+    )

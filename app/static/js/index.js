@@ -208,6 +208,21 @@ const validateForm = (validationList) => {
   return result;
 };
 
+const showToastMessage = (msg, type) => {
+  const mainToast = document.getElementById("mainToast");
+  mainToast.classList.remove("text-bg-warning");
+  mainToast.classList.remove("text-bg-success");
+  const msgTypes = {
+    success: "text-bg-success",
+    warning: "text-bg-warning",
+  }
+  mainToast.classList.add(msgTypes[type]);
+  const mainToastMsg = mainToast.querySelector(".toast-body");
+  mainToastMsg.textContent = msg;
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
+  toastBootstrap.show();
+};
+
 const sendFormData = (form, toastMsg = "") => {
   const formData = new FormData(form);
   const params = new URLSearchParams(formData);
@@ -220,23 +235,10 @@ const sendFormData = (form, toastMsg = "") => {
       method: form.method,
     }).then((resp) => {
       if (resp.ok) {
-        const mainToast = document.getElementById("mainToast");
-        mainToast.classList.remove("text-bg-warning");
-        mainToast.classList.add("text-bg-success");
-        const mainToastMsg = mainToast.querySelector(".toast-body");
-        mainToastMsg.textContent = toastMsg;
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
-
-        toastBootstrap.show();
+        showToastMessage(toastMsg, "success");
         navigateTo(form.target);
       } else {
-        const mainToast = document.getElementById("mainToast");
-        mainToast.classList.add("text-bg-warning");
-        const mainToastMsg = mainToast.querySelector(".toast-body");
-        mainToastMsg.textContent = "Falha na validação do formulário";
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(mainToast);
-
-        toastBootstrap.show();
+        showToastMessage("Falha na validação do formulário", "warning");
       }
     });
 };
