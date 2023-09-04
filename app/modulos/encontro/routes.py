@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from app.model import EquipeEncontro
 from app.modulos.encontro import service as encontro_service
+from app.util.error_handler import BusinessException
 
 encontro_bp = Blueprint("encontro", __name__, url_prefix="/encontros")
 
@@ -16,8 +17,11 @@ def definir_coordenador(id_encontro, id_equipe):
     equipe_encontro_alterado.id_equipe = equipe_encontro.id_equipe
     equipe_encontro_alterado.id_coordenador = request.form.get("id_coordenador", type=int)
 
-    encontro_service.atualizar_equipe_encontro(
-        equipe_encontro, equipe_encontro_alterado
-    )
+    try:
+        encontro_service.atualizar_equipe_encontro(
+            equipe_encontro, equipe_encontro_alterado
+        )
+    except BusinessException as bex:
+        return str(bex), 422
 
     return "ok", 200

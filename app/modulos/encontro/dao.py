@@ -13,3 +13,14 @@ def buscar_equipe_encontro_por_encontro(
         )
         .first()
     )
+
+
+def buscar_equipe_casal_coordena(id_coordenador: int, id_encontro: int) -> EquipeEncontro:
+    return (
+        db.session.query(EquipeEncontro)
+        .filter(
+            EquipeEncontro.id_coordenador == id_coordenador,
+            EquipeEncontro.id_encontro == id_encontro,
+        )
+        .first()
+    )

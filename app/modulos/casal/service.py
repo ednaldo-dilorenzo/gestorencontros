@@ -13,8 +13,10 @@ def buscar_todos(
     return casal_dao.buscar_casais(paroquia, page, per_page, id_inscrito)
 
 
-def buscar_por_filtro(filtro: str, id_paroquia: int, id_inscrito: Optional[int]=None):
-    resultado = casal_dao.buscar_por_filtro(filtro.lower(), id_paroquia, id_inscrito=id_inscrito)
+def buscar_por_filtro(filtro: str, id_paroquia: int, id_inscrito: Optional[int] = None):
+    resultado = casal_dao.buscar_por_filtro(
+        filtro.lower(), id_paroquia, id_inscrito=id_inscrito
+    )
     return resultado
 
 
@@ -68,7 +70,12 @@ def buscar_por_filtro_test(
     id_encontro: Optional[int] = None,
     inscrito: Optional[bool] = True,
     id_circulo: Optional[int] = None,
+    id_equipe: Optional[int] = None,
 ) -> list:
     return casal_dao.buscar_por_filtro_test(
-        filtro, id_paroquia, id_encontro, inscrito, id_circulo
+        filtro, id_paroquia, id_encontro, inscrito, id_circulo, id_equipe
     )
+
+
+def buscar_casais_por_equipe_e_encontro(id_encontro: int, id_equipe: int) -> list:
+    return casal_dao.buscar_casais_por_equipe_e_encontro(id_encontro, id_equipe)

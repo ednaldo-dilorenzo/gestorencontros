@@ -1,5 +1,5 @@
 from app.extensoes import db
-from app.model import Casal, Pessoa
+from app.model import Casal, Pessoa, EquipeEncontroCasal
 from sqlalchemy import or_
 from typing import Optional
 
@@ -92,6 +92,7 @@ def buscar_por_filtro_test(
     id_encontro: Optional[int] = None,
     inscrito: Optional[bool] = True,
     id_circulo: Optional[int] = None,
+    id_equipe: Optional[int] = None,
 ) -> list:
     resultado = db.session.query(Casal).filter(
         Casal.id_paroquia == id_paroquia,
@@ -104,15 +105,31 @@ def buscar_por_filtro_test(
         else:
             return []
 
-    if id_circulo:
-        resultado = resultado.filter(Casal.id_circulo == id_circulo)
-
     if id_encontro:
         if inscrito:
             resultado = resultado.filter(Casal.id_inscrito == id_encontro)
         else:
+            if id_equipe:
+                resultado = resultado.join(
+                    EquipeEncontroCasal, Casal.id == EquipeEncontroCasal.id_casal
+                )
+
             resultado = resultado.filter(
                 or_(Casal.id_inscrito != id_encontro, Casal.id_inscrito == None)
             )
 
+    if id_circulo:
+        resultado = resultado.filter(Casal.id_circulo == id_circulo)
+
     return resultado.order_by(Casal.id).all()
+
+
+def buscar_casais_por_equipe_e_encontro(id_encontro: int, id_equipe: int) -> list:
+    return (
+        db.session.query(EquipeEncontroCasal)
+        .filter(
+            EquipeEncontroCasal.id_encontro == id_encontro,
+            EquipeEncontroCasal.id_equipe == id_equipe,
+        )
+        .all()
+    )

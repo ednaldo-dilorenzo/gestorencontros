@@ -30,12 +30,20 @@ def editar(id):
 @casal_bp.route("/busca")
 def buscar_por_filtro():
     filtro = request.args.get("filtro")
-    inscrito = request.args.get("inscrito", type=bool)
+    inscrito = request.args.get(
+        "inscrito", default=False, type=lambda v: v.lower() == "true"
+    )
     circulo = request.args.get("circulo")
     encontro = request.args.get("encontro", type=int)
+    equipe = request.args.get("equipe", type=int)
 
     casais = casal_service.buscar_por_filtro_test(
-        filtro, 1, encontro, inscrito, circulo
+        filtro=filtro,
+        id_paroquia=1,
+        id_encontro=encontro,
+        inscrito=inscrito,
+        id_circulo=circulo,
+        id_equipe=equipe,
     )
 
     return [

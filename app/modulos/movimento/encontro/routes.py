@@ -263,3 +263,14 @@ def equipes_encontro_index(id_movimento, id_encontro):
         id_encontro=id_encontro,
         id_movimento=id_movimento,
     )
+
+
+@encontro_bp.route("/<int:id_encontro>/montagem-equipes")
+def montagem_equipes(id_movimento, id_encontro):
+    equipes_encontro = equipe_service.buscar_equipes_por_encontro(id_encontro)
+    return render_template(
+        "movimento/equipe_montagem.html",
+        equipes_encontro=equipes_encontro,
+        id_encontro=id_encontro,
+        id_movimento=id_movimento,
+    )

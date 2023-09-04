@@ -1,0 +1,160 @@
+<div class="d-flex justify-content-between">
+  <h2 class="fs-4">Montagem dos Equipes</h2>
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="/pages{{ url_for('movimento.index')}}" data-link>Movimentos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="#" data-link>Encontros</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a href="#" data-link>Círculos</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Novo Círculo</li>
+    </ol>
+  </nav>
+</div>
+<hr />
+<nav class="navbar bg-body-tertiary mb-3">
+  <div class="container-fluid">
+    <a
+      href="/pages{{ url_for('movimento.encontro.index', id_movimento=id_movimento) }}"
+      class="btn btn-outline-primary me-2"
+      data-link
+      ><i class="fa-solid fa-arrow-left"></i
+    ></a>
+  </div>
+</nav>
+<div class="row">
+  <div class="col-md-6">
+    <h4>Casais Participantes</h4>
+    <input
+      class="form-control mb-3"
+      type="search"
+      name="nome"
+      id="iptNome"
+      placeholder="Pesquisar casal inscrito"
+    />
+    <ul id="lstCasaisInscritos" class="list-group lista-casais"></ul>
+  </div>
+  <div class="col-md-6">
+    <h4>Casais incluídos</h4>
+    <select id="sltEquipes" class="form-select mb-3">
+      <option value="" selected>Selecione a equipe...</option>
+      {% for equipe_encontro in equipes_encontro %}
+      <option value="{{ equipe_encontro.id_equipe }}">
+        {{ equipe_encontro.equipe.nome }}        
+      </option>
+      {% endfor %}
+    </select>
+    <ul id="lstCasaisIncluidos" class="list-group lista-casais"></ul>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $("#iptNome").on(
+      "keyup",
+      $.debounce(250, function () {
+        var value = $(this).val().toLowerCase();
+        $.ajax({
+          url: "{{ url_for('casal.buscar_por_filtro') }}",
+          dataType: "json",
+          type: "GET",
+          data: {
+            encontro: "{{ id_encontro }}",
+            inscrito: false,
+            filtro: value,
+          },
+          contentType: "application/json",
+          dataType: "json",
+        }).done(function (response) {
+          $("#lstCasaisInscritos").empty();
+          $.each(response, function (key, value) {
+            $("#lstCasaisInscritos").append(
+              `<li class="list-group-item ui-sortable-handle" value="${value.id}">${value.nome}</li>`
+            );
+          });
+        });
+      })
+    );
+
+    const atualizaCirculoCasal = (id_casal, id_circulo) => {
+      $.ajax({
+        url: `/casais/${id_casal}`,
+        type: "PATCH",
+        data: {
+          id_circulo: id_circulo,
+        },
+      });
+    };
+
+    $("#lstCasaisInscritos, #lstCasaisIncluidos")
+      .sortable({
+        connectWith: "ul",
+        placeholder: "placeholder",
+        delay: 150,
+        remove: function (e, ui) {
+          const id_circulo = $("#sltCirculos").val();
+          if (!id_circulo.trim()) {
+            return false;
+          }
+        },
+        receive: function (event, ui) {
+          const id_casal = $(ui.item).val();
+
+          if (event.target.id === "lstCasaisIncluidos") {
+            const id_circulo = $("#sltCirculos").find(":selected").val();
+            atualizaCirculoCasal(id_casal, id_circulo);
+          } else {
+            atualizaCirculoCasal(id_casal, null);
+          }
+        },
+      })
+      .disableSelection()
+      .dblclick(function (e) {
+        var item = e.target;
+        const id_casal = $(item).val();
+        if (e.currentTarget.id === "lstCasaisInscritos") {
+          const id_circulo = $("#sltCirculos").find(":selected").val();
+          atualizaCirculoCasal(id_casal, id_circulo);
+          $(item).fadeOut("fast", function () {
+            $(item).appendTo($("#lstCasaisIncluidos")).fadeIn("slow");
+          });
+        } else {
+          atualizaCirculoCasal(id_casal, null);
+          $(item).fadeOut("fast", function () {
+            $(item).appendTo($("#lstCasaisInscritos")).fadeIn("slow");
+          });
+        }
+      });
+
+    $("#sltEquipes").on("change", function () {
+      const id_equipe = $(this).val();
+      if (id_equipe.trim()) {
+        $.ajax({
+          url: "{{ url_for('casal.buscar_por_filtro') }}",
+          dataType: "json",
+          type: "GET",
+          data: {
+            encontro: "{{ id_encontro }}",
+            inscrito: false,
+            equipe: id_equipe,
+          },
+          contentType: "application/json",
+          dataType: "json",
+        }).done(function (response) {
+          $("#lstCasaisIncluidos").empty();
+          $.each(response, function (key, value) {
+            $("#lstCasaisIncluidos").append(
+              `<li class="list-group-item ui-sortable-handle" value="${value.id}">${value.nome}<input type="radio" name="coordenador"></li>`
+            );
+          });
+        });
+      } else {
+        $("#lstCasaisIncluidos").empty();
+      }
+    });
+  });
+</script>

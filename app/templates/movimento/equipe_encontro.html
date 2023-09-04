@@ -4,14 +4,23 @@
   }
 </style>
 <div class="d-flex justify-content-between">
-  <h2 class="fs-4">Encontros Para o Encontro</h2>
+  <h2 class="fs-4">Definição de Equipes para o Encontro</h2>
   <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item active" aria-current="page">
         <a href="/pages{{ url_for('movimento.index')}}" data-link>Movimentos</a>
       </li>
-      <li class="breadcrumb-item active" aria-current="page">Encontros</li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a
+          href="/pages{{ url_for('movimento.encontro.index', id_movimento=id_movimento)}}"
+          data-link
+          >Encontros</a
+        >
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Definição de Equipe
+      </li>
     </ol>
   </nav>
 </div>
@@ -19,10 +28,12 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <div>
-      <a href="" class="btn btn-outline-primary me-2" data-link
+      <a
+        href="/pages{{ url_for('movimento.encontro.index', id_movimento=id_movimento) }}"
+        class="btn btn-outline-primary me-2"
+        data-link
         ><i class="fa-solid fa-arrow-left"></i
       ></a>
-      <a href="" class="btn btn-primary" data-link>+ Novo</a>
     </div>
   </div>
 </nav>
@@ -135,6 +146,12 @@
               .find(".cell-content")
               .text(dadoSelecionado.id ? dadoSelecionado.text : "Não definido");
             showToastMessage("Coordenador definido com sucesso!", "success");
+          },
+          error: () => {
+            showToastMessage(
+              "Coordenador já definido para outra equipe",
+              "warning"
+            );
           },
         });
       }

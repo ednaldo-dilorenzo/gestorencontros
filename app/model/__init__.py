@@ -92,3 +92,12 @@ class EquipeEncontro(db.Model):
         uselist=False,
         foreign_keys=[id_coordenador],
     )
+
+
+class EquipeEncontroCasal(db.Model):
+    id_equipe = db.Column(db.BigInteger, db.ForeignKey("equipe.id"), primary_key=True)
+    id_encontro = db.Column(
+        db.BigInteger, db.ForeignKey("encontro.id"), primary_key=True
+    )
+    id_casal = db.Column(db.BigInteger, db.ForeignKey("casal.id"), primary_key=True)
+    casal = db.relationship("Casal", uselist=False, foreign_keys=[id_casal])
