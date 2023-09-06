@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from app.model import EquipeEncontro
 from app.modulos.encontro import service as encontro_service
+from app.modulos.equipe import service as equipe_service
 from app.util.error_handler import BusinessException
 
 encontro_bp = Blueprint("encontro", __name__, url_prefix="/encontros")
@@ -15,7 +16,9 @@ def definir_coordenador(id_encontro, id_equipe):
     equipe_encontro_alterado = EquipeEncontro()
     equipe_encontro_alterado.id_encontro = equipe_encontro.id_encontro
     equipe_encontro_alterado.id_equipe = equipe_encontro.id_equipe
-    equipe_encontro_alterado.id_coordenador = request.form.get("id_coordenador", type=int)
+    equipe_encontro_alterado.id_coordenador = request.form.get(
+        "id_coordenador", type=int
+    )
 
     try:
         encontro_service.atualizar_equipe_encontro(
@@ -25,3 +28,22 @@ def definir_coordenador(id_encontro, id_equipe):
         return str(bex), 422
 
     return "ok", 200
+
+
+@encontro_bp.route("/<int:id_encontro>/equipes/<int:id_equipe>", methods=["GET"])
+def buscar_casais_equipe(id_encontro, id_equipe):
+    equipe_encontros = (
+        equipe_service.buscar_equipe_encontro_casal_por_encontro_e_equipe(
+            id_encontro, id_equipe
+        )
+    )
+
+    return [
+        {
+            "id": equipe_encontro.casal.id,
+            "nome": f"{equipe_encontro.casal.esposo.apelido}/{equipe_encontro.casal.esposa.apelido}",
+            "coordenador": equipe_encontro.coordenador,
+            "aceito": equipe_encontro.aceito,
+        }
+        for equipe_encontro in equipe_encontros
+    ]

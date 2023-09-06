@@ -155,7 +155,8 @@ def editar_casal(id, back_link):
             per_page=per_page,
             back_link=back_link,
         )
-    elif request.method == "POST":
+    
+    if request.method == "POST":
         if not casal_form.validate_on_submit():
             return "Falha na validação do formulário", 400
 

@@ -1,4 +1,4 @@
-from app.model import EquipeEncontro
+from app.model import EquipeEncontro, EquipeEncontroCasal
 from app.util.error_handler import BusinessException
 from app.modulos.encontro import dao as encontro_dao
 from app.extensoes import transactional
@@ -27,3 +27,19 @@ def atualizar_equipe_encontro(
 
 def buscar_equipe_encontro_por_encontro(id_encontro: int, id_equipe: int):
     return encontro_dao.buscar_equipe_encontro_por_encontro(id_encontro, id_equipe)
+
+
+def buscar_equipe_encontro_casal(
+    id_equipe: int, id_encontro: int, id_casal: int
+) -> EquipeEncontroCasal:
+    return encontro_dao.buscar_equipe_encontro_casal(id_equipe, id_encontro, id_casal)
+
+
+@transactional
+def adicionar_equipe_encontro_casal(equipe_encontro_casal: EquipeEncontroCasal):
+    return encontro_dao.adicionar_equipe_encontro_casal(equipe_encontro_casal)
+
+
+@transactional
+def remover_equipe_econtro_casal(equipe_encontro_casal: EquipeEncontroCasal):
+    return encontro_dao.remover_equipe_encontro_casal(equipe_encontro_casal)

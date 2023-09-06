@@ -101,3 +101,5 @@ class EquipeEncontroCasal(db.Model):
     )
     id_casal = db.Column(db.BigInteger, db.ForeignKey("casal.id"), primary_key=True)
     casal = db.relationship("Casal", uselist=False, foreign_keys=[id_casal])
+    coordenador = db.Column(db.Boolean, nullable=False, default=False)
+    aceito = db.Column(db.Boolean, nullable=False, default=True)

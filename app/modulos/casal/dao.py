@@ -1,6 +1,6 @@
 from app.extensoes import db
 from app.model import Casal, Pessoa, EquipeEncontroCasal
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from typing import Optional
 
 
@@ -111,7 +111,11 @@ def buscar_por_filtro_test(
         else:
             if id_equipe:
                 resultado = resultado.join(
-                    EquipeEncontroCasal, Casal.id == EquipeEncontroCasal.id_casal
+                    EquipeEncontroCasal,
+                    and_(
+                        Casal.id == EquipeEncontroCasal.id_casal,
+                        EquipeEncontroCasal.id_equipe == id_equipe,
+                    ),
                 )
 
             resultado = resultado.filter(

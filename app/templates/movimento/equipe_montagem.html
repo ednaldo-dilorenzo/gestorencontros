@@ -45,7 +45,7 @@
       <option value="" selected>Selecione a equipe...</option>
       {% for equipe_encontro in equipes_encontro %}
       <option value="{{ equipe_encontro.id_equipe }}">
-        {{ equipe_encontro.equipe.nome }}        
+        {{ equipe_encontro.equipe.nome }}
       </option>
       {% endfor %}
     </select>
@@ -80,12 +80,14 @@
       })
     );
 
-    const atualizaCirculoCasal = (id_casal, id_circulo) => {
+    const atualizaEquipeCasal = (id_casal, id_equipe, remove = false) => {
+      const metodo = remove ? "DELETE" : "POST";
       $.ajax({
-        url: `/casais/${id_casal}`,
-        type: "PATCH",
+        url: `/casais/${id_casal}/equipe`,
+        type: metodo,
         data: {
-          id_circulo: id_circulo,
+          id_equipe: id_equipe,
+          id_encontro: "{{id_encontro}}",
         },
       });
     };
@@ -96,19 +98,19 @@
         placeholder: "placeholder",
         delay: 150,
         remove: function (e, ui) {
-          const id_circulo = $("#sltCirculos").val();
-          if (!id_circulo.trim()) {
+          const id_equipe = $("#sltEquipes").val();
+          if (!id_equipe.trim()) {
             return false;
           }
         },
         receive: function (event, ui) {
           const id_casal = $(ui.item).val();
+          const id_equipe = $("#sltEquipes").find(":selected").val();
 
           if (event.target.id === "lstCasaisIncluidos") {
-            const id_circulo = $("#sltCirculos").find(":selected").val();
-            atualizaCirculoCasal(id_casal, id_circulo);
+            atualizaEquipeCasal(id_casal, id_equipe);
           } else {
-            atualizaCirculoCasal(id_casal, null);
+            atualizaEquipeCasal(id_casal, id_equipe, true);
           }
         },
       })
@@ -130,27 +132,44 @@
         }
       });
 
+    const changeRadio = (e) => {
+      console.dir(e.currentTarget);
+    };
+
     $("#sltEquipes").on("change", function () {
       const id_equipe = $(this).val();
       if (id_equipe.trim()) {
         $.ajax({
-          url: "{{ url_for('casal.buscar_por_filtro') }}",
+          url: `/encontros/{{ id_encontro }}/equipes/${id_equipe}`,
           dataType: "json",
           type: "GET",
-          data: {
-            encontro: "{{ id_encontro }}",
-            inscrito: false,
-            equipe: id_equipe,
-          },
           contentType: "application/json",
           dataType: "json",
         }).done(function (response) {
-          $("#lstCasaisIncluidos").empty();
+          const listaIncluidos = $("#lstCasaisIncluidos");
+          listaIncluidos.empty();
           $.each(response, function (key, value) {
-            $("#lstCasaisIncluidos").append(
-              `<li class="list-group-item ui-sortable-handle" value="${value.id}">${value.nome}<input type="radio" name="coordenador"></li>`
+            const checked = value.coordenador ? "checked" : "";
+            const aceito = value.aceito
+              ? '<span class="badge bg-success">Aceito</span>'
+              : '<span class="badge bg-danger">Não aceito</span>';
+            listaIncluidos.append(
+              `<li class="list-group-item d-flex justify-content-between align-items-center" value="${
+                value.id
+              }">                                
+                <div>                  
+                  <input ${
+                    value.aceito ? "" : "disabled"
+                  } class="form-check-input mx-1" type="radio" name="lgrpCoordenador" value="${
+                value.id
+              }" id="firstRadio" ${checked}>
+                  ${value.nome}
+                </div>
+                ${aceito}
+              </li>`
             );
           });
+          listaIncluidos.find("input").change(changeRadio);
         });
       } else {
         $("#lstCasaisIncluidos").empty();
