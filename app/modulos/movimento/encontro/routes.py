@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from flask import Blueprint, render_template, request, url_for
 from flask_login import login_required
 import app.modulos.movimento.service as movimento_service
@@ -56,14 +57,14 @@ def novo(id_movimento):
         )
 
     if not encontro_form.validate_on_submit():
-        return "Falha na validação do formulário", 400
+        return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     novo_encontro = encontro_form.retorna_encontro()
     novo_encontro.id_movimento = id_movimento
 
     movimento_service.criar_encontro(novo_encontro)
 
-    return "200", 201
+    return "ok", HTTPStatus.CREATED
 
 
 @encontro_bp.route("/<int:id_encontro>", methods=["GET", "POST"])
@@ -73,7 +74,7 @@ def editar(id_movimento, id_encontro):
     encontro = movimento_service.buscar_encontro_por_id(id_movimento, id_encontro)
 
     if not encontro:
-        return "Evento não encontrado", 404
+        return "Evento não encontrado", HTTPStatus.NOT_FOUND
 
     encontro_form = EncontroForm()
 
@@ -89,13 +90,13 @@ def editar(id_movimento, id_encontro):
         )
 
     if not encontro_form.validate_on_submit():
-        return "Falha na validação do formulário", 400
+        return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     encontro_alterado = encontro_form.retorna_encontro()
 
     movimento_service.atualizar_encontro(encontro, encontro_alterado)
 
-    return "ok", 200
+    return "ok", HTTPStatus.OK
 
 
 @encontro_bp.route("/<int:id_encontro>/inscritos")
@@ -185,7 +186,7 @@ def novo_circulo(id_movimento, id_encontro):
         )
 
     if not circulo_form.validate_on_submit():
-        return "Falha na validação do formulário", 400
+        return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     circulo_novo = circulo_form.retorna_circulo()
     circulo_novo.id_movimento = id_movimento
@@ -194,7 +195,7 @@ def novo_circulo(id_movimento, id_encontro):
 
     movimento_service.criar_circulo(circulo_novo)
 
-    return "200", 201
+    return "ok", HTTPStatus.CREATED
 
 
 @encontro_bp.route(
@@ -224,7 +225,7 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
         )
 
     if not circulo_form.validate_on_submit():
-        return "Falha na validação do formulário", 400
+        return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     circulo_novo = circulo_form.retorna_circulo()
     circulo_novo.id_movimento = id_movimento
@@ -233,7 +234,7 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
 
     movimento_service.atualizar_circulo(circulo_atual, circulo_novo)
 
-    return "ok", 200
+    return "ok", HTTPStatus.OK
 
 
 @encontro_bp.route(
@@ -251,17 +252,6 @@ def montar_circulo(id_movimento, id_encontro):
         circulos_corrente=circulos_corrente,
         id_movimento=id_movimento,
         id_encontro=id_encontro,
-    )
-
-
-@encontro_bp.route("/<int:id_encontro>/equipes")
-def equipes_encontro_index(id_movimento, id_encontro):
-    equipes_encontro = equipe_service.buscar_equipes_por_encontro(id_encontro)
-    return render_template(
-        "movimento/equipe_encontro.html",
-        equipes_encontro=equipes_encontro,
-        id_encontro=id_encontro,
-        id_movimento=id_movimento,
     )
 
 

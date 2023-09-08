@@ -1,4 +1,4 @@
-from app.model import EquipeEncontro, EquipeEncontroCasal
+from app.model import EquipeEncontroCasal
 from app.util.error_handler import BusinessException
 from app.modulos.encontro import dao as encontro_dao
 from app.extensoes import transactional
@@ -6,23 +6,50 @@ from app.extensoes import transactional
 
 @transactional
 def atualizar_equipe_encontro(
-    equipe_encontro_atual: EquipeEncontro, equipe_encontro_alterado: EquipeEncontro
+    equipe_encontro_casal_atual: EquipeEncontroCasal,
+    equipe_encontro_alterado: EquipeEncontroCasal,
 ):
-    if equipe_encontro_alterado.id_coordenador is not None:
-        equipe_casal_coordenador = encontro_dao.buscar_equipe_casal_coordena(
-            equipe_encontro_alterado.id_coordenador,
-            equipe_encontro_alterado.id_encontro,
+    if (
+        not equipe_encontro_casal_atual.coordenador
+        and equipe_encontro_alterado.coordenador
+    ):
+        equipe_casal_coordena = encontro_dao.buscar_equipe_casal_coordena(
+            equipe_encontro_alterado.id_casal, equipe_encontro_alterado.id_encontro
         )
 
         if (
-            equipe_casal_coordenador
-            and equipe_casal_coordenador.id_equipe != equipe_encontro_alterado.id_equipe
+            equipe_casal_coordena
+            and equipe_casal_coordena.id_equipe != equipe_encontro_alterado.id_equipe
         ):
             raise BusinessException(
                 "Tentativa de colocar casal para coordenar mais de uma equipe"
             )
 
-    equipe_encontro_atual.id_coordenador = equipe_encontro_alterado.id_coordenador
+        if coordenador_atual_da_equipe := encontro_dao.buscar_coordenador_da_equipe_no_encontro(
+            equipe_encontro_casal_atual.id_encontro,
+            equipe_encontro_casal_atual.id_equipe,
+        ):
+            coordenador_atual_da_equipe.coordenador = False
+
+        equipe_encontro_casal_atual.coordenador = True
+    elif (
+        equipe_encontro_casal_atual.coordenador != equipe_encontro_alterado.coordenador
+    ):
+        equipe_encontro_casal_atual.coordenador = False
+
+    if (
+        equipe_encontro_alterado.aceito
+        and equipe_encontro_casal_atual.aceito != equipe_encontro_alterado.aceito
+    ):
+        equipe_encontro_casal_atual.aceito = equipe_encontro_alterado.aceito
+
+
+@transactional
+def remover_coordenador_da_equipe(id_encontro: int, id_equipe: int):
+    if coordenador_atual_da_equipe := encontro_dao.buscar_coordenador_da_equipe_no_encontro(
+        id_encontro, id_equipe
+    ):
+        coordenador_atual_da_equipe.coordenador = False
 
 
 def buscar_equipe_encontro_por_encontro(id_encontro: int, id_equipe: int):

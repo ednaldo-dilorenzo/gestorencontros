@@ -133,7 +133,24 @@
       });
 
     const changeRadio = (e) => {
-      console.dir(e.currentTarget);
+      const id_equipe = $("#sltEquipes").find(":selected").val();
+      $.ajax({
+        url: `/encontros/{{id_encontro}}/equipes/${id_equipe}`,
+        type: "PATCH",
+        data: {
+          id_coordenador: $(e.currentTarget).val(),
+        },
+        success: () => {
+          showToastMessage(
+            "Coordenador de equipe atualizado com sucesso!",
+            "success"
+          );
+        },
+        error: (err) => {
+          showToastMessage(err.responseText, "warning");
+          $(e.currentTarget).prop("checked", false);
+        },
+      });
     };
 
     $("#sltEquipes").on("change", function () {

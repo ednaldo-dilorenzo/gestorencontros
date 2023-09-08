@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from app.model import Casal, Pessoa
 import app.modulos.casal.service as casal_service
 from app.util.file_handler import salvar_imagem
@@ -82,7 +83,7 @@ def listar_casais(id_inscrito=None, back_link=None, novo_link=None, edit_link=No
         inscrito=id_inscrito,
         back_link=back_link,
         novo_link=novo_link,
-        edit_link=edit_link
+        edit_link=edit_link,
     )
 
 
@@ -102,7 +103,7 @@ def novo_casal(id_inscrito=None, back_link=None):
         )
 
     if not casal_form.validate_on_submit():
-        return "Falha na validação", 400
+        return "Falha na validação", HTTPStatus.BAD_REQUEST
 
     novo_casal = casal_form.retorna_casal()
     novo_casal = casal_service.salvar(novo_casal)
@@ -119,14 +120,14 @@ def novo_casal(id_inscrito=None, back_link=None):
         f"{novo_casal.esposa.id}_pessoa.jpg",
     )
 
-    return "ok", 201
+    return "created", HTTPStatus.CREATED
 
 
 def editar_casal(id, back_link):
     casal = casal_service.buscar_por_id(id, 1)
 
     if not casal:
-        return "Casal não encontrado", 404
+        return "Casal não encontrado", HTTPStatus.NOT_FOUND
 
     casal_form = CasalForm()
 
@@ -155,10 +156,10 @@ def editar_casal(id, back_link):
             per_page=per_page,
             back_link=back_link,
         )
-    
+
     if request.method == "POST":
         if not casal_form.validate_on_submit():
-            return "Falha na validação do formulário", 400
+            return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     casal_atualizado = casal_form.retorna_casal()
     casal_service.atualizar_casal(casal, casal_atualizado)
@@ -175,4 +176,4 @@ def editar_casal(id, back_link):
         f"{casal.esposa.id}_pessoa.jpg",
     )
 
-    return "Casal atualizado com sucesso", 200
+    return "ok", HTTPStatus.OK

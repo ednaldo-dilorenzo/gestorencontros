@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from flask import Blueprint, render_template, request
 import app.modulos.usuario.service as usuario_service
 from app.model import Usuario
@@ -40,12 +41,12 @@ def registrar():
         return render_template("usuario/registrar.html", form=usuario_form)
 
     if not usuario_form.validate_on_submit():
-        return "Falha na validação", 400
+        return "Falha na validação", HTTPStatus.BAD_REQUEST
 
     novo_usuario = usuario_form.retorna_usuario()
     usuario_service.salvar(novo_usuario)
 
-    return "ok", 201
+    return "ok", HTTPStatus.CREATED
 
 
 @usuario_bp.route("/<int:id_usuario>", methods=["GET", "POST"])
@@ -54,7 +55,7 @@ def editar(id_usuario):
     usuario_atual = usuario_service.buscar_por_id_e_paroquia(id_usuario, 1)
 
     if not usuario_atual:
-        return "Usuário não encontrado", 404
+        return "Usuário não encontrado", HTTPStatus.NOT_FOUND
 
     if request.method == "GET":
         usuario_form.id.data = usuario_atual.id
@@ -64,9 +65,9 @@ def editar(id_usuario):
         return render_template("usuario/registrar.html", form=usuario_form)
 
     if not usuario_form.validate_on_submit():
-        return "Falha na validação do form", 400
+        return "Falha na validação do form", HTTPStatus.BAD_REQUEST
 
     usuario_alterado = usuario_form.retorna_usuario()
     usuario_service.editar(usuario_atual, usuario_alterado)
 
-    return "ok", 200
+    return "ok", HTTPStatus.OK

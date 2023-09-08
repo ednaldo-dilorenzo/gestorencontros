@@ -96,6 +96,7 @@ class EquipeEncontro(db.Model):
 
 class EquipeEncontroCasal(db.Model):
     id_equipe = db.Column(db.BigInteger, db.ForeignKey("equipe.id"), primary_key=True)
+    equipe = db.relationship("Equipe", uselist=False, foreign_keys=[id_equipe])
     id_encontro = db.Column(
         db.BigInteger, db.ForeignKey("encontro.id"), primary_key=True
     )

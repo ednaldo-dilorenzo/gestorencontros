@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from flask import Blueprint, render_template, url_for, request
 import app.modulos.movimento.service as movimento_service
 from flask_login import login_required
@@ -48,13 +49,13 @@ def nova_equipe(id_movimento):
         )
 
     if not equipe_form.validate_on_submit():
-        return "Falha na validação dos dados", 400
+        return "Falha na validação dos dados", HTTPStatus.BAD_REQUEST
 
     nova_equipe = equipe_form.retorna_equipe()
     nova_equipe.id_movimento = id_movimento
     movimento_service.criar_equipe(nova_equipe)
 
-    return "created", 201
+    return "created", HTTPStatus.CREATED
 
 
 @equipe_bp.route("/<int:id_equipe>", methods=["GET", "POST"])
@@ -65,7 +66,7 @@ def editar_equipe(id_movimento, id_equipe):
     )
 
     if not equipe_atual:
-        return "Equipe não encontrada", 404
+        return "Equipe não encontrada", HTTPStatus.NOT_FOUND
 
     equipe_form = EquipeForm()
 
@@ -80,9 +81,9 @@ def editar_equipe(id_movimento, id_equipe):
         )
 
     if not equipe_form.validate_on_submit():
-        return "Falha na validação dos dados", 400
+        return "Falha na validação dos dados", HTTPStatus.BAD_REQUEST
 
     nova_equipe = equipe_form.retorna_equipe()
     movimento_service.atualizar_equipe(equipe_atual, nova_equipe)
 
-    return "updated", 200
+    return "ok", HTTPStatus.OK

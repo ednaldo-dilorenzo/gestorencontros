@@ -9,6 +9,10 @@ def buscar_encontros(paroquia: int):
 
 
 @transactional
+def criar_movimento(movimento):
+    encontro_dao.salvar(movimento)
+
+@transactional
 def atualizar_movimento(movimento_atual, movimento_alterado):
     movimento_atual.nome = movimento_alterado.nome
 

@@ -1,5 +1,6 @@
-from app.model import EquipeEncontro, EquipeEncontroCasal, Casal
+from app.model import EquipeEncontro, EquipeEncontroCasal
 from app.extensoes import db
+from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
 
 
@@ -7,7 +8,6 @@ def buscar_equipes_por_encontro(id_encontro: int) -> list:
     return (
         db.session.query(EquipeEncontro)
         .options(joinedload(EquipeEncontro.equipe))
-        .options(joinedload(EquipeEncontro.coordenador))
         .filter(EquipeEncontro.id_encontro == id_encontro)
         .all()
     )
