@@ -73,7 +73,12 @@
           $("#lstCasaisInscritos").empty();
           $.each(response, function (key, value) {
             $("#lstCasaisInscritos").append(
-              `<li class="list-group-item ui-sortable-handle" value="${value.id}">${value.nome}</li>`
+              `<li class="list-group-item d-flex justify-content-between align-items-center ui-sortable-handle" value="${value.id}">
+                <div>
+                  <input class="form-check-input mx-1" style="display: none;" type="radio" name="lgrpCoordenador" value="${value.id}" id="firstRadio">
+                <span>${value.nome}</span>
+                </div>
+              </li>`
             );
           });
         });
@@ -97,20 +102,18 @@
         connectWith: "ul",
         placeholder: "placeholder",
         delay: 150,
-        remove: function (e, ui) {
-          const id_equipe = $("#sltEquipes").val();
-          if (!id_equipe.trim()) {
-            return false;
-          }
-        },
         receive: function (event, ui) {
           const id_casal = $(ui.item).val();
           const id_equipe = $("#sltEquipes").find(":selected").val();
+          const casal_input = $(ui.item).find("[name=lgrpCoordenador]");
 
           if (event.target.id === "lstCasaisIncluidos") {
             atualizaEquipeCasal(id_casal, id_equipe);
+            casal_input.show();
+            casal_input.change(changeRadio);
           } else {
             atualizaEquipeCasal(id_casal, id_equipe, true);
+            casal_input.hide();
           }
         },
       })
@@ -180,7 +183,7 @@
                   } class="form-check-input mx-1" type="radio" name="lgrpCoordenador" value="${
                 value.id
               }" id="firstRadio" ${checked}>
-                  ${value.nome}
+                  <span>${value.nome}</span>
                 </div>
                 ${aceito}
               </li>`

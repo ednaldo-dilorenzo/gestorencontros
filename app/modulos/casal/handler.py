@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from flask_login import current_user
 from app.model import Casal, Pessoa
 import app.modulos.casal.service as casal_service
 from app.util.file_handler import salvar_imagem
@@ -42,10 +43,10 @@ class CasalForm(FlaskForm):
     def retorna_casal(self) -> Casal:
         casal = Casal()
         casal.id = self.id.data if self.id.data else None
-        casal.id_paroquia = 1
+        casal.id_paroquia = current_user.id_paroquia
         casal.esposo = Pessoa()
         casal.esposo.id = self.id_esposo.data if self.id_esposo.data else None
-        casal.esposo.id_paroquia = 1
+        casal.esposo.id_paroquia = current_user.id_paroquia
         casal.esposo.nome = self.nome_esposo.data
         casal.esposo.apelido = self.apelido_esposo.data
         casal.esposo.email = self.email_esposo.data
@@ -53,7 +54,7 @@ class CasalForm(FlaskForm):
         casal.esposo.nascimento = self.nascimento_esposo.data
         casal.esposa = Pessoa()
         casal.esposa.id = self.id_esposa.data if self.id_esposa.data else None
-        casal.esposa.id_paroquia = 1
+        casal.esposa.id_paroquia = current_user.id_paroquia
         casal.esposa.nome = self.nome_esposa.data
         casal.esposa.apelido = self.apelido_esposa.data
         casal.esposa.email = self.email_esposa.data
@@ -71,9 +72,13 @@ def listar_casais(id_inscrito=None, back_link=None, novo_link=None, edit_link=No
     per_page = request.args.get("per_page", 10, type=int)
 
     casais = (
-        casal_service.buscar_por_filtro(filtro, 1, id_inscrito=id_inscrito)
+        casal_service.buscar_por_filtro(
+            filtro, current_user.id_paroquia, id_inscrito=id_inscrito
+        )
         if filtro
-        else casal_service.buscar_todos(1, page, per_page, id_inscrito)
+        else casal_service.buscar_todos(
+            current_user.id_paroquia, page, per_page, id_inscrito
+        )
     )
 
     return render_template(
@@ -124,7 +129,7 @@ def novo_casal(id_inscrito=None, back_link=None):
 
 
 def editar_casal(id, back_link):
-    casal = casal_service.buscar_por_id(id, 1)
+    casal = casal_service.buscar_por_id(id, current_user.id_paroquia)
 
     if not casal:
         return "Casal não encontrado", HTTPStatus.NOT_FOUND

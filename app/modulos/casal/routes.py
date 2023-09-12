@@ -1,10 +1,11 @@
 from http import HTTPStatus
 from flask import Blueprint, request, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app.modulos.casal.handler import listar_casais, novo_casal, editar_casal
 import app.modulos.casal.service as casal_service
 import app.modulos.encontro.service as encontro_service
 from app.model import EquipeEncontroCasal
+from app.util.security import permission
 
 
 casal_bp = Blueprint("casal", __name__, url_prefix="/casais")
@@ -12,6 +13,7 @@ casal_bp = Blueprint("casal", __name__, url_prefix="/casais")
 
 @casal_bp.route("", strict_slashes=False)
 @login_required
+@permission(["DIRIGENTE"])
 def index():
     return listar_casais(
         novo_link=url_for("casal.register"), edit_link=url_for("casal.index")
@@ -20,17 +22,21 @@ def index():
 
 @casal_bp.route("/novo", methods=["GET", "POST"])
 @login_required
+@permission(["DIRIGENTE"])
 def register():
     return novo_casal(back_link=url_for("casal.index"))
 
 
 @casal_bp.route("/<int:id>", methods=["GET", "POST", "PATCH"])
 @login_required
+@permission(["DIRIGENTE"])
 def editar(id):
     return editar_casal(id, back_link=url_for("casal.index"))
 
 
 @casal_bp.route("/busca")
+@login_required
+@permission(["DIRIGENTE"])
 def buscar_por_filtro():
     filtro = request.args.get("filtro")
     inscrito = request.args.get(
@@ -42,7 +48,7 @@ def buscar_por_filtro():
 
     casais = casal_service.buscar_por_filtro_test(
         filtro=filtro,
-        id_paroquia=1,
+        id_paroquia=current_user.id_paroquia,
         id_encontro=encontro,
         inscrito=inscrito,
         id_circulo=circulo,
@@ -57,6 +63,7 @@ def buscar_por_filtro():
 
 @casal_bp.route("/<int:id_casal>/equipe", methods=["POST", "DELETE"])
 @login_required
+@permission(["DIRIGENTE"])
 def adicionar_equipe(id_casal):
     id_encontro = request.form.get("id_encontro", type=int)
     id_equipe = request.form.get("id_equipe", type=int)

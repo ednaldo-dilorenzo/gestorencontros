@@ -72,7 +72,7 @@ const router = async () => {
       view: "/movimentos/:id_movimento/encontros/:id_encontro/circulos/montagem",
     },
     {
-      path: "/pages/usuarios/",
+      path: "/pages/usuarios",
       view: "/usuarios",
     },
     {

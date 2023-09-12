@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, render_template, request, url_for
+from flask_login import current_user
 import app.modulos.movimento.service as movimento_service
 from app.model import Movimento
 from wtforms import StringField
@@ -22,7 +23,7 @@ class MovimentoForm(FlaskForm):
 @movimento_bp.route("", strict_slashes=False)
 @login_required
 def index():
-    movimentos = movimento_service.buscar_encontros(1)
+    movimentos = movimento_service.buscar_encontros(current_user.id_paroquia)
     return render_template("movimento/index.html", movimentos=movimentos)
 
 
@@ -42,7 +43,7 @@ def register():
 
     movimento = Movimento()
     movimento.nome = movimento_form.nome.data
-    movimento.id_paroquia = 1
+    movimento.id_paroquia = current_user.id_paroquia
     movimento_service.criar_movimento(movimento)
     return "ok", HTTPStatus.OK
 
@@ -50,7 +51,7 @@ def register():
 @movimento_bp.route("/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit(id):
-    movimento = movimento_service.buscar_movimento_por_id(id, 1)
+    movimento = movimento_service.buscar_movimento_por_id(id, current_user.id_paroquia)
 
     if not movimento:
         return "Encontro não encontrado", HTTPStatus.NOT_FOUND

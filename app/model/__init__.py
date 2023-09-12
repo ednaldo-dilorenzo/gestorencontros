@@ -3,22 +3,25 @@ from flask_login import UserMixin
 
 
 class Paroquia(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, unique=True, nullable=False)
 
 
 class Usuario(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     username = db.Column(db.String, unique=True, nullable=False)
     senha = db.Column(db.String, nullable=False)
     nome = db.Column(db.String, nullable=False)
     papel = db.Column(db.String, nullable=False)
     ativo = db.Column(db.Boolean, nullable=False, default=True)
-    id_paroquia = db.Column(db.Integer)
+    id_paroquia = db.Column(db.BigInteger, db.ForeignKey("paroquia.id"))
+    paroquia = db.relationship(
+        "Paroquia", backref="paroquia", uselist=False, foreign_keys=[id_paroquia]
+    )
 
 
 class Pessoa(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
     telefone = db.Column(db.String, nullable=False)
@@ -28,7 +31,7 @@ class Pessoa(db.Model):
 
 
 class Casal(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     id_esposo = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
     id_esposa = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
     esposa = db.relationship(
@@ -44,20 +47,20 @@ class Casal(db.Model):
 
 
 class Movimento(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"), nullable=False)
 
 
 class Equipe(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     descricao = db.Column(db.String, nullable=False)
     id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)
 
 
 class Encontro(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     ano = db.Column(db.Integer, nullable=False)
     tema = db.Column(db.String, nullable=False)
@@ -67,7 +70,7 @@ class Encontro(db.Model):
 
 
 class Circulo(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String)
     cor = db.Column(db.String, nullable=False)
     id_coordenador = db.Column(db.Integer, db.ForeignKey("casal.id"))

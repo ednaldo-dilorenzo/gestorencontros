@@ -9,8 +9,16 @@ def buscar_por_paroquia(id_paroquia: int, page: int = 1, per_page: int = 10):
     return usuario_dao.buscar_por_paroquia(id_paroquia, page, per_page)
 
 
+def buscar_todos(page: int = 1, per_page: int = 10):
+    return usuario_dao.buscar_todos(page, per_page)
+
+
 def buscar_por_id_e_paroquia(id_usuario: int, id_paroquia: int) -> Usuario:
     return usuario_dao.buscar_por_id_e_paroquia(id_usuario, id_paroquia)
+
+
+def buscar_por_id(id_usuario: int) -> Usuario:
+    return usuario_dao.buscar_por_id(id_usuario)
 
 
 @transactional

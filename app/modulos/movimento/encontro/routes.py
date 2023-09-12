@@ -1,6 +1,6 @@
 from http import HTTPStatus
 from flask import Blueprint, render_template, request, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 import app.modulos.movimento.service as movimento_service
 from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired, Optional
@@ -38,7 +38,7 @@ class EncontroForm(FlaskForm):
 @encontro_bp.route("/")
 @login_required
 def index(id_movimento):
-    movimento = movimento_service.buscar_movimento_por_id(id_movimento, 1)
+    movimento = movimento_service.buscar_movimento_por_id(id_movimento, current_user.id_paroquia)
     encontros = movimento_service.buscar_encontros_por_movimento(id_movimento)
     return render_template(
         "movimento/encontro/index.html", encontros=encontros, movimento=movimento
@@ -48,7 +48,7 @@ def index(id_movimento):
 @encontro_bp.route("/novo", methods=["GET", "POST"])
 @login_required
 def novo(id_movimento):
-    movimento = movimento_service.buscar_movimento_por_id(id_movimento, 1)
+    movimento = movimento_service.buscar_movimento_por_id(id_movimento, current_user.id_paroquia)
     encontro_form = EncontroForm()
 
     if request.method == "GET":
@@ -70,7 +70,7 @@ def novo(id_movimento):
 @encontro_bp.route("/<int:id_encontro>", methods=["GET", "POST"])
 @login_required
 def editar(id_movimento, id_encontro):
-    movimento = movimento_service.buscar_movimento_por_id(id_movimento, 1)
+    movimento = movimento_service.buscar_movimento_por_id(id_movimento, current_user.id_paroquia)
     encontro = movimento_service.buscar_encontro_por_id(id_movimento, id_encontro)
 
     if not encontro:
@@ -191,7 +191,7 @@ def novo_circulo(id_movimento, id_encontro):
     circulo_novo = circulo_form.retorna_circulo()
     circulo_novo.id_movimento = id_movimento
     circulo_novo.id_encontro = id_encontro
-    circulo_novo.id_paroquia = 1
+    circulo_novo.id_paroquia = current_user.id_paroquia
 
     movimento_service.criar_circulo(circulo_novo)
 
@@ -230,7 +230,7 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
     circulo_novo = circulo_form.retorna_circulo()
     circulo_novo.id_movimento = id_movimento
     circulo_novo.id_encontro = id_encontro
-    circulo_novo.id_paroquia = 1
+    circulo_novo.id_paroquia = current_user.id_paroquia
 
     movimento_service.atualizar_circulo(circulo_atual, circulo_novo)
 
