@@ -2,9 +2,8 @@ name: Push-to-EC2
 
 # Trigger deployment only on push to master branch
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
   deploy:
@@ -15,10 +14,22 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
-      - name: Deploy to Server 1
+      - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
+   
+      - name: Restart Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          script: |
+            pkill gunicorn
+            cd /home/ubuntu/encontros/encontros
+            gunicorn --bind 0.0.0.0:5000 encontros:app --daemon
+           
