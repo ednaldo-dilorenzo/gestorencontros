@@ -33,5 +33,6 @@ def editar(usuario_atual: Usuario, usuario_alterado: Usuario):
     usuario_atual.ativo = usuario_alterado.ativo
     usuario_atual.nome = usuario_alterado.nome
     usuario_atual.username = usuario_alterado.username
+    usuario_atual.id_paroquia = usuario_alterado.id_paroquia
     if usuario_alterado.senha:
         usuario_atual.senha = generate_password_hash(usuario_alterado.senha)

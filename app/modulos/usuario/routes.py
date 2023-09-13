@@ -1,8 +1,9 @@
 from http import HTTPStatus
 from flask import Blueprint, render_template, request
 import app.modulos.usuario.service as usuario_service
+from app.modulos.paroquia import service as paroquia_service
 from app.model import Usuario
-from wtforms import StringField, PasswordField, BooleanField, HiddenField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Optional
 from flask_wtf import FlaskForm
 from flask_login import login_required, current_user
@@ -33,7 +34,13 @@ class UsuarioForm(FlaskForm):
     nome = StringField("Nome", validators=[DataRequired()])
     senha = PasswordField("Senha")
     ativo = BooleanField("Ativo", default=False)
-    id_paroquia = IntegerField("Paroquia", validators=[Optional()])
+    id_paroquia = SelectField(
+        "Paroquia",
+        choices=(),
+        validators=[Optional()],
+        validate_choice=False,
+        coerce=int,
+    )
 
     def retorna_usuario(self):
         resultado = Usuario()
@@ -41,7 +48,6 @@ class UsuarioForm(FlaskForm):
         resultado.senha = self.senha.data
         resultado.nome = self.nome.data
         resultado.ativo = self.ativo.data
-        resultado.id_paroquia = current_user.id_paroquia
         return resultado
 
 
@@ -51,12 +57,25 @@ def registrar():
     usuario_form = UsuarioForm()
 
     if request.method == "GET":
+        if current_user.papel == Roles.ROLE_ADMIN:
+            paroquias = [(-1, "Selecione...")] + [
+                (paroquia.id, paroquia.nome)
+                for paroquia in paroquia_service.buscar_paroquias()
+            ]
+            usuario_form.id_paroquia.choices = paroquias
         return render_template("usuario/registrar.html", form=usuario_form)
 
     if not usuario_form.validate_on_submit():
         return "Falha na validação", HTTPStatus.BAD_REQUEST
 
     novo_usuario = usuario_form.retorna_usuario()
+    if current_user.papel == Roles.ROLE_ADMIN:
+        novo_usuario.id_paroquia = (
+            usuario_form.id_paroquia.data if usuario_form.id_paroquia.data > 0 else None
+        )
+    else:
+        novo_usuario.id_paroquia = current_user.id_paroquia
+
     usuario_service.salvar(novo_usuario)
 
     return "ok", HTTPStatus.CREATED
@@ -81,12 +100,28 @@ def editar(id_usuario):
         usuario_form.ativo.data = usuario_atual.ativo
         usuario_form.nome.data = usuario_atual.nome
         usuario_form.username.data = usuario_atual.username
+        if current_user.papel == Roles.ROLE_ADMIN:
+            paroquias = [(-1, "Selecione...")] + [
+                (paroquia.id, paroquia.nome)
+                for paroquia in paroquia_service.buscar_paroquias()
+            ]
+            usuario_form.id_paroquia.choices = paroquias
+            if usuario_atual.id_paroquia:
+                usuario_form.id_paroquia.data = usuario_atual.id_paroquia
+
         return render_template("usuario/registrar.html", form=usuario_form)
 
     if not usuario_form.validate_on_submit():
         return "Falha na validação do form", HTTPStatus.BAD_REQUEST
 
     usuario_alterado = usuario_form.retorna_usuario()
+    if current_user.papel == Roles.ROLE_ADMIN:
+        usuario_alterado.id_paroquia = (
+            usuario_form.id_paroquia.data if usuario_form.id_paroquia.data > 0 else None
+        )
+    else:
+        usuario_alterado.id_paroquia = current_user.id_paroquia
+
     usuario_service.editar(usuario_atual, usuario_alterado)
 
     return "ok", HTTPStatus.OK

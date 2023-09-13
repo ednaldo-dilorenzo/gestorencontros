@@ -4,3 +4,4 @@ from app.modulos.autenticacao.routes import auth_bp
 from app.modulos.usuario.routes import usuario_bp
 from app.modulos.foto.routes import foto_bp
 from app.modulos.encontro.routes import encontro_bp
+from app.modulos.paroquia.routes import paroquia_bp
