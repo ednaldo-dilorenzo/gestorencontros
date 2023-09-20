@@ -31,5 +31,7 @@ jobs:
           script: |
             pkill gunicorn
             cd /home/ubuntu/encontros/encontros
+            poetry install
+            FLASK_APP=encontros flask db upgrade
             gunicorn --bind 0.0.0.0:5000 encontros:app --daemon
            
