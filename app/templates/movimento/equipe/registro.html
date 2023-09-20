@@ -17,6 +17,7 @@
   action="{% if form.id.data %}{{ url_for('movimento.equipe.editar_equipe', id_movimento=id_movimento, id_equipe=form.id.data) }}{% else %}{{ url_for('movimento.equipe.nova_equipe', id_movimento=id_movimento) }}{% endif %}"
   target="/pages{{ url_for('movimento.equipe.index', id_movimento=id_movimento) }}"
   method="post"
+  id="frmEquipe"
   novalidate
 >
   {{ form.csrf_token }} {% if form.id.data %}
@@ -43,7 +44,9 @@
         class="form-control"
         id="iptDescricao"
         name="descricao"
-      >{% if form.descricao.data %}{{ form.descricao.data }}{% endif %}</textarea>
+      >
+{% if form.descricao.data %}{{ form.descricao.data }}{% endif %}</textarea
+      >
     </div>
   </div>
   <hr class="my-4" />
@@ -80,18 +83,18 @@
     "use strict";
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const form = document.querySelector("form");
+    const form = document.getElementById("frmEquipe");
     const formValidations = [
       {
-        selector: "#iptNome",
+        field: "nome",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: "required", message: "Por favor informe o nome" },
         ],
       },
       {
-        selector: "#iptDescricao",
+        field: "descricao",
         validations: [
-          { handler: isRequired, message: "Por favor informe a descrição" },
+          { handler: "required", message: "Por favor informe a descrição" },
         ],
       },
     ];

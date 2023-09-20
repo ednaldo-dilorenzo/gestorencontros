@@ -125,3 +125,23 @@ def editar(id_usuario):
     usuario_service.editar(usuario_atual, usuario_alterado)
 
     return "ok", HTTPStatus.OK
+
+
+@usuario_bp.route("/senha", methods=["GET", "POST"])
+def alterar_senha():
+
+    if request.method == "GET":
+        return render_template("usuario/alterar_senha.html")
+
+    senha = request.form.get("senha")
+    confirmacao = request.form.get("confirmacao")
+
+    if (not senha or not confirmacao) or (senha != confirmacao):
+        return "Falha na validação do form", HTTPStatus.BAD_REQUEST
+
+    try:
+        usuario_service.mudar_senha(current_user.id, senha)
+    except KeyError:
+        return "usuário não encontrado", HTTPStatus.NOT_FOUND
+
+    return "ok", HTTPStatus.OK

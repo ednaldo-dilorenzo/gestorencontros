@@ -251,53 +251,53 @@
     const form = document.querySelector("form");
     const formValidations = [
       {
-        selector: "#iptNomeEsposo",
+        field: "nome_esposo",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: "required", message: "Por favor informe o nome" },
         ],
       },
       {
-        selector: "#iptApelidoEsposo",
+        field: "apelido_esposo",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome usual" },
+          { handler: "required", message: "Por favor informe o nome usual" },
         ],
       },
       {
-        selector: "#iptEmailEsposo",
+        field: "email_esposo",
         validations: [
-          { handler: isRequired, message: "Por favor informe o email" },
-          { handler: isEmailValid, message: "Formato de email inválido" },
+          { handler: "required", message: "Por favor informe o email" },
+          { handler: "required", message: "Formato de email inválido" },
         ],
       },
       {
-        selector: "#iptTelefoneEsposo",
+        field: "telefone_esposo",
         validations: [
-          { handler: isRequired, message: "Por favor informe o telefone" },
+          { handler: "required", message: "Por favor informe o telefone" },
         ],
       },
       {
-        selector: "#iptNomeEsposa",
+        field: "nome_esposa",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: "required", message: "Por favor informe o nome" },
         ],
       },
       {
-        selector: "#iptApelidoEsposa",
+        field: "apelido_esposa",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome usual" },
+          { handler: "required", message: "Por favor informe o nome usual" },
         ],
       },
       {
-        selector: "#iptEmailEsposa",
+        field: "email_esposa",
         validations: [
-          { handler: isRequired, message: "Por favor informe o email" },
-          { handler: isEmailValid, message: "Formato de email inválido" },
+          { handler: "required", message: "Por favor informe o email" },
+          { handler: "email", message: "Formato de email inválido" },
         ],
       },
       {
-        selector: "#iptTelefoneEsposa",
+        field: "telefone_esposa",
         validations: [
-          { handler: isRequired, message: "Por favor informe o telefone" },
+          { handler: "required", message: "Por favor informe o telefone" },
         ],
       },
     ];

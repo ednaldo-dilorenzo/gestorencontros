@@ -1,0 +1,83 @@
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Alterar Senha</h1>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          id="btnClose"
+        ></button>
+      </div>
+      <form
+        id="frmAlterarSenha"
+        method="post"
+        action="{{ url_for('usuario.alterar_senha') }}"
+      >
+        <div class="modal-body mb-3">
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label" for="iptSenha">Senha</label>
+              <input
+                class="form-control"
+                type="password"
+                name="senha"
+                id="iptSenha"
+              />
+            </div>
+            <div class="col-md-12">
+              <label class="form-label" for="iptConfirmacao">Confirmação</label>
+              <input
+                class="form-control"
+                type="password"
+                name="confirmacao"
+                id="iptConfirmacao"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const form = document.querySelector("#frmAlterarSenha");
+    const formValidations = [
+      {
+        field: "senha",
+        validations: [
+          { handler: "required", message: "Por favor informe a senha" },
+        ],
+      },
+      {
+        field: "confirmacao",
+        validations: [
+          { handler: "required", message: "Por favor informe a confirmação" },
+        ],
+      },
+    ];
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.classList.add("was-validated");
+
+      if (validateForm(formValidations)) {
+        sendFormData(event.target, "Senha alterada com sucesso!");
+        $(".modal").hide();
+      }
+    });
+  })();
+</script>

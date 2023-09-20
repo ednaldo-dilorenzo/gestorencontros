@@ -116,12 +116,10 @@ def novo_casal(id_inscrito=None, back_link=None):
     foto_esposa = casal_form.foto_esposa.data
     salvar_imagem(
         foto_esposo,
-        current_app.config["UPLOAD_FOLDER"],
         f"{novo_casal.esposo.id}_pessoa.jpg",
     )
     salvar_imagem(
         foto_esposa,
-        current_app.config["UPLOAD_FOLDER"],
         f"{novo_casal.esposa.id}_pessoa.jpg",
     )
 
@@ -172,12 +170,10 @@ def editar_casal(id, back_link):
     foto_esposa = casal_form.foto_esposa.data
     salvar_imagem(
         foto_esposo,
-        current_app.config["UPLOAD_FOLDER"],
         f"{casal.esposo.id}_pessoa.jpg",
     )
     salvar_imagem(
         foto_esposa,
-        current_app.config["UPLOAD_FOLDER"],
         f"{casal.esposa.id}_pessoa.jpg",
     )
 

@@ -17,6 +17,7 @@
   action="{% if form.id.data %}{{ url_for('usuario.editar', id_usuario=form.id.data) }}{% else %}{{ url_for('usuario.registrar') }}{% endif %}"
   target="/pages{{ url_for('usuario.index') }}"
   method="post"
+  id="frmUsuario"
   class="row g-3"
   novalidate
 >
@@ -67,19 +68,19 @@
     "use strict";
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const form = document.querySelector("form");
+    const form = document.querySelector("#frmUsuario");
     const formValidations = [
       {
-        selector: "#nome",
+        field: "nome",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: "required", message: "Por favor informe o nome" },
         ],
       },
       {
-        selector: "#username",
+        field: "username",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
-          { handler: isEmailValid, message: "Formato de email inválido" },
+          { handler: "required", message: "Por favor informe o nome" },
+          { handler: "email", message: "Formato de email inválido" },
         ],
       },
     ];

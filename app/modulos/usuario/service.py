@@ -36,3 +36,13 @@ def editar(usuario_atual: Usuario, usuario_alterado: Usuario):
     usuario_atual.id_paroquia = usuario_alterado.id_paroquia
     if usuario_alterado.senha:
         usuario_atual.senha = generate_password_hash(usuario_alterado.senha)
+
+
+@transactional
+def mudar_senha(id_usuario: int, nova_senha):
+    usuario = usuario_dao.buscar_por_id(id_usuario)
+
+    if not usuario:
+        raise KeyError("Usuário não encontrado")
+
+    usuario.senha = generate_password_hash(nova_senha)

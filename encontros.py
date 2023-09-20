@@ -4,7 +4,7 @@ from flask_login import login_required
 import logging
 
 
-app = create_app("app.cfg")
+app = create_app("config.py")
 
 
 @app.route("/", defaults={"path": ""})

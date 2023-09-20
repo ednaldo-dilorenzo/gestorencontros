@@ -19,6 +19,7 @@
 </div>
 <hr />
 <form
+  id="frmEncontro"
   action="{% if form.id.data %}{{ url_for('movimento.encontro.editar', id_movimento=movimento.id, id_encontro=form.id.data) }}{% else %}{{ url_for('movimento.encontro.novo', id_movimento=movimento.id) }}{% endif %}"
   target="/pages{{ url_for('movimento.encontro.index', id_movimento=movimento.id) }}"
   method="post"
@@ -117,30 +118,79 @@
   (() => {
     "use strict";
 
+    /*const formValidations = [
+      {
+        field: "nome",
+        handler: isEmailValid,
+        validations: [
+          {
+            handler: "required",
+            message: "Por favor informe o nome",
+          },
+        ],
+      },
+      {
+        field: "tema",
+        validations: [
+          { handler: "required", message: "Por favor informe o tema" },
+        ],
+      },
+      {
+        field: "ano",
+        validations: [
+          { handler: "required", message: "Por favor informe o ano" },
+        ],
+      },
+    ];
+    $("#frmEncontro").on("submit", (e) => {
+      e.preventDefault();
+      if (!$(e.currentTarget).validate(formValidations)) {
+        console.log("Deu erro");
+      }
+
+      $.ajax({
+        url: "{% if form.id.data %}{{ url_for('movimento.encontro.editar', id_movimento=movimento.id, id_encontro=form.id.data) }}{% else %}{{ url_for('movimento.encontro.novo', id_movimento=movimento.id) }}{% endif %}",
+        type: "POST",
+        data: $(e.currentTarget).serialize(),
+        success: function (result) {
+          $(function () {
+            // do stuff
+            showToastMessage("Chegou no ajax sucesso"); 
+          });
+          
+          console.log("Chegou no ajax sucesso");
+        },
+        error: function (result) {
+          console.log("Chegou no ajax error");
+        },
+      });
+    });*/
+
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const form = document.querySelector("form");
+    const form = document.querySelector("#frmEncontro");
     const formValidations = [
       {
-        selector: "#iptNome",
+        field: "nome",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: "required", message: "Por favor informe o nome" },
         ],
       },
       {
-        selector: "#iptTema",
+        field: "tema",
         validations: [
-          { handler: isRequired, message: "Por favor informe o tema" },
+          { handler: "required", message: "Por favor informe o tema" },
         ],
       },
       {
-        selector: "#iptAno",
+        field: "ano",
         validations: [
-          { handler: isRequired, message: "Por favor informe o ano" },
+          { handler: "required", message: "Por favor informe o ano" },
         ],
       },
     ];
 
     form.addEventListener("submit", (event) => {
+      console.log("Entrou no addenve.t");
       event.preventDefault();
       event.stopPropagation();
       event.target.classList.add("was-validated");
@@ -150,6 +200,7 @@
         : "Encontro criado com sucesso";
 
       if (validateForm(formValidations)) {
+        console.log("Não validou o form");
         sendFormData(event.target, successMsg);
       }
     });

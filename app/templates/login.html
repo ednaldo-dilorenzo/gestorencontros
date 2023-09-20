@@ -76,15 +76,15 @@ main %}
     const form = document.querySelector("form");
     const formValidations = [
       {
-        selector: "#iptLogin",
+        field: "login",
         validations: [
-          { handler: isRequired, message: "Por favor informe o login" },
+          { handler: "required", message: "Por favor informe o login" },
         ],
       },
       {
-        selector: "#iptPassword",
+        field: "senha",
         validations: [
-          { handler: isRequired, message: "Por favor informe a senha" },
+          { handler: "required", message: "Por favor informe a senha" },
         ],
       },
     ];

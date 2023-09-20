@@ -17,6 +17,7 @@
   action="{% if form.id.data %}{{ url_for('movimento.edit', id=form.id.data) }}{% else %}{{ url_for('movimento.register') }}{% endif %}"
   target="/pages{{ url_for('movimento.index') }}"
   method="post"
+  id="frmMovimento"
   novalidate
 >
   {{ form.csrf_token }} {% if form.id.data %}
@@ -68,12 +69,12 @@
     "use strict";
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const form = document.querySelector("form");
+    const form = document.getElementById("frmMovimento");
     const formValidations = [
       {
-        selector: "#iptNome",
+        field: "nome",
         validations: [
-          { handler: isRequired, message: "Por favor informe o nome" },
+          { handler: "required", message: "Por favor informe o nome" },
         ],
       },
     ];
