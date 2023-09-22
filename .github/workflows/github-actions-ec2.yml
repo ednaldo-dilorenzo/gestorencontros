@@ -29,9 +29,10 @@ jobs:
           host: ${{ secrets.HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           script: |
-            pkill gunicorn
-            cd /home/ubuntu/encontros/encontros
+            sudo systemctl stop paroquial
+            cd /home/ubuntu/gestorencontros
+            git fech origin
             poetry install
             FLASK_APP=encontros flask db upgrade
-            gunicorn --bind 0.0.0.0:5000 encontros:app --daemon
+            sudo systemctl start paroquial
            

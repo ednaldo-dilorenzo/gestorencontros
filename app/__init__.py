@@ -7,6 +7,7 @@ from app.modulos import (
     foto_bp,
     encontro_bp,
     paroquia_bp,
+    dashboard_bp,
 )
 from app.extensoes import db, login_manager, migrate
 import logging
@@ -35,6 +36,7 @@ def create_app(config_filename: str = ""):
     app.register_blueprint(foto_bp)
     app.register_blueprint(encontro_bp)
     app.register_blueprint(paroquia_bp)
+    app.register_blueprint(dashboard_bp)
 
     return app
 

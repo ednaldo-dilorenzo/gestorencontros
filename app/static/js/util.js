@@ -21,7 +21,7 @@ function pathToRegex(path) {
 
 async function router() {
   const routes = [
-    { path: "/", view: "/" },
+    { path: "/", view: "/dashboard" },
     { path: "/pages/casais", view: "/casais" },
     { path: "/pages/casais/novo", view: "/casais/novo" },
     { path: "/pages/casais/:id", view: "/casais/:id" },
