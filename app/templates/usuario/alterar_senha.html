@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalAlterarSenha" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -40,7 +40,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Cancelar</button>
           <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
       </form>
@@ -76,7 +76,7 @@
 
       if (validateForm(formValidations)) {
         sendFormData(event.target, "Senha alterada com sucesso!");
-        $(".modal").hide();
+        $("#modalAlterarSenha").modal("hide");
       }
     });
   })();

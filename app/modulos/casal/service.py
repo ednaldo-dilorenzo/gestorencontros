@@ -1,6 +1,7 @@
 import app.modulos.casal.dao as casal_dao
 from app.model import Casal
 from app.extensoes import transactional
+from instance.config import current_config
 from typing import Optional
 
 
@@ -25,20 +26,28 @@ def buscar_por_id(id_casal: int, id_paroquia: int) -> Casal:
 
 
 @transactional
-def salvar(casal):
+def salvar(casal, foto_esposo=None, foto_esposa=None):
     casal.esposo = casal_dao.criar_pessoa(casal.esposo)
     casal.esposa = casal_dao.criar_pessoa(casal.esposa)
     casal.extenso = f"{casal.esposo.nome} {casal.esposo.apelido} {casal.esposa.nome} {casal.esposa.apelido}".lower()
     casal = casal_dao.criar_casal(casal)
+    if foto_esposo:
+        current_config.FILE_HANDLER.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
+    if foto_esposa:
+        current_config.FILE_HANDLER.save(foto_esposa, f"{casal.esposa.id}_pessoa.jpg")
     return casal
 
 
 @transactional
-def atualizar_casal(casal, casal_atualizado):
+def atualizar_casal(casal, casal_atualizado, foto_esposo=None, foto_esposa=None):
     atualizar_pessoa(casal.esposo, casal_atualizado.esposo)
     atualizar_pessoa(casal.esposa, casal_atualizado.esposa)
     casal.id_circulo = casal_atualizado.id_circulo
     casal.extenso = f"{casal.esposo.nome} {casal.esposa.nome}".lower()
+    if foto_esposo:
+        current_config.FILE_HANDLER.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
+    if foto_esposa:
+        current_config.FILE_HANDLER.save(foto_esposa, f"{casal.esposa.id}_pessoa.jpg")
 
 
 def atualizar_pessoa(pessoa, pessoa_atualizada):
@@ -79,3 +88,17 @@ def buscar_por_filtro_test(
 
 def buscar_casais_por_equipe_e_encontro(id_encontro: int, id_equipe: int) -> list:
     return casal_dao.buscar_casais_por_equipe_e_encontro(id_encontro, id_equipe)
+
+
+def retornar_foto_pessoa(id_pessoa: int, feminino: bool = False):
+    nome_arquivo = f"{id_pessoa}_pessoa.jpg"
+    if not id_pessoa:
+        nome_arquivo = "anonima.jpg" if feminino else "anonimo.jpg"
+
+    arquivo = current_config.FILE_HANDLER.read(nome_arquivo)
+    if arquivo:
+        return arquivo
+
+    return current_config.FILE_HANDLER.read(
+        "anonima.jpg" if feminino else "anonimo.jpg"
+    )

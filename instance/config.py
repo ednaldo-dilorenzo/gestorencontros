@@ -1,18 +1,42 @@
-import os
+from os import environ, path
 from dotenv import load_dotenv
+from app.util.file_handler import FileSystemFileHandler, AWSFileHandler
 
-load_dotenv()
-
-SECRET_KEY = os.getenv("SECRET_KEY", "secret-key")
-DATABASE_HOST = os.getenv("DATABASE_HOST", "127.0.0.1")
-DATABASE_USERNAME = os.getenv("DATABASE_USERNAME", "master")
-DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "secret")
-DATABASE_PORT = os.getenv("DATABASE_PORT", "5432")
 
 # Get the folder of the top-level directory of this project
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-UPLOAD_FOLDER = "/home/edsf/Imagens"
+dot_env_path = environ.get("DOTENV_PATH", None)
+BASEDIR = dot_env_path if dot_env_path else path.abspath(path.dirname(__file__))
 
-SQLALCHEMY_DATABASE_URI = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/encontros"
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_ECHO = True
+load_dotenv(path.join(BASEDIR, ".env"))
+
+ENVIRONMENT = environ.get("ENVIRONMENT", "development")
+
+
+class Config(object):
+    SECRET_KEY = environ.get("SECRET_KEY", "secret-key")
+    print(SECRET_KEY)
+    DATABASE_HOST = environ.get("DATABASE_HOST", "127.0.0.1")
+    DATABASE_USERNAME = environ.get("DATABASE_USERNAME", "master")
+    DATABASE_PASSWORD = environ.get("DATABASE_PASSWORD", "secret")
+    DATABASE_PORT = environ.get("DATABASE_PORT", "5432")
+
+    UPLOAD_FOLDER = environ.get("UPLOAD_FOLDER")
+
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/encontros"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = True
+
+
+class DevelopmentConfig(Config):
+    FILE_HANDLER = FileSystemFileHandler(Config.UPLOAD_FOLDER)
+    FLASK_ENV = "development"
+
+
+class ProductionConfig(Config):
+    FILE_HANDLER = AWSFileHandler("encontros-file-prod")
+    FLASK_ENV = "production"
+
+
+current_config = (
+    ProductionConfig() if ENVIRONMENT == "production" else DevelopmentConfig()
+)

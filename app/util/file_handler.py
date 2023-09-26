@@ -1,29 +1,42 @@
 import os
-from instance import config
 from werkzeug.utils import secure_filename
-import os
+import boto3
 
 
-def salvar_imagem(arquivo=None, nome_arquivo="default.png"):
-    caminho_arquivo = config.UPLOAD_FOLDER
-    if arquivo:
-        nome = secure_filename(nome_arquivo)
-        arquivo.save(os.path.join(caminho_arquivo, nome))
+class FileHandler:
+    def save(self, file, filename):
+        pass
+
+    def read(self, filename):
+        pass
 
 
-def salvar_foto_pessoa(id_pessoa: int):
-    pass
+class FileSystemFileHandler(FileHandler):
+    def __init__(self, upload_path):
+        self.upload_path = upload_path
+
+    def save(self, file, filename):
+        if file:
+            new_file_name = secure_filename(filename)
+            file.save(os.path.join(self.upload_path, new_file_name))
+        else:
+            raise FileNotFoundError()
+
+    def read(self, filename):
+        file_path = f"{self.upload_path}/{filename}"
+        if os.path.exists(file_path):
+            return open(file_path, "rb")
+
+        return None
 
 
-def retornar_foto_pessoa(id_pessoa: int, feminino: bool = False):
-    nome_arquivo = f"{id_pessoa}_pessoa.jpg"
-    if not id_pessoa or not os.path.exists(
-        os.path.join(config.UPLOAD_FOLDER, nome_arquivo)
-    ):
-        nome_arquivo = "anonima.jpg" if feminino else "anonimo.jpg"
+class AWSFileHandler(FileHandler):
+    def __init__(self, bucket_name):
+        self.bucket_name = bucket_name
+        self.s3_client = boto3.client("s3")
 
-    return open(f"{config.UPLOAD_FOLDER}/{nome_arquivo}", "rb")
+    def save(self, file, filename):
+        self.s3_client.upload_file(file, self.bucket_name, filename)
 
-
-def pegar_caminho_uploads():
-    return config.UPLOAD_FOLDER
+    def read(self, filename):
+        self.s3_client()

@@ -1,7 +1,7 @@
 from flask import Blueprint, send_file
-from app.util.file_handler import retornar_foto_pessoa
 from flask_login import login_required
 from flask import request
+from app.modulos.casal.service import retornar_foto_pessoa
 
 
 foto_bp = Blueprint("foto", __name__, url_prefix="/foto")

@@ -10,10 +10,11 @@ from app.modulos import (
     dashboard_bp,
 )
 from app.extensoes import db, login_manager, migrate
+from instance.config import current_config
 import logging
 
 
-def create_app(config_filename: str = ""):
+def create_app():
     """
     Creates the app.
 
@@ -22,7 +23,7 @@ def create_app(config_filename: str = ""):
 
     """
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_pyfile(config_filename)
+    app.config.from_object(current_config)
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)

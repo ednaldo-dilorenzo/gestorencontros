@@ -19,6 +19,7 @@
   enctype="multipart/form-data"
   method="post"
   class="row g-3"
+  id="frmCasal"
   novalidate
 >
   {{ form.hidden_tag() }}
@@ -248,7 +249,7 @@
     });
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const form = document.querySelector("form");
+    const form = document.getElementById("frmCasal");
     const formValidations = [
       {
         field: "nome_esposo",
@@ -260,13 +261,6 @@
         field: "apelido_esposo",
         validations: [
           { handler: "required", message: "Por favor informe o nome usual" },
-        ],
-      },
-      {
-        field: "email_esposo",
-        validations: [
-          { handler: "required", message: "Por favor informe o email" },
-          { handler: "required", message: "Formato de email inválido" },
         ],
       },
       {
@@ -285,13 +279,6 @@
         field: "apelido_esposa",
         validations: [
           { handler: "required", message: "Por favor informe o nome usual" },
-        ],
-      },
-      {
-        field: "email_esposa",
-        validations: [
-          { handler: "required", message: "Por favor informe o email" },
-          { handler: "email", message: "Formato de email inválido" },
         ],
       },
       {

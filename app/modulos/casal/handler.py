@@ -2,7 +2,6 @@ from http import HTTPStatus
 from flask_login import current_user
 from app.model import Casal, Pessoa
 import app.modulos.casal.service as casal_service
-from app.util.file_handler import salvar_imagem
 from flask import request, render_template, url_for, current_app
 from flask_wtf import FlaskForm
 from wtforms import (
@@ -21,13 +20,13 @@ class CasalForm(FlaskForm):
     id_esposo = IntegerField("id_esposo")
     nome_esposo = StringField("nome_esposo", validators=[DataRequired()])
     apelido_esposo = StringField("apelido_esposo", validators=[DataRequired()])
-    email_esposo = EmailField("email_esposo", validators=[DataRequired()])
+    email_esposo = EmailField("email_esposo")
     nascimento_esposo = DateField("nascimento_esposo", validators=[Optional()])
     telefone_esposo = StringField("telefone_esposo", validators=[DataRequired()])
     id_esposa = IntegerField("id_esposa")
     nome_esposa = StringField("nome_esposa", validators=[DataRequired()])
     apelido_esposa = StringField("apelido_esposa", validators=[DataRequired()])
-    email_esposa = EmailField("email_esposa", validators=[DataRequired()])
+    email_esposa = EmailField("email_esposa")
     nascimento_esposa = DateField("nascimento_esposa", validators=[Optional()])
     telefone_esposa = StringField("telefone_esposa", validators=[DataRequired()])
     endereco = StringField("endereco")
@@ -111,16 +110,8 @@ def novo_casal(id_inscrito=None, back_link=None):
         return "Falha na validação", HTTPStatus.BAD_REQUEST
 
     novo_casal = casal_form.retorna_casal()
-    novo_casal = casal_service.salvar(novo_casal)
-    foto_esposo = casal_form.foto_esposo.data
-    foto_esposa = casal_form.foto_esposa.data
-    salvar_imagem(
-        foto_esposo,
-        f"{novo_casal.esposo.id}_pessoa.jpg",
-    )
-    salvar_imagem(
-        foto_esposa,
-        f"{novo_casal.esposa.id}_pessoa.jpg",
+    novo_casal = casal_service.salvar(
+        novo_casal, casal_form.foto_esposo.data, casal_form.foto_esposa.data
     )
 
     return "created", HTTPStatus.CREATED
@@ -165,16 +156,11 @@ def editar_casal(id, back_link):
             return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     casal_atualizado = casal_form.retorna_casal()
-    casal_service.atualizar_casal(casal, casal_atualizado)
-    foto_esposo = casal_form.foto_esposo.data
-    foto_esposa = casal_form.foto_esposa.data
-    salvar_imagem(
-        foto_esposo,
-        f"{casal.esposo.id}_pessoa.jpg",
-    )
-    salvar_imagem(
-        foto_esposa,
-        f"{casal.esposa.id}_pessoa.jpg",
+    casal_service.atualizar_casal(
+        casal,
+        casal_atualizado,
+        casal_form.foto_esposo.data,
+        casal_form.foto_esposa.data,
     )
 
     return "ok", HTTPStatus.OK
