@@ -11,17 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
-
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-   
       - name: Restart Server
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -31,7 +20,7 @@ jobs:
           script: |
             sudo systemctl stop paroquial
             cd /home/ubuntu/gestorencontros
-            git fech origin
+            git fetch origin
             poetry install
             FLASK_APP=encontros flask db upgrade
             sudo systemctl start paroquial

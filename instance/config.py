@@ -13,8 +13,7 @@ ENVIRONMENT = environ.get("ENVIRONMENT", "development")
 
 
 class Config(object):
-    SECRET_KEY = environ.get("SECRET_KEY", "secret-key")
-    print(SECRET_KEY)
+    SECRET_KEY = environ.get("SECRET_KEY", "secret-key")    
     DATABASE_HOST = environ.get("DATABASE_HOST", "127.0.0.1")
     DATABASE_USERNAME = environ.get("DATABASE_USERNAME", "master")
     DATABASE_PASSWORD = environ.get("DATABASE_PASSWORD", "secret")
