@@ -39,5 +39,5 @@ class AWSFileHandler(FileHandler):
         self.s3_client.upload_file(file, self.bucket_name, filename)
 
     def read(self, filename):
-        self.s3_client()
-        return open("test.txt", "r")
+        response = self.s3_client.get_object(Bucket=self.bucket_name, Key=filename)
+        return response['Body'].read()
