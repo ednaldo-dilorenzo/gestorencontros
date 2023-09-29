@@ -1,7 +1,7 @@
 import app.modulos.casal.dao as casal_dao
 from app.model import Casal
 from app.extensoes import transactional
-from instance.config import current_config
+from app.config import current_config
 from typing import Optional
 
 
@@ -32,9 +32,9 @@ def salvar(casal, foto_esposo=None, foto_esposa=None):
     casal.extenso = f"{casal.esposo.nome} {casal.esposo.apelido} {casal.esposa.nome} {casal.esposa.apelido}".lower()
     casal = casal_dao.criar_casal(casal)
     if foto_esposo:
-        current_config.FILE_HANDLER.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
+        current_config.file_handler.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
     if foto_esposa:
-        current_config.FILE_HANDLER.save(foto_esposa, f"{casal.esposa.id}_pessoa.jpg")
+        current_config.file_handler.save(foto_esposa, f"{casal.esposa.id}_pessoa.jpg")
     return casal
 
 
@@ -45,9 +45,9 @@ def atualizar_casal(casal, casal_atualizado, foto_esposo=None, foto_esposa=None)
     casal.id_circulo = casal_atualizado.id_circulo
     casal.extenso = f"{casal.esposo.nome} {casal.esposa.nome}".lower()
     if foto_esposo:
-        current_config.FILE_HANDLER.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
+        current_config.file_handler.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
     if foto_esposa:
-        current_config.FILE_HANDLER.save(foto_esposa, f"{casal.esposa.id}_pessoa.jpg")
+        current_config.file_handler.save(foto_esposa, f"{casal.esposa.id}_pessoa.jpg")
 
 
 def atualizar_pessoa(pessoa, pessoa_atualizada):
@@ -95,10 +95,10 @@ def retornar_foto_pessoa(id_pessoa: int, feminino: bool = False):
     if not id_pessoa:
         nome_arquivo = "anonima.jpg" if feminino else "anonimo.jpg"
 
-    arquivo = current_config.FILE_HANDLER.read(nome_arquivo)
+    arquivo = current_config.file_handler.read(nome_arquivo)
     if arquivo:
         return arquivo
 
-    return current_config.FILE_HANDLER.read(
+    return current_config.file_handler.read(
         "anonima.jpg" if feminino else "anonimo.jpg"
     )

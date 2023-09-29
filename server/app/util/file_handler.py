@@ -40,3 +40,4 @@ class AWSFileHandler(FileHandler):
 
     def read(self, filename):
         self.s3_client()
+        return open("test.txt", "r")

@@ -13,7 +13,7 @@ ENVIRONMENT = environ.get("ENVIRONMENT", "development")
 
 
 class Config(object):
-    SECRET_KEY = environ.get("SECRET_KEY", "secret-key")    
+    SECRET_KEY = environ.get("SECRET_KEY", "secret-key")
     DATABASE_HOST = environ.get("DATABASE_HOST", "127.0.0.1")
     DATABASE_USERNAME = environ.get("DATABASE_USERNAME", "master")
     DATABASE_PASSWORD = environ.get("DATABASE_PASSWORD", "secret")
@@ -27,13 +27,17 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
-    FILE_HANDLER = FileSystemFileHandler(Config.UPLOAD_FOLDER)
     FLASK_ENV = "development"
+
+    def __init__(self):
+        self.file_handler = FileSystemFileHandler(Config.UPLOAD_FOLDER)
 
 
 class ProductionConfig(Config):
-    FILE_HANDLER = AWSFileHandler("encontros-file-prod")
     FLASK_ENV = "production"
+
+    def __init__(self):
+        self.file_handler = AWSFileHandler("encontros-file-prod")
 
 
 current_config = (

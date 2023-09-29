@@ -10,7 +10,7 @@ from app.modulos import (
     dashboard_bp,
 )
 from app.extensoes import db, login_manager, migrate
-from instance.config import current_config
+from app.config import current_config
 import logging
 
 
