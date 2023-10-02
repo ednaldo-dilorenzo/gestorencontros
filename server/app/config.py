@@ -4,10 +4,12 @@ from app.util.file_handler import FileSystemFileHandler, AWSFileHandler
 
 
 # Get the folder of the top-level directory of this project
-dot_env_path = environ.get("DOTENV_PATH", None)
-BASEDIR = dot_env_path if dot_env_path else path.abspath(path.dirname(__file__))
+BASEDIR = path.abspath(path.dirname(__file__))
+dot_env_path = (
+    config_path if (config_path := environ.get("DOTENV_PATH", None)) else BASEDIR
+)
 
-load_dotenv(path.join(BASEDIR, ".env"))
+load_dotenv(path.join(dot_env_path, ".env"))
 
 ENVIRONMENT = environ.get("ENVIRONMENT", "development")
 
@@ -23,11 +25,11 @@ class Config(object):
 
     SQLALCHEMY_DATABASE_URI = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/encontros"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ECHO = True
 
 
 class DevelopmentConfig(Config):
     FLASK_ENV = "development"
+    SQLALCHEMY_ECHO = True
 
     def __init__(self):
         self.file_handler = FileSystemFileHandler(Config.UPLOAD_FOLDER)
@@ -35,9 +37,10 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     FLASK_ENV = "production"
+    SQLALCHEMY_ECHO = False
 
     def __init__(self):
-        self.file_handler = AWSFileHandler("encontros-file-prod", "fotos_pessoa")
+        self.file_handler = AWSFileHandler("encontros-files-prod", "fotos_pessoa")
 
 
 current_config = (
