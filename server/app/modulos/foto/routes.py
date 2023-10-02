@@ -13,5 +13,7 @@ def foto():
     id_pessoa = request.args.get("id_pessoa", type=int)
     tipo = request.args.get("tipo")
     return send_file(
-        retornar_foto_pessoa(id_pessoa, tipo and tipo == "f"), download_name="foto.jpg"
+        retornar_foto_pessoa(id_pessoa, tipo and tipo == "f"),
+        download_name="foto.jpg",
+        mimetype="image/jpeg",
     )

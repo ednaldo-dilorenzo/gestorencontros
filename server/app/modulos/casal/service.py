@@ -1,7 +1,7 @@
 import app.modulos.casal.dao as casal_dao
 from app.model import Casal
 from app.extensoes import transactional
-from app.config import current_config
+from app.config import current_config, BASEDIR
 from typing import Optional
 
 
@@ -92,13 +92,10 @@ def buscar_casais_por_equipe_e_encontro(id_encontro: int, id_equipe: int) -> lis
 
 def retornar_foto_pessoa(id_pessoa: int, feminino: bool = False):
     nome_arquivo = f"{id_pessoa}_pessoa.jpg"
-    if not id_pessoa:
-        nome_arquivo = "anonima.jpg" if feminino else "anonimo.jpg"
 
-    arquivo = current_config.file_handler.read(nome_arquivo)
-    if arquivo:
-        return arquivo
+    if not current_config.file_handler.file_exists(nome_arquivo):
+        return open(
+            f"{BASEDIR}/static/img/{'anonima.jpg' if feminino else 'anonimo.jpg'}", "rb"
+        )
 
-    return current_config.file_handler.read(
-        "anonima.jpg" if feminino else "anonimo.jpg"
-    )
+    return current_config.file_handler.read(nome_arquivo)

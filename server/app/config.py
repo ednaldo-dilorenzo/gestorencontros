@@ -37,7 +37,7 @@ class ProductionConfig(Config):
     FLASK_ENV = "production"
 
     def __init__(self):
-        self.file_handler = AWSFileHandler("encontros-file-prod")
+        self.file_handler = AWSFileHandler("encontros-file-prod", "fotos_pessoa")
 
 
 current_config = (
