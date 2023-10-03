@@ -13,6 +13,7 @@ from wtforms import (
     FileField,
 )
 from wtforms.validators import DataRequired, Optional
+from werkzeug.urls import url_parse
 
 
 class CasalForm(FlaskForm):
@@ -88,6 +89,7 @@ def listar_casais(id_inscrito=None, back_link=None, novo_link=None, edit_link=No
         back_link=back_link,
         novo_link=novo_link,
         edit_link=edit_link,
+        page_link=url_parse(request.referrer).path
     )
 
 
