@@ -27,7 +27,7 @@
     ></a>
   </div>
 </nav>
-<div class="row">
+<div class="row mb-3">
   <div class="col-md-6">
     <h4>Casais sem círculo</h4>
     <input
@@ -40,6 +40,12 @@
     <ul id="lstCasaisInscritos" class="list-group lista-casais">
       {% for casal_sem_circulo in casais_sem_circulo %}
       <li class="list-group-item" value="{{ casal_sem_circulo.id }}">
+        <button
+          name="btnDetalhesCasal"
+          class="btn btn-sm icon-link icon-link-hover"
+        >
+          <i class="fas fa-magnifying-glass"></i>
+        </button>
         {{casal_sem_circulo.esposo.apelido}}/{{casal_sem_circulo.esposa.apelido}}
       </li>
       {% endfor %}
@@ -117,6 +123,21 @@
         }
       });
 
+    function showModal(e) {
+      const id_casal = e.currentTarget.parentElement.value;
+      const modal = document.createElement("div");
+      modal.setAttribute("id", "modal-container");
+      document.body.append(modal);
+      $("#modal-container").load(`/casais/${id_casal}/detalhes`, function () {
+        $(".modal").modal({ backdrop: "static" });
+        $(".modal").modal("show");
+        $(".modal").on("hidden.bs.modal", function () {
+          $(this).remove();
+          $("#modal-container").remove();
+        });
+      });
+    }
+
     $("#sltCirculos").on("change", function () {
       const id_circulo = $(this).val();
       if (id_circulo.trim()) {
@@ -134,14 +155,25 @@
         }).done(function (response) {
           $("#lstCasaisIncluidos").empty();
           $.each(response, function (key, value) {
-            $("#lstCasaisIncluidos").append(
-              `<li class="list-group-item ui-sortable-handle" value="${value.id}">${value.nome}</li>`
-            );
+            const item = $(
+            `<li class="list-group-item" value="${value.id}">
+              <button
+                name="btnDetalhesCasal"
+                class="btn btn-sm icon-link icon-link-hover"
+              >
+                <i class="fas fa-magnifying-glass"></i>
+              </button>
+              ${value.nome}
+            </li>`);
+            item.find("[name=btnDetalhesCasal]").click(showModal);
+            $("#lstCasaisIncluidos").append(item);
           });
         });
       } else {
         $("#lstCasaisIncluidos").empty();
       }
     });
+
+    $("[name=btnDetalhesCasal]").click(showModal);
   });
 </script>

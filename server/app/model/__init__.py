@@ -44,6 +44,7 @@ class Casal(db.Model):
     extenso = db.Column(db.String)
     id_inscrito = db.Column(db.Integer, db.ForeignKey("encontro.id"))
     id_circulo = db.Column(db.Integer, db.ForeignKey("circulo.id"))
+    observacoes = db.Column(db.String(250))
 
 
 class Movimento(db.Model):

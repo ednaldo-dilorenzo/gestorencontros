@@ -11,6 +11,7 @@ from app.modulos import (
 )
 from app.extensoes import db, login_manager, migrate
 from app.config import current_config
+from app.util.filters import calculate_age
 import logging
 
 
@@ -24,6 +25,7 @@ def create_app():
     """
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(current_config)
+    app.add_template_filter(calculate_age)
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)

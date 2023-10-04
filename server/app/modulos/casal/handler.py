@@ -2,7 +2,7 @@ from http import HTTPStatus
 from flask_login import current_user
 from app.model import Casal, Pessoa
 import app.modulos.casal.service as casal_service
-from flask import request, render_template, url_for, current_app
+from flask import request, render_template
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
@@ -11,6 +11,7 @@ from wtforms import (
     DateField,
     HiddenField,
     FileField,
+    TextAreaField,
 )
 from wtforms.validators import DataRequired, Optional
 from werkzeug.urls import url_parse
@@ -39,6 +40,7 @@ class CasalForm(FlaskForm):
     id_inscrito = HiddenField("id_inscrito")
     foto_esposo = FileField()
     foto_esposa = FileField()
+    observacoes = TextAreaField("observacoes")
 
     def retorna_casal(self) -> Casal:
         casal = Casal()
@@ -62,6 +64,7 @@ class CasalForm(FlaskForm):
         casal.esposa.nascimento = self.nascimento_esposa.data
         casal.id_circulo = self.id_circulo.data
         casal.id_inscrito = self.id_inscrito.data if self.id_inscrito.data else None
+        casal.observacoes = self.observacoes.data
 
         return casal
 
@@ -141,6 +144,7 @@ def editar_casal(id, back_link):
         casal_form.telefone_esposo.data = casal.esposo.telefone
         casal_form.telefone_esposa.data = casal.esposa.telefone
         casal_form.nascimento_esposa.data = casal.esposa.nascimento
+        casal_form.observacoes.data = casal.observacoes
 
         page = request.args.get("page", 1, type=int)
         per_page = request.args.get("per_page", 10, type=int)

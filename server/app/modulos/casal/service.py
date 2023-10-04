@@ -44,6 +44,7 @@ def atualizar_casal(casal, casal_atualizado, foto_esposo=None, foto_esposa=None)
     atualizar_pessoa(casal.esposa, casal_atualizado.esposa)
     casal.id_circulo = casal_atualizado.id_circulo
     casal.extenso = f"{casal.esposo.nome} {casal.esposa.nome}".lower()
+    casal.observacoes = casal_atualizado.observacoes
     if foto_esposo:
         current_config.file_handler.save(foto_esposo, f"{casal.esposo.id}_pessoa.jpg")
     if foto_esposa:
@@ -57,6 +58,10 @@ def atualizar_pessoa(pessoa, pessoa_atualizada):
         pessoa.email = pessoa_atualizada.email
     if pessoa_atualizada.telefone:
         pessoa.telefone = pessoa_atualizada.telefone
+    if pessoa_atualizada.nascimento:
+        pessoa.nascimento = pessoa_atualizada.nascimento
+    if pessoa_atualizada.apelido:
+        pessoa.apelido = pessoa_atualizada.apelido
 
 
 def buscar_casais_inscritos_sem_circulo(id_encontro: int) -> list:

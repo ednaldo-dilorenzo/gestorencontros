@@ -140,8 +140,17 @@
         class="form-control"
         id="iptEmailEsposa"
       />
-    </div>  
-  <h3 class="fs-5 my-4">Endereço</h3>  
+    </div>
+  <h3 class="fs-5 my-2">Observações</h3>
+  <div class="col-12">
+  <textarea
+        type="text"
+        class="form-control"
+        id="iptObservacoes"
+        name="observacoes"
+      >{% if form.observacoes.data %}{{ form.observacoes.data }}{% endif %}</textarea>
+    </div>
+  <h3 class="fs-5 my-2">Endereço</h3>  
     <div class="col-12">
       <label for="iptEndereco" class="form-label">Endereço</label>
       <input

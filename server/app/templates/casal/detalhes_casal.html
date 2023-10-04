@@ -1,0 +1,64 @@
+<!-- Modal -->
+<div class="modal fade" id="modalAlterarSenha" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          Detalhes do Casal
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          id="btnClose"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h5>Esposo</h5>
+        <div class="container">
+          <div class="row mb-2">
+            <div class="col-md-3">Nome:</div>
+            <div class="col">{{ casal.esposo.nome }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-3">Nome usual:</div>
+            <div class="col">{{ casal.esposo.apelido }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-3">Idade:</div>
+            <div class="col">{{ casal.esposo.nascimento | calculate_age }} anos</div>
+          </div>
+        </div>
+        <h5>Esposa</h5>
+        <div class="container">
+          <div class="row mb-2">
+            <div class="col-md-3">Nome:</div>
+            <div class="col">{{ casal.esposa.nome }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-3">Nome usual:</div>
+            <div class="col">{{ casal.esposa.apelido }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-3">Idade:</div>
+            <div class="col">{{ casal.esposa.nascimento | calculate_age }} anos</div>
+          </div>
+        </div>
+        <h5>Observações</h5>
+        <div class="container">
+            <div class="row mb-2">
+              <div class="col">
+                {{ casal.observacoes }}
+              </div>
+            </div>            
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

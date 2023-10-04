@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from flask import Blueprint, request, url_for
+from flask import Blueprint, request, url_for, render_template
 from flask_login import login_required, current_user
 from app.modulos.casal.handler import listar_casais, novo_casal, editar_casal
 import app.modulos.casal.service as casal_service
@@ -91,3 +91,11 @@ def adicionar_equipe(id_casal):
     encontro_service.remover_equipe_econtro_casal(equipe_encontro_casal)
 
     return "ok", HTTPStatus.OK
+
+
+@casal_bp.route("/<int:id_casal>/detalhes")
+@login_required
+@permission(["DIRIGENTE"])
+def detalhes_casal(id_casal):
+    casal = casal_service.buscar_por_id(id_paroquia=1, id_casal=id_casal)
+    return render_template("casal/detalhes_casal.html", casal=casal)
