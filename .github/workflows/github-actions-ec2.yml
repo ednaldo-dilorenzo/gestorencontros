@@ -20,8 +20,9 @@ jobs:
           script: |
             sudo systemctl stop paroquial
             cd /home/ubuntu/gestorencontros
-            git fetch origin
+            git pull
+            cd server
             poetry install
-            FLASK_APP=encontros flask db upgrade
+            DOTENV_PATH=/home/ubuntu/ FLASK_APP=encontros flask db upgrade
             sudo systemctl start paroquial
            

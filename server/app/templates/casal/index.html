@@ -28,7 +28,6 @@
       action="/pages{{ url_for('casal.index')}}"
       class="d-flex"
       role="search"
-      target="/pages{{ url_for('casal.index')}}"
     >
       <input type="hidden" name="inscrito" value="{{inscrito}}" />
       <input
@@ -136,10 +135,11 @@
   </ul>
 </nav>
 <script>
-  const form = document.getElementById("frmPesquisa");
+  const frmPesquisaCasais = document.getElementById("frmPesquisa");
 
-  form.addEventListener("submit", (evt) => {
+  frmPesquisaCasais.addEventListener("submit", (evt) => {
     evt.preventDefault();
+    evt.stopPropagation();
     sendFormData(evt.target);
   });
 </script>

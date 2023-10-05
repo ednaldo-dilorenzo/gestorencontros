@@ -49,7 +49,7 @@
         <div class="container">
             <div class="row mb-2">
               <div class="col">
-                {{ casal.observacoes }}
+                {% if casal.observacoes %}{{ casal.observacoes }}{% else %}Nenhuma.{% endif %}
               </div>
             </div>            
           </div>

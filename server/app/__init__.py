@@ -31,6 +31,12 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = "authentication.login"
     login_manager.login_message = "Por favor realize o login para executar esta ação."
+    
+    @app.url_value_preprocessor
+    def pull_lang_code(endpoint, values):
+        print(endpoint)
+        print(values)
+        
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(casal_bp)
