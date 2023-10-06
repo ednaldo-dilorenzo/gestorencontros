@@ -81,7 +81,7 @@ def registrar():
     return "ok", HTTPStatus.CREATED
 
 
-@usuario_bp.route("/<int:id_usuario>", methods=["GET", "POST"])
+@usuario_bp.route("/<hashid:id_usuario>", methods=["GET", "POST"])
 @login_required
 def editar(id_usuario):
     usuario_form = UsuarioForm()

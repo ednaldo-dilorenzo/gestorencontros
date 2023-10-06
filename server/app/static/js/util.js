@@ -119,7 +119,6 @@ function isRequired(value) {
   return value && value.trim();
 }
 
-
 function validateField(field, validations) {
   if (!field || !validations) return;
 
@@ -135,7 +134,8 @@ function validateField(field, validations) {
       previousErrorMsg.remove();
     }
     if (
-      validation.handler && validationTypes[validation.handler] &&
+      validation.handler &&
+      validationTypes[validation.handler] &&
       (!field.value || !validationTypes[validation.handler](field.value))
     ) {
       field.setCustomValidity("Invalid field");

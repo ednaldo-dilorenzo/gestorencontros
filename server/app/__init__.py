@@ -9,7 +9,7 @@ from app.modulos import (
     paroquia_bp,
     dashboard_bp,
 )
-from app.extensoes import db, login_manager, migrate
+from app.extensoes import db, login_manager, migrate, hashids
 from app.config import current_config
 from app.util.filters import calculate_age
 import logging
@@ -27,6 +27,7 @@ def create_app():
     app.config.from_object(current_config)
     app.add_template_filter(calculate_age)
     db.init_app(app)
+    hashids.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
     login_manager.login_view = "authentication.login"

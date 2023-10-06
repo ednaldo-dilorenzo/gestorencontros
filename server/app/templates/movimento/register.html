@@ -14,7 +14,7 @@
 </div>
 <hr />
 <form
-  action="{% if form.id.data %}{{ url_for('movimento.edit', id=form.id.data) }}{% else %}{{ url_for('movimento.register') }}{% endif %}"
+  action="{% if form.id.data %}{{ url_for('movimento.edit', id_movimento=form.id.data) }}{% else %}{{ url_for('movimento.register') }}{% endif %}"
   target="/pages{{ url_for('movimento.index') }}"
   method="post"
   id="frmMovimento"

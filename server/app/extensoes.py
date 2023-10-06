@@ -2,11 +2,13 @@ from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_hashids import Hashids
 
 
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
+hashids = Hashids()
 
 
 def transactional(fn):

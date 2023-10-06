@@ -1,5 +1,6 @@
 from app.extensoes import db
 from flask_login import UserMixin
+from flask_hashids import HashidMixin
 
 
 class Paroquia(db.Model):
@@ -7,7 +8,7 @@ class Paroquia(db.Model):
     nome = db.Column(db.String, unique=True, nullable=False)
 
 
-class Usuario(db.Model, UserMixin):
+class Usuario(db.Model, UserMixin, HashidMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     username = db.Column(db.String, unique=True, nullable=False)
     senha = db.Column(db.String, nullable=False)
@@ -30,7 +31,7 @@ class Pessoa(db.Model):
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"))
 
 
-class Casal(db.Model):
+class Casal(db.Model, HashidMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     id_esposo = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
     id_esposa = db.Column(db.Integer, db.ForeignKey("pessoa.id"))
@@ -47,20 +48,20 @@ class Casal(db.Model):
     observacoes = db.Column(db.String(250))
 
 
-class Movimento(db.Model):
+class Movimento(db.Model, HashidMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     id_paroquia = db.Column(db.Integer, db.ForeignKey("paroquia.id"), nullable=False)
 
 
-class Equipe(db.Model):
+class Equipe(db.Model, HashidMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     descricao = db.Column(db.String, nullable=False)
     id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)
 
 
-class Encontro(db.Model):
+class Encontro(db.Model, HashidMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
     ano = db.Column(db.Integer, nullable=False)
@@ -70,7 +71,7 @@ class Encontro(db.Model):
     id_movimento = db.Column(db.Integer, db.ForeignKey("movimento.id"), nullable=False)
 
 
-class Circulo(db.Model):
+class Circulo(db.Model, HashidMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nome = db.Column(db.String)
     cor = db.Column(db.String, nullable=False)

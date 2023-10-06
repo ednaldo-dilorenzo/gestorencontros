@@ -48,10 +48,10 @@ def register():
     return "ok", HTTPStatus.OK
 
 
-@movimento_bp.route("/<int:id>", methods=["GET", "POST"])
+@movimento_bp.route("/<hashid:id_movimento>", methods=["GET", "POST"])
 @login_required
-def edit(id):
-    movimento = movimento_service.buscar_movimento_por_id(id, current_user.id_paroquia)
+def edit(id_movimento):
+    movimento = movimento_service.buscar_movimento_por_id(id_movimento, current_user.id_paroquia)
 
     if not movimento:
         return "Encontro não encontrado", HTTPStatus.NOT_FOUND

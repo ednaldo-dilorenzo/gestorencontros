@@ -27,7 +27,7 @@ def register():
     return novo_casal(back_link=url_for("casal.index"))
 
 
-@casal_bp.route("/<int:id>", methods=["GET", "POST", "PATCH"])
+@casal_bp.route("/<hashid:id>", methods=["GET", "POST", "PATCH"])
 @login_required
 @permission(["DIRIGENTE"])
 def editar(id):
@@ -61,7 +61,7 @@ def buscar_por_filtro():
     ]
 
 
-@casal_bp.route("/<int:id_casal>/equipe", methods=["POST", "DELETE"])
+@casal_bp.route("/<hashid:id_casal>/equipe", methods=["POST", "DELETE"])
 @login_required
 @permission(["DIRIGENTE"])
 def adicionar_equipe(id_casal):
@@ -93,7 +93,7 @@ def adicionar_equipe(id_casal):
     return "ok", HTTPStatus.OK
 
 
-@casal_bp.route("/<int:id_casal>/detalhes")
+@casal_bp.route("/<hashid:id_casal>/detalhes")
 @login_required
 @permission(["DIRIGENTE"])
 def detalhes_casal(id_casal):

@@ -20,6 +20,8 @@ class Config(object):
     DATABASE_USERNAME = environ.get("DATABASE_USERNAME", "master")
     DATABASE_PASSWORD = environ.get("DATABASE_PASSWORD", "secret")
     DATABASE_PORT = environ.get("DATABASE_PORT", "5432")
+    HASHIDS_SALT = 'secret!'
+    HASHIDS_MIN_LENGTH = 5
 
     UPLOAD_FOLDER = environ.get("UPLOAD_FOLDER")
 

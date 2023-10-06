@@ -110,6 +110,22 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-hashids"
+version = "1.0.2"
+description = "Hashids integration for Flask applications."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "Flask-Hashids-1.0.2.tar.gz", hash = "sha256:3682dfaa78989ffa2acbd3bc364633301800a9640f899017cee9a0ddc3c8f9ad"},
+    {file = "Flask_Hashids-1.0.2-py3-none-any.whl", hash = "sha256:8fff4a120d468ae95d7300ae0ca434c7ea57060d44b09aee9243745f9f717b12"},
+]
+
+[package.dependencies]
+Flask = ">=0.7"
+Hashids = ">=1.0.2"
+
+[[package]]
 name = "flask-login"
 version = "0.6.2"
 description = "User authentication and session management for Flask."
@@ -251,6 +267,21 @@ files = [
 [package.extras]
 docs = ["Sphinx", "docutils (<0.18)"]
 test = ["objgraph", "psutil"]
+
+[[package]]
+name = "hashids"
+version = "1.3.1"
+description = "Implements the hashids algorithm in python. For more information, visit http://hashids.org/"
+category = "main"
+optional = false
+python-versions = ">=2.7"
+files = [
+    {file = "hashids-1.3.1-py2.py3-none-any.whl", hash = "sha256:8bddd1acba501bfc9306e7e5a99a1667f4f2cacdc20cbd70bcc5ddfa5147c94c"},
+    {file = "hashids-1.3.1.tar.gz", hash = "sha256:6c3dc775e65efc2ce2c157a65acb776d634cb814598f406469abef00ae3f635c"},
+]
+
+[package.extras]
+test = ["pytest (>=2.1.0)"]
 
 [[package]]
 name = "itsdangerous"
@@ -617,4 +648,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "242d3dbf92a4232aa972650d5615be08a6f2866d2a6dcb7d3d73e6f160ee9cc4"
+content-hash = "888078fa8fcb5405b72f87032743c55b7436c9ae89f216717604c5278beb15ca"

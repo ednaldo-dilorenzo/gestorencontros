@@ -12,7 +12,7 @@ from app.model import Circulo, Encontro
 
 
 encontro_bp = Blueprint(
-    "encontro", __name__, url_prefix="/<int:id_movimento>/encontros"
+    "encontro", __name__, url_prefix="/<hashid:id_movimento>/encontros"
 )
 
 
@@ -67,7 +67,7 @@ def novo(id_movimento):
     return "ok", HTTPStatus.CREATED
 
 
-@encontro_bp.route("/<int:id_encontro>", methods=["GET", "POST"])
+@encontro_bp.route("/<hashid:id_encontro>", methods=["GET", "POST"])
 @login_required
 def editar(id_movimento, id_encontro):
     movimento = movimento_service.buscar_movimento_por_id(id_movimento, current_user.id_paroquia)
@@ -99,7 +99,7 @@ def editar(id_movimento, id_encontro):
     return "ok", HTTPStatus.OK
 
 
-@encontro_bp.route("/<int:id_encontro>/inscritos")
+@encontro_bp.route("/<hashid:id_encontro>/inscritos")
 @login_required
 def casais_inscritos(id_movimento, id_encontro):
     return listar_casais(
@@ -118,7 +118,7 @@ def casais_inscritos(id_movimento, id_encontro):
     )
 
 
-@encontro_bp.route("/<int:id_encontro>/inscritos/novo")
+@encontro_bp.route("/<hashid:id_encontro>/inscritos/novo")
 @login_required
 def novo_inscrito(id_movimento, id_encontro):
     return novo_casal(
@@ -131,7 +131,7 @@ def novo_inscrito(id_movimento, id_encontro):
     )
 
 
-@encontro_bp.route("/<int:id_encontro>/inscritos/<int:id_casal>")
+@encontro_bp.route("/<hashid:id_encontro>/inscritos/<hashid:id_casal>")
 @login_required
 def editar_inscrito(id_movimento, id_encontro, id_casal):
     return editar_casal(
@@ -144,7 +144,7 @@ def editar_inscrito(id_movimento, id_encontro, id_casal):
     )
 
 
-@encontro_bp.route("/<int:id_encontro>/circulos")
+@encontro_bp.route("/<hashid:id_encontro>/circulos")
 @login_required
 def circulos(id_movimento, id_encontro):
     circulos_encontro = movimento_service.buscar_circulos_por_encontro(id_encontro)
@@ -172,7 +172,7 @@ class CirculoForm(FlaskForm):
         return resultado
 
 
-@encontro_bp.route("/<int:id_encontro>/novo", methods=["GET", "POST"])
+@encontro_bp.route("/<hashid:id_encontro>/novo", methods=["GET", "POST"])
 @login_required
 def novo_circulo(id_movimento, id_encontro):
     circulo_form = CirculoForm()
@@ -199,7 +199,7 @@ def novo_circulo(id_movimento, id_encontro):
 
 
 @encontro_bp.route(
-    "/<int:id_encontro>/circulos/<int:id_circulo>",
+    "/<hashid:id_encontro>/circulos/<hashid:id_circulo>",
     methods=["GET", "POST"],
 )
 @login_required
@@ -238,7 +238,7 @@ def editar_circulo(id_movimento, id_encontro, id_circulo):
 
 
 @encontro_bp.route(
-    "/<int:id_encontro>/circulos/montagem",
+    "/<hashid:id_encontro>/circulos/montagem",
     methods=["GET"],
 )
 @login_required
@@ -255,7 +255,7 @@ def montar_circulo(id_movimento, id_encontro):
     )
 
 
-@encontro_bp.route("/<int:id_encontro>/montagem-equipes")
+@encontro_bp.route("/<hashid:id_encontro>/montagem-equipes")
 def montagem_equipes(id_movimento, id_encontro):
     equipes_encontro = equipe_service.buscar_equipes_por_encontro(id_encontro)
     return render_template(

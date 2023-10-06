@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
 
 
-equipe_bp = Blueprint("equipe", __name__, url_prefix="/<int:id_movimento>/equipes")
+equipe_bp = Blueprint("equipe", __name__, url_prefix="/<hashid:id_movimento>/equipes")
 
 
 class EquipeForm(FlaskForm):
@@ -58,7 +58,7 @@ def nova_equipe(id_movimento):
     return "created", HTTPStatus.CREATED
 
 
-@equipe_bp.route("/<int:id_equipe>", methods=["GET", "POST"])
+@equipe_bp.route("/<hashid:id_equipe>", methods=["GET", "POST"])
 @login_required
 def editar_equipe(id_movimento, id_equipe):
     equipe_atual = movimento_service.buscar_equipe_por_id_e_movimento(
