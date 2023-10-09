@@ -48,6 +48,7 @@
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Editar encontro"
           href="/pages{{ url_for('movimento.encontro.editar', id_movimento=movimento.id, id_encontro=encontro.id) }}"
           data-link
         >
@@ -55,6 +56,7 @@
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Círculos"
           href="/pages{{ url_for('movimento.encontro.circulos', id_movimento=movimento.id, id_encontro=encontro.id) }}"
           data-link
         >
@@ -62,6 +64,7 @@
         </a>
         <a
           href="/pages{{ url_for('movimento.encontro.casais_inscritos', id_movimento=movimento.id, id_encontro=encontro.id ) }}"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Casais inscritos"
           class="btn btn-sm icon-link icon-link-hover"
           data-link
         >
@@ -70,6 +73,7 @@
         <a
           href="/pages{{ url_for('movimento.encontro.montar_circulo', id_movimento=movimento.id, id_encontro=encontro.id ) }}"
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Montagem de círculos"
           data-link
         >
           <i class="fa-solid fa-ring"></i>
@@ -77,6 +81,7 @@
         <a
           href="/pages{{ url_for('movimento.encontro.montagem_equipes', id_movimento=movimento.id, id_encontro=encontro.id ) }}"
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Montagem de equipes"
           data-link
         >
           <i class="fa-solid fa-users-gear"></i>

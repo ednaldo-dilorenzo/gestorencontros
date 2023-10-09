@@ -1,6 +1,5 @@
 from app.model import EquipeEncontro, EquipeEncontroCasal
 from app.extensoes import db
-from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
 
 
@@ -23,5 +22,6 @@ def buscar_equipe_encontro_casal_por_encontro_e_equipe(
             EquipeEncontroCasal.id_encontro == id_encontro,
             EquipeEncontroCasal.id_equipe == id_equipe,
         )
+        .order_by(EquipeEncontroCasal.coordenador.desc(), EquipeEncontroCasal.aceito.desc())
         .all()
     )

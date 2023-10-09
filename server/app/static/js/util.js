@@ -101,7 +101,15 @@ async function router() {
     match.view = match.view + location.search;
   }
 
-  $("#app").load(match.view);
+  $("#app").load(match.view, function() {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger : 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('hide');
+    });
+  });  
 }
 
 function navigateTo(url) {

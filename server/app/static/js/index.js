@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       navigateTo(link);
     }
-  });
+  });  
 
   router();
 });

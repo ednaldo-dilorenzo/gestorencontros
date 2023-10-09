@@ -1,16 +1,20 @@
 import os
+from abc import ABC, abstractmethod
 from io import BytesIO
 from werkzeug.utils import secure_filename
 import boto3
 
 
-class FileHandler:
+class FileHandler(ABC):
+    @abstractmethod
     def save(self, file, filename):
         pass
 
+    @abstractmethod
     def read(self, filename):
         pass
 
+    @abstractmethod
     def file_exists(self, filename):
         pass
 

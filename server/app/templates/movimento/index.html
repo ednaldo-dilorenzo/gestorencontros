@@ -35,6 +35,7 @@
       <td>
         <a
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Editar movimento"
           href="/pages{{ url_for('movimento.edit', id_movimento=movimento.id) }}"
           data-link
         >
@@ -42,6 +43,7 @@
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Equipes"
           href="/pages{{ url_for('movimento.equipe.index', id_movimento=movimento.id) }}"
           data-link
         >
@@ -49,6 +51,7 @@
         </a>
         <a
           class="btn btn-sm icon-link icon-link-hover"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Encontros"
           href="/pages{{ url_for('movimento.encontro.index', id_movimento=movimento.id) }}"
           data-link
         >
