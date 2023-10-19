@@ -20,13 +20,21 @@ class Config(object):
     DATABASE_USERNAME = environ.get("DATABASE_USERNAME", "master")
     DATABASE_PASSWORD = environ.get("DATABASE_PASSWORD", "secret")
     DATABASE_PORT = environ.get("DATABASE_PORT", "5432")
-    HASHIDS_SALT = 'secret!'
+    HASHIDS_SALT = "secret!"
     HASHIDS_MIN_LENGTH = 5
+    TESTING = False
 
     UPLOAD_FOLDER = environ.get("UPLOAD_FOLDER")
 
     SQLALCHEMY_DATABASE_URI = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/encontros"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+class UnitTestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "sqlite:///encontros.db"
+    WTF_CSRF_ENABLED = False
+    TESTING = True
+    SESSION_COOKIE_DOMAIN = None
 
 
 class DevelopmentConfig(Config):
@@ -45,6 +53,10 @@ class ProductionConfig(Config):
         self.file_handler = AWSFileHandler("encontros-files-prod", "fotos_pessoa")
 
 
-current_config = (
-    ProductionConfig() if ENVIRONMENT == "production" else DevelopmentConfig()
-)
+environments = {
+    "production": ProductionConfig,
+    "development": DevelopmentConfig,
+    "unit_test": UnitTestConfig
+}
+
+current_config = environments[ENVIRONMENT]()

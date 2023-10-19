@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from flask import Blueprint, redirect, url_for, request, render_template, flash
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
@@ -8,7 +9,6 @@ from flask_login import (
     current_user,
     login_user,
     logout_user,
-    login_required,
 )
 
 auth_bp = Blueprint("authentication", __name__, url_prefix="/auth")
@@ -32,8 +32,15 @@ def login():
         return redirect(url_for("root"))
     form = LoginForm()
     paroquias = paroquia_service.buscar_paroquias()
-    if request.method == "GET" or not form.validate_on_submit():
+    if request.method == "GET":
         return render_template("login.html", form=form, paroquias=paroquias)
+
+    if not form.validate_on_submit():
+        flash("Falha na validação do formulário.")
+        return (
+            render_template("login.html", form=form, paroquias=paroquias),
+            HTTPStatus.BAD_REQUEST,
+        )
 
     if logged_user := usuario_service.valida_usuario(
         form.login.data, form.senha.data, form.paroquia.data
@@ -43,4 +50,4 @@ def login():
         return redirect(url_for(next_url)) if next_url else redirect(url_for("root"))
 
     flash("Login ou senha inválida")
-    return render_template("login.html", form=form, paroquias=paroquias)
+    return render_template("login.html", form=form, paroquias=paroquias), HTTPStatus.UNAUTHORIZED

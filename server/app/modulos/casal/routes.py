@@ -6,6 +6,7 @@ import app.modulos.casal.service as casal_service
 import app.modulos.encontro.service as encontro_service
 from app.model import EquipeEncontroCasal
 from app.util.security import permission
+from app.extensoes import hashids
 
 
 casal_bp = Blueprint("casal", __name__, url_prefix="/casais")
@@ -42,9 +43,13 @@ def buscar_por_filtro():
     inscrito = request.args.get(
         "inscrito", default=False, type=lambda v: v.lower() == "true"
     )
-    circulo = request.args.get("circulo")
-    encontro = request.args.get("encontro", type=int)
-    equipe = request.args.get("equipe", type=int)
+    circulo = (
+        hashids.decode(circulo) if (circulo := request.args.get("circulo")) else None
+    )
+    encontro = (
+        hashids.decode(encontro) if (encontro := request.args.get("encontro")) else None
+    )
+    equipe = hashids.decode(equipe) if (equipe := request.args.get("equipe")) else None
 
     casais = casal_service.buscar_por_filtro_test(
         filtro=filtro,
@@ -56,7 +61,7 @@ def buscar_por_filtro():
     )
 
     return [
-        {"id": casal.id, "nome": f"{casal.esposo.apelido}/{casal.esposa.apelido}"}
+        {"id": casal.hashid, "nome": f"{casal.esposo.apelido}/{casal.esposa.apelido}"}
         for casal in casais
     ]
 
@@ -65,8 +70,8 @@ def buscar_por_filtro():
 @login_required
 @permission(["DIRIGENTE"])
 def adicionar_equipe(id_casal):
-    id_encontro = request.form.get("id_encontro", type=int)
-    id_equipe = request.form.get("id_equipe", type=int)
+    id_encontro = hashids.decode(request.form.get("id_encontro"))
+    id_equipe = hashids.decode(request.form.get("id_equipe"))
 
     if not id_encontro or not id_equipe:
         return "Encontro ou equipe não fornecida", HTTPStatus.BAD_REQUEST

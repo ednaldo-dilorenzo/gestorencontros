@@ -9,6 +9,7 @@ from app.modulos.casal.handler import listar_casais, novo_casal, editar_casal
 import app.modulos.casal.service as casal_service
 import app.modulos.equipe.service as equipe_service
 from app.model import Circulo, Encontro
+from app.extensoes import hashids
 
 
 encontro_bp = Blueprint(
@@ -251,7 +252,7 @@ def montar_circulo(id_movimento, id_encontro):
         casais_sem_circulo=casais_sem_circulo,
         circulos_corrente=circulos_corrente,
         id_movimento=id_movimento,
-        id_encontro=id_encontro,
+        id_encontro=hashids.encode(id_encontro),
     )
 
 
@@ -261,6 +262,6 @@ def montagem_equipes(id_movimento, id_encontro):
     return render_template(
         "movimento/equipe_montagem.html",
         equipes_encontro=equipes_encontro,
-        id_encontro=id_encontro,
+        id_encontro=hashids.encode(id_encontro),
         id_movimento=id_movimento,
     )

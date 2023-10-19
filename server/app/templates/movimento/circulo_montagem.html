@@ -39,7 +39,7 @@
     />
     <ul id="lstCasaisInscritos" class="list-group lista-casais">
       {% for casal_sem_circulo in casais_sem_circulo %}
-      <li class="list-group-item" value="{{ casal_sem_circulo.id }}">
+      <li class="list-group-item" value="{{ casal_sem_circulo.hashid }}">
         <button
           name="btnDetalhesCasal"
           class="btn btn-sm icon-link icon-link-hover"
@@ -56,7 +56,7 @@
     <select id="sltCirculos" class="form-select mb-3">
       <option value="" selected>Selecione o círculo...</option>
       {% for circulo in circulos_corrente %}
-      <option value="{{ circulo.id }}" style="background: {{ circulo.cor }};">
+      <option value="{{ circulo.hashid }}" style="background: {{ circulo.cor }};">
         {% if circulo.nome %}{{ circulo.nome }}{% else %}Sem nome{% endif %}
       </option>
       {% endfor %}
@@ -95,10 +95,10 @@
           }
         },
         receive: function (event, ui) {
-          const id_casal = $(ui.item).val();
+          const id_casal = $(ui.item).attr("value");
 
           if (event.target.id === "lstCasaisIncluidos") {
-            const id_circulo = $("#sltCirculos").find(":selected").val();
+            const id_circulo = $("#sltCirculos").find(":selected").attr("value");
             atualizaCirculoCasal(id_casal, id_circulo);
           } else {
             atualizaCirculoCasal(id_casal, null);
@@ -124,7 +124,7 @@
       });
 
     function showModal(e) {
-      const id_casal = e.currentTarget.parentElement.value;
+      const id_casal = $(e.currentTarget.parentElement).attr("value");
       const modal = document.createElement("div");
       modal.setAttribute("id", "modal-container");
       document.body.append(modal);

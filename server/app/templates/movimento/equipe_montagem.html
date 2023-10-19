@@ -44,7 +44,7 @@
     <select id="sltEquipes" class="form-select mb-3">
       <option value="" selected>Selecione a equipe...</option>
       {% for equipe_encontro in equipes_encontro %}
-      <option value="{{ equipe_encontro.id_equipe }}">
+      <option value="{{ equipe_encontro.equipe.hashid }}">
         {{ equipe_encontro.equipe.nome }}
       </option>
       {% endfor %}
@@ -78,6 +78,10 @@
                   <input class="form-check-input mx-1" style="display: none;" type="radio" name="lgrpCoordenador" value="${value.id}" id="firstRadio">
                 <span>${value.nome}</span>
                 </div>
+                <div name="divAceitou" class="form-check form-switch"  style="display: none;">
+                  <input class="form-check-input" value="${value.id}" type="checkbox" role="switch" name="swtAceito" checked>
+                  <label class="form-check-label">Aceitou</label>
+                </div>
               </li>`
             );
           });
@@ -103,45 +107,34 @@
         placeholder: "placeholder",
         delay: 150,
         receive: function (event, ui) {
-          const id_casal = $(ui.item).val();
+          const id_casal = $(ui.item).attr("value");
           const id_equipe = $("#sltEquipes").find(":selected").val();
           const casal_input = $(ui.item).find("[name=lgrpCoordenador]");
+          const aceito_input = $(ui.item).find("[name=divAceitou]");
 
           if (event.target.id === "lstCasaisIncluidos") {
             atualizaEquipeCasal(id_casal, id_equipe);
             casal_input.show();
             casal_input.change(changeRadio);
+            aceito_input.show();
           } else {
             atualizaEquipeCasal(id_casal, id_equipe, true);
             casal_input.hide();
+            aceito_input.hide();
           }
         },
       })
-      .disableSelection()
-      .dblclick(function (e) {
-        var item = e.target;
-        const id_casal = $(item).val();
-        if (e.currentTarget.id === "lstCasaisInscritos") {
-          const id_circulo = $("#sltCirculos").find(":selected").val();
-          atualizaCirculoCasal(id_casal, id_circulo);
-          $(item).fadeOut("fast", function () {
-            $(item).appendTo($("#lstCasaisIncluidos")).fadeIn("slow");
-          });
-        } else {
-          atualizaCirculoCasal(id_casal, null);
-          $(item).fadeOut("fast", function () {
-            $(item).appendTo($("#lstCasaisInscritos")).fadeIn("slow");
-          });
-        }
-      });
+      .disableSelection();
 
     const changeRadio = (e) => {
       const id_equipe = $("#sltEquipes").find(":selected").val();
       $.ajax({
-        url: `/encontros/{{id_encontro}}/equipes/${id_equipe}`,
+        url: `/encontros/{{id_encontro}}/equipes/${id_equipe}/casal/${$(
+          e.currentTarget
+        ).attr("value")}`,
         type: "PATCH",
         data: {
-          id_coordenador: $(e.currentTarget).val(),
+          coordenador: true,
         },
         success: () => {
           showToastMessage(
@@ -182,14 +175,43 @@
               }" id="firstRadio" ${checked}>
                   <span>${value.nome}</span>
                 </div>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" ${value.aceito ? "checked" : ""}>
-                  <label class="form-check-label" for="flexSwitchCheckChecked">Aceitou</label>
+                <div name="divAceitou" class="form-check form-switch">
+                  <input class="form-check-input" value="${
+                    value.id
+                  }" type="checkbox" role="switch" name="swtAceito" ${
+                value.aceito ? "checked" : ""
+              }>
+                  <label class="form-check-label">Aceitou</label>
                 </div>
               </li>`
             );
           });
           listaIncluidos.find("[type=radio]").change(changeRadio);
+          listaIncluidos
+            .find("[type=checkbox]")
+            .on("change.bootstrapSwitch", function (e, state) {
+              const id_equipe = $("#sltEquipes").find(":selected").val();
+              $(e.currentTarget).closest("li").find("[name=lgrpCoordenador]").prop({disabled: !e.target.checked});
+              $.ajax({
+                url: `/encontros/{{id_encontro}}/equipes/${id_equipe}/casal/${$(
+                  e.currentTarget
+                ).attr("value")}`,
+                type: "PATCH",
+                data: {
+                  aceito: e.target.checked,
+                },
+                success: () => {
+                  showToastMessage(
+                    "Situação do casal na equipe atualizada com sucesso!",
+                    "success"
+                  );
+                },
+                error: (err) => {
+                  showToastMessage(err.responseText, "warning");
+                  $(e.currentTarget).prop("checked", false);
+                },
+              });
+            });
         });
       } else {
         $("#lstCasaisIncluidos").empty();

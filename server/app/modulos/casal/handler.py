@@ -15,6 +15,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Optional
 from werkzeug.urls import url_parse
+from app.extensoes import hashids
 
 
 class CasalForm(FlaskForm):
@@ -36,7 +37,7 @@ class CasalForm(FlaskForm):
     cidade = StringField("cidade")
     estado = StringField("estado")
     cep = StringField("cep")
-    id_circulo = IntegerField("id_circulo")
+    id_circulo = StringField("id_circulo")
     id_inscrito = HiddenField("id_inscrito")
     foto_esposo = FileField()
     foto_esposa = FileField()
@@ -62,7 +63,7 @@ class CasalForm(FlaskForm):
         casal.esposa.email = self.email_esposa.data
         casal.esposa.telefone = self.telefone_esposa.data
         casal.esposa.nascimento = self.nascimento_esposa.data
-        casal.id_circulo = self.id_circulo.data
+        casal.id_circulo = hashids.decode(self.id_circulo.data) if self.id_circulo.data else None
         casal.id_inscrito = self.id_inscrito.data if self.id_inscrito.data else None
         casal.observacoes = self.observacoes.data
 
@@ -162,6 +163,7 @@ def editar_casal(id, back_link):
             return "Falha na validação do formulário", HTTPStatus.BAD_REQUEST
 
     casal_atualizado = casal_form.retorna_casal()
+    print(request.form.get("id_circulo"))
     casal_service.atualizar_casal(
         casal,
         casal_atualizado,

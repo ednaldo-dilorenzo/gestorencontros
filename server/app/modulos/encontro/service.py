@@ -9,36 +9,37 @@ def atualizar_equipe_encontro(
     equipe_encontro_casal_atual: EquipeEncontroCasal,
     equipe_encontro_alterado: EquipeEncontroCasal,
 ):
-    if (
-        not equipe_encontro_casal_atual.coordenador
-        and equipe_encontro_alterado.coordenador
-    ):
-        equipe_casal_coordena = encontro_dao.buscar_equipe_casal_coordena(
-            equipe_encontro_alterado.id_casal, equipe_encontro_alterado.id_encontro
-        )
-
+    if equipe_encontro_alterado.coordenador is not None:
         if (
-            equipe_casal_coordena
-            and equipe_casal_coordena.id_equipe != equipe_encontro_alterado.id_equipe
+            not equipe_encontro_casal_atual.coordenador
+            and equipe_encontro_alterado.coordenador
         ):
-            raise BusinessException(
-                "Tentativa de colocar casal para coordenar mais de uma equipe"
+            equipe_casal_coordena = encontro_dao.buscar_equipe_casal_coordena(
+                equipe_encontro_alterado.id_casal, equipe_encontro_alterado.id_encontro
             )
 
-        if coordenador_atual_da_equipe := encontro_dao.buscar_coordenador_da_equipe_no_encontro(
-            equipe_encontro_casal_atual.id_encontro,
-            equipe_encontro_casal_atual.id_equipe,
-        ):
-            coordenador_atual_da_equipe.coordenador = False
+            if (
+                equipe_casal_coordena
+                and equipe_casal_coordena.id_equipe != equipe_encontro_alterado.id_equipe
+            ):
+                raise BusinessException(
+                    "Tentativa de alocar casal para coordenar mais de uma equipe"
+                )
 
-        equipe_encontro_casal_atual.coordenador = True
-    elif (
-        equipe_encontro_casal_atual.coordenador != equipe_encontro_alterado.coordenador
-    ):
-        equipe_encontro_casal_atual.coordenador = False
+            if coordenador_atual_da_equipe := encontro_dao.buscar_coordenador_da_equipe_no_encontro(
+                equipe_encontro_casal_atual.id_encontro,
+                equipe_encontro_casal_atual.id_equipe,
+            ):
+                coordenador_atual_da_equipe.coordenador = False
+
+            equipe_encontro_casal_atual.coordenador = True
+        elif (
+            equipe_encontro_casal_atual.coordenador != equipe_encontro_alterado.coordenador
+        ):
+            equipe_encontro_casal_atual.coordenador = False
 
     if (
-        equipe_encontro_alterado.aceito
+        equipe_encontro_alterado.aceito is not None
         and equipe_encontro_casal_atual.aceito != equipe_encontro_alterado.aceito
     ):
         equipe_encontro_casal_atual.aceito = equipe_encontro_alterado.aceito

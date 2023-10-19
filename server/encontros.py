@@ -1,17 +1,8 @@
-from flask import render_template
 from app import create_app
-from flask_login import login_required
 import logging
 
 
 app = create_app()
-
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-@login_required
-def root(path):
-    return render_template("index.html")
 
 
 if __name__ == "__main__":

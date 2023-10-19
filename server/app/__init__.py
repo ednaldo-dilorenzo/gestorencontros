@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, render_template
+from flask_login import login_required
 from app.modulos import (
     auth_bp,
     casal_bp,
@@ -32,12 +33,6 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = "authentication.login"
     login_manager.login_message = "Por favor realize o login para executar esta ação."
-    
-    @app.url_value_preprocessor
-    def pull_lang_code(endpoint, values):
-        print(endpoint)
-        print(values)
-        
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(casal_bp)
@@ -47,6 +42,12 @@ def create_app():
     app.register_blueprint(encontro_bp)
     app.register_blueprint(paroquia_bp)
     app.register_blueprint(dashboard_bp)
+
+    @app.route("/", defaults={"path": ""})
+    @app.route("/<path:path>")
+    @login_required
+    def root(path):
+        return render_template("index.html")
 
     return app
 
