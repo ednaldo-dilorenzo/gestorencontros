@@ -23,10 +23,14 @@ def test_post_login_wrong_password(app_with_data):
     assert response.status_code == HTTPStatus.UNAUTHORIZED.value
 
 
-def test_post_login_ok(app_with_data):
+def test_post_login_ok(app_with_data, test_user):
     response = app_with_data.post(
         url_for("authentication.login"),
-        data={"login": "teste@teste.com", "senha": "123456", "paroquia": 1},
+        data={
+            "login": test_user.username,
+            "senha": "123456",
+            "paroquia": test_user.id_paroquia,
+        },
         follow_redirects=True,
     )
     assert response.status_code == HTTPStatus.OK.value

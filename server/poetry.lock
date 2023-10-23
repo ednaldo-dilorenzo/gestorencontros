@@ -103,6 +103,21 @@ files = [
 test = ["pytest (>=6)"]
 
 [[package]]
+name = "faker"
+version = "19.11.0"
+description = "Faker is a Python package that generates fake data for you."
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "Faker-19.11.0-py3-none-any.whl", hash = "sha256:e28090068293c5a83e7f4d636417d45fae1031ca8a8136cc2415549ebc2111e2"},
+    {file = "Faker-19.11.0.tar.gz", hash = "sha256:a62a3fd3bfa3122d4f57dfa26a1cc37d76751a76c8ddd63cf9d24078c57913a4"},
+]
+
+[package.dependencies]
+python-dateutil = ">=2.4"
+
+[[package]]
 name = "flask"
 version = "2.2.5"
 description = "A simple framework for building complex web applications."
@@ -758,4 +773,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c6f521d5eb3dd9d68a4f4b6e64cf405e363e2707262b084f327138d96fec6cc3"
+content-hash = "985c09635945dc822af1a584cf8de5cdd29f2f6e88c10336fc627b2f0643e22f"
